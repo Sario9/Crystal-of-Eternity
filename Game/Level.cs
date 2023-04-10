@@ -6,12 +6,12 @@ namespace Crystal_of_Eternity
     {
         public TileMap Map { get; private set; }
 
-        private Vector2 playerStartPosition;
+        public Vector2 PlayerStartPosition { get; private set; }
 
-        public Level(TileMap map, Vector2 playerStartPosition)
+        public Level(LevelType levelType, Vector2 playerStartPosition)
         {
-            Map = map;
-            this.playerStartPosition = playerStartPosition;
+            Map = new TileMap(levelType, 16, 16);
+            PlayerStartPosition = playerStartPosition;
         }
     }
 }

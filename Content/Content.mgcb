@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:Game/General/Entities/Player/Character-knight.png
 
+#begin Game/General/Entities/Player/Sword.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/Entities/Player/Sword.png
+
 #begin Game/Level1/Sprites/Environment/Tree_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -36,6 +48,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Game/Level1/Sprites/Environment/Tree_1.png
+
+#begin Game/Level1/Sprites/Environment/Tree_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/Level1/Sprites/Environment/Tree_2.png
 
 #begin Game/Level1/Sprites/Tiles/Grass_1.png
 /importer:TextureImporter

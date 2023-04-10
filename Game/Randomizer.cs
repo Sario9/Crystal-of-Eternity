@@ -22,7 +22,7 @@ namespace Crystal_of_Eternity
             var elements = new List<KeyValuePair<int, double>>();
             for (int i = 0; i < chances.Length; i++)
             {
-                elements.Add(new(i + 1, chances[i]));
+                elements.Add(new(i, chances[i]));
             }
 
             var roll = Random.NextDouble();

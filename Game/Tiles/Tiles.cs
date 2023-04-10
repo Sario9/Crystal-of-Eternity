@@ -20,6 +20,7 @@ namespace Crystal_of_Eternity
             Environment = new Dictionary<LevelType, List<Texture2D>>();
 
             LoadContent(LevelType.Level1, TileType.Ground);
+            LoadContent(LevelType.Level1, TileType.Environment);
         }
 
         private static void LoadContent(LevelType levelType, TileType tileType)
@@ -31,7 +32,7 @@ namespace Crystal_of_Eternity
                     break;
 
                 case TileType.Environment:
-                    AddTiles(Environment, levelType, "Sprites/Environment/Tree_", 1);
+                    AddTiles(Environment, levelType, "Sprites/Environment/Tree_", 2);
                     break;
 
                 default:

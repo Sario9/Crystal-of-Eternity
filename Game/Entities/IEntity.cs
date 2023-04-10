@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Sprites;
 
 namespace Crystal_of_Eternity
 {
@@ -11,7 +11,7 @@ namespace Crystal_of_Eternity
 
         public float CurrentHP { get; }
 
-        public Texture2D Sprite { get; }
+        public Sprite Sprite { get; }
 
         public void TakeHit();
     }
