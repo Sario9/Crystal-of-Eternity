@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Crystal_of_Eternity
 {
@@ -10,6 +11,7 @@ namespace Crystal_of_Eternity
 
         private Texture2D[,] ground;
         private Texture2D[,] environment;
+        private Obstacle[,] obstacles;
 
         public TileMap(LevelType levelType, int width, int height)
         {
@@ -17,13 +19,29 @@ namespace Crystal_of_Eternity
             Type = levelType;
             ground = new Texture2D[width, height];
             environment = new Texture2D[width, height];
+            obstacles = new Obstacle[width, height];
             LoadContent();
+        }
+
+        public IEnumerable<Obstacle> GetObstacles()
+        {
+            foreach (var obstacle in obstacles) 
+                yield return obstacle;
         }
 
         private void LoadContent()
         {
             MapGenerator.GenerateGround(ground, Size, Type);
             MapGenerator.GenerateEnvironment(environment, Size, Type);
+            for (int i = 0; i < Size.X; i++)
+            {
+                for (int j = 0; j < Size.Y; j++)
+                {
+                    if (environment[i, j] != null)
+                        obstacles[i, j] = new Obstacle(new((new Vector2(i, j) - Vector2.One / 4)
+                            * Tiles.TileSize.X, Tiles.TileSize * 0.4f));
+                }
+            }
         }
 
         public void DrawTile(Texture2D[,] tiles, int x, int y, int layer, SpriteBatch spriteBatch)
@@ -53,6 +71,7 @@ namespace Crystal_of_Eternity
                     if (environment[i, j] != null)
                     {
                         DrawTile(environment, i, j, 1, spriteBatch);
+                        //obstacles[i, j].Draw(spriteBatch);
                     }
                 }
             }

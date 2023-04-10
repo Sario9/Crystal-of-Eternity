@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 
 namespace Crystal_of_Eternity
 {
-    public interface IEntity
+    public interface IEntity : ICollisionActor
     {
         public string Name { get; }
 
@@ -14,5 +16,9 @@ namespace Crystal_of_Eternity
         public Sprite Sprite { get; }
 
         public void TakeHit();
+
+        public void Update(GameTime gameTime);
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch);
     }
 }

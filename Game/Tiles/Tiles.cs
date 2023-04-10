@@ -7,7 +7,7 @@ namespace Crystal_of_Eternity
 {
     public static class Tiles
     {
-        public static Point TileSize => new(32, 32);
+        public static Vector2 TileSize => new(32, 32);
 
         public readonly static Dictionary<LevelType, List<Texture2D>> Ground;
         public readonly static Dictionary<LevelType, List<Texture2D>> Environment;
@@ -32,7 +32,7 @@ namespace Crystal_of_Eternity
                     break;
 
                 case TileType.Environment:
-                    AddTiles(Environment, levelType, "Sprites/Environment/Tree_", 2);
+                    AddTiles(Environment, levelType, "Sprites/Environment/Tree_", 3);
                     break;
 
                 default:

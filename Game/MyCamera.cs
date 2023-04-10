@@ -19,15 +19,28 @@ namespace Crystal_of_Eternity
 
         public void Initialize()
         {
-            Main.Zoom = 2.0f;
+            Main.Zoom = 2.5f;
             Main.MaximumZoom = 2.5f;
-            Main.MinimumZoom = 1.5f;
+            Main.MinimumZoom = 2f;
         }
 
         public void Update(GameTime gameTime, Player player)
         {
             Main.ZoomIn(UserInput.MakeZoom(0.1f));
-            Main.LookAt(player.Position);
+            Main.LookAt(MapClampedPosition(player.Position));
+        }
+
+        private Vector2 MapClampedPosition(Vector2 position)
+        {
+            var level = MyGame.Instance.CurrentLevel;
+            var cameraMax = new Vector2(level.Map.Size.X * 31 -
+                (device.Viewport.Width / Main.Zoom / 2),
+                level.Map.Size.Y * 31 -
+                (device.Viewport.Height / Main.Zoom / 2));
+
+            return Vector2.Clamp(position,
+               new Vector2(device.Viewport.Width / Main.Zoom / 2, device.Viewport.Height / Main.Zoom / 2) - Vector2.One * 6,
+               cameraMax);
         }
     }
 }
