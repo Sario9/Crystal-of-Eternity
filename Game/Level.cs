@@ -43,7 +43,7 @@ namespace Crystal_of_Eternity
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawRectangle(bounds, Color.Green, 5);
+            //spriteBatch.DrawRectangle(bounds, Color.Green, 5);
         }
     }
 }

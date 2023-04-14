@@ -3,10 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.Timers;
+using MonoGame.Extended.TextureAtlases;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
@@ -32,7 +30,7 @@ namespace Crystal_of_Eternity
         }
 
         public Sprite Sprite { get; private set; }
-        public IShapeF Bounds => Sprite.GetBoundingRectangle(Position + new Vector2(0,16) * 0.5f, 0, new(0.6f, 0.6f));
+        public IShapeF Bounds => Sprite.GetBoundingRectangle(Position + new Vector2(0, 16) * 0.5f, 0, new(0.6f, 0.6f));
 
 
         #endregion
@@ -59,9 +57,8 @@ namespace Crystal_of_Eternity
 
         private readonly float baseMoveSpeed = 100.0f;
         private float moveSpeed = 1.0f;
-        private float maxSpeed = 1.0f;
         private Vector2 velocity;
-        private bool isIdle => velocity == Vector2.Zero;    
+        private bool isIdle => velocity == Vector2.Zero;
 
         private SpriteEffects flip = SpriteEffects.None;
         private WalkAnimation walkAnimation;
@@ -77,6 +74,11 @@ namespace Crystal_of_Eternity
             Position = Vector2.Clamp(Position + velocity, minPosition, maxPosition);
         }
 
+        public void Attack(Vector2 direction, float attackRange)
+        {
+            direction.Normalize();
+           
+        }
         public void TakeHit()
         {
             throw new NotImplementedException();
@@ -109,7 +111,10 @@ namespace Crystal_of_Eternity
             if (!isIdle)
                 walkAnimation.Play(gameTime);
             else
+            {
                 walkAnimation.Reset();
+                Attack(new(0,1), 10);
+            }
 
             if (velocity.X > 0)
                 flip = SpriteEffects.FlipHorizontally;
