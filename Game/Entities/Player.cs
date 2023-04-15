@@ -5,6 +5,7 @@ using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using System;
+using TexturePackerLoader;
 
 namespace Crystal_of_Eternity
 {
@@ -77,7 +78,6 @@ namespace Crystal_of_Eternity
         public void Attack(Vector2 direction, float attackRange)
         {
             direction.Normalize();
-           
         }
         public void TakeHit()
         {
@@ -92,7 +92,8 @@ namespace Crystal_of_Eternity
         public void LoadContent()
         {
             var content = MyGame.Instance.Content;
-            texture = content.Load<Texture2D>("Game/General/Entities/Player/Character-knight");
+            var spriteSheetLoader = new SpriteSheetLoader(content, MyGame.Instance.GraphicsDevice);
+            texture = content.Load<Texture2D>(SpriteNames.Character_knight);
             Sprite = new Sprite(texture);
         }
 
@@ -104,6 +105,7 @@ namespace Crystal_of_Eternity
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
             Position -= collisionInfo.PenetrationVector * 1.1f;
+            Attack(new(1,1), 1);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -1,0 +1,16 @@
+#
+# Sprite sheet data for MonoGame.
+#
+# To learn how to import these sprites into your MonoGame project visit:
+# https://www.codeandweb.com/texturepacker/monogame
+#
+# Sprite sheet: AttackSpriteSheet.png (96 x 8)
+# $TexturePacker:SmartUpdate:b762783ddac7aa4a99071724029ff312:727e8a2c162e305628e4538f6c2d8bd9:13345c3b20fb160acf6413c73a809078$
+#
+
+Attack_1;0;0;0;16;8;16;8;0.5;0.5
+Attack_2;0;16;0;16;8;16;8;0.5;0.5
+Attack_3;0;32;0;16;8;16;8;0.5;0.5
+Attack_4;0;48;0;16;8;16;8;0.5;0.5
+Attack_5;0;64;0;16;8;16;8;0.5;0.5
+Attack_6;0;80;0;16;8;16;8;0.5;0.5
