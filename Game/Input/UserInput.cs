@@ -10,7 +10,7 @@ namespace Crystal_of_Eternity
         public static MouseState MouseState { get; private set; }
         private static MouseState lastMouseState;
 
-        private static Game game;
+        private static MyGame game;
 
         static UserInput()
         {
@@ -26,6 +26,12 @@ namespace Crystal_of_Eternity
         public static float MakeZoom(float maxSpeed)
         {
             return MathHelper.Clamp(MouseState.ScrollWheelValue - lastMouseState.ScrollWheelValue, -maxSpeed, maxSpeed);
+        }
+
+        public static Point GetMousePosition() => MouseState.Position;
+        public static bool IsLMBPressed()
+        {
+            return lastMouseState.LeftButton == MouseState.LeftButton ? false : MouseState.LeftButton == ButtonState.Pressed;
         }
 
         public static Vector2 MovePlayer()

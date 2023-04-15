@@ -28,11 +28,11 @@ namespace Crystal_of_Eternity
             switch (tileType)
             {
                 case TileType.Ground:
-                    AddTiles(Ground, levelType, "Sprites/Tiles/Grass_", 5);
+                    AddTiles(Ground, levelType, TileNames.Grass, 5);
                     break;
 
                 case TileType.Environment:
-                    AddTiles(Environment, levelType, "Sprites/Environment/Tree_", 3);
+                    AddTiles(Environment, levelType, TileNames.Tree, 3);
                     break;
 
                 default:

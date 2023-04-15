@@ -18,7 +18,7 @@ namespace Crystal_of_Eternity
 
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
-
+            
         }
 
         public void Draw(SpriteBatch spriteBatch)

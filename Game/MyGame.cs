@@ -8,11 +8,11 @@ namespace Crystal_of_Eternity
     {
         public static MyGame Instance { get; private set; }
         public Level CurrentLevel { get; private set; }
+        public Player Player { get; private set; }
+        public MyCamera Camera { get; private set; }
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private MyCamera camera;
-        private Player player;
         private readonly CollisionComponent collisionComponent;
 
         public MyGame()
@@ -29,8 +29,8 @@ namespace Crystal_of_Eternity
         {
             CurrentLevel = new Level(LevelType.Level1, new(32, 32), Vector2.One * 128);
             CurrentLevel.Initialize();
-            player = CurrentLevel.Player;
-            camera = new MyCamera(GraphicsDevice);
+            Player = CurrentLevel.Player;
+            Camera = new MyCamera(GraphicsDevice);
             base.Initialize();
         }
 
@@ -42,8 +42,8 @@ namespace Crystal_of_Eternity
         protected override void Update(GameTime gameTime)
         {
             UserInput.Update(gameTime);
-            player.Update(gameTime);
-            camera.Update(gameTime, player);
+            Player.Update(gameTime);
+            Camera.Update(gameTime, Player);
             CurrentLevel.Update(gameTime);
             base.Update(gameTime);
         }
@@ -52,9 +52,9 @@ namespace Crystal_of_Eternity
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-                SamplerState.PointClamp, null, null, null, camera.Main.GetViewMatrix());
+                SamplerState.PointClamp, null, null, null, Camera.Main.GetViewMatrix());
             CurrentLevel.Map.Draw(gameTime, spriteBatch);
-            player.Draw(gameTime, spriteBatch);
+            Player.Draw(gameTime, spriteBatch);
             CurrentLevel.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
