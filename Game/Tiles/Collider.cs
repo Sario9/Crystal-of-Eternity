@@ -7,13 +7,15 @@ using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
-    public class Obstacle : ICollisionActor
+    public class Collider : ICollisionActor
     {
         public IShapeF Bounds { get; private set; }
+        public readonly ColliderType Type;
 
-        public Obstacle(RectangleF bounds)
+        public Collider(RectangleF bounds, ColliderType type)
         {
             Bounds = bounds;
+            Type = type;
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)

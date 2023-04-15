@@ -11,7 +11,7 @@ namespace Crystal_of_Eternity
 
         private Texture2D[,] ground;
         private Texture2D[,] environment;
-        private Obstacle[,] obstacles;
+        private Collider[,] obstacles;
 
         public TileMap(LevelType levelType, int width, int height)
         {
@@ -19,11 +19,11 @@ namespace Crystal_of_Eternity
             Type = levelType;
             ground = new Texture2D[width, height];
             environment = new Texture2D[width, height];
-            obstacles = new Obstacle[width, height];
+            obstacles = new Collider[width, height];
             LoadContent();
         }
 
-        public IEnumerable<Obstacle> GetObstacles()
+        public IEnumerable<Collider> GetObstacles()
         {
             foreach (var obstacle in obstacles) 
                 yield return obstacle;
@@ -38,8 +38,8 @@ namespace Crystal_of_Eternity
                 for (int j = 0; j < Size.Y; j++)
                 {
                     if (environment[i, j] != null)
-                        obstacles[i, j] = new Obstacle(new((new Vector2(i, j) - Vector2.One / 4)
-                            * Tiles.TileSize.X, Tiles.TileSize * 0.4f));
+                        obstacles[i, j] = new Collider(new((new Vector2(i, j) - Vector2.One / 4)
+                            * Tiles.TileSize.X, Tiles.TileSize * 0.4f), ColliderType.Obstacle);
                 }
             }
         }

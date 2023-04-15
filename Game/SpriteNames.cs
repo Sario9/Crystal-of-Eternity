@@ -9,7 +9,20 @@ namespace Crystal_of_Eternity
 {
     public static class SpriteNames
     {
+        #region Character
+
         public const string Character_knight = "Game/General/Entities/Player/Character-knight";
+
+        #endregion
+
+        #region Enemies
+
+        public const string Skeleton1 = "Game/General/Entities/Enemies/Skeleton_1";
+        
+        #endregion
+
+        #region Attacks
+
         public const string AttackSpriteSheet = "Game/General/Entities/Player/Animations/Attack/AttackSpriteSheet";
         public const string Attack_1 = "Game/General/Entities/Player/Animations/Attack/Attack_1";
         public const string Attack_2 = "Game/General/Entities/Player/Animations/Attack/Attack_2";
@@ -17,5 +30,7 @@ namespace Crystal_of_Eternity
         public const string Attack_4 = "Game/General/Entities/Player/Animations/Attack/Attack_4";
         public const string Attack_5 = "Game/General/Entities/Player/Animations/Attack/Attack_5";
         public const string Attack_6 = "Game/General/Entities/Player/Animations/Attack/Attack_6";
+
+        #endregion
     }
 }

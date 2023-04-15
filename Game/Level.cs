@@ -29,20 +29,30 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             Player = new Player("Player", PlayerStartPosition, 100.0f, bounds);
+            Entities.Add(new Enemy("Skeleton", new(15,15), 25, bounds));
+
             collisionComponent.Insert(Player);
+
+            foreach(var entity in Entities) 
+                collisionComponent.Insert(entity);
+
             foreach (var obstacle in Map.GetObstacles().Where(x => x != null))
-            {
                 collisionComponent.Insert(obstacle);
-            }
         }
 
         public void Update(GameTime gameTime)
         {
             collisionComponent.Update(gameTime);
+            foreach (var entity in Entities)
+                entity.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            foreach (var entity in Entities)
+                entity.Draw(gameTime, spriteBatch);
+
+            Player.Draw(gameTime, spriteBatch);
             //spriteBatch.DrawRectangle(bounds, Color.Green, 5);
         }
     }

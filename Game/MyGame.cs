@@ -54,8 +54,7 @@ namespace Crystal_of_Eternity
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 SamplerState.PointClamp, null, null, null, Camera.Main.GetViewMatrix());
             CurrentLevel.Map.Draw(gameTime, spriteBatch);
-            Player.Draw(gameTime, spriteBatch);
-            CurrentLevel.Draw(spriteBatch);
+            CurrentLevel.Draw(spriteBatch, gameTime);
             spriteBatch.End();
             base.Draw(gameTime);
         }

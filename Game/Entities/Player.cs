@@ -6,6 +6,7 @@ using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Crystal_of_Eternity
 {
@@ -48,6 +49,8 @@ namespace Crystal_of_Eternity
 
             minPosition = Vector2.Zero;
             maxPosition = mapBounds.BottomRight;
+
+            collisionComponent = MyGame.Instance.CurrentLevel.collisionComponent;
         }
 
         #region Private
@@ -69,9 +72,11 @@ namespace Crystal_of_Eternity
         private Vector2 maxPosition;
 
         private SpritesAnimation attackAnimation;
-        private Obstacle attackCollider;
+        private Collider attackCollider;
+        private bool canAttack => !attackAnimation.IsPlaying;
+        private CollisionComponent collisionComponent;
 
-        #endregion  
+        #endregion
 
         public void Move(Vector2 direction, GameTime gameTime)
         {
@@ -84,8 +89,10 @@ namespace Crystal_of_Eternity
             direction.Normalize();
             var attackPosition = Position + direction * attackRange;
             attackAnimation.SetRotation(Vector2Extensions.ToAngle(attackPosition - Position));
-            attackCollider = new(new(attackPosition, size * attackAnimation.Scale));
             attackAnimation.Play();
+            attackCollider = new(new(attackPosition - attackAnimation.CurrentSprite.Bounds.Size.ToVector2() / 2,
+                size * attackAnimation.Scale), ColliderType.Attack);
+            collisionComponent.Insert(attackCollider);
         }
 
         public void TakeHit()
@@ -117,13 +124,15 @@ namespace Crystal_of_Eternity
         public void Update(GameTime gameTime)
         {
             Move(UserInput.MovePlayer(), gameTime);
-            if(UserInput.IsLMBPressed())
+            if(UserInput.IsLMBPressed() && canAttack)
             {
                 var camera = MyGame.Instance.Camera.Main;
                 var mouseWorldPosition = camera.ScreenToWorld(UserInput.GetMousePosition().ToVector2());
-                Attack(mouseWorldPosition - Position, 35, new(16, 8));
+                Attack(mouseWorldPosition - Position, 35, new(8, 8));
             }
             attackAnimation.Update(gameTime);
+            if(attackCollider != null && !attackAnimation.IsPlaying && collisionComponent.Contains(attackCollider))
+                collisionComponent.Remove(attackCollider);
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)
@@ -143,11 +152,13 @@ namespace Crystal_of_Eternity
             if (velocity.X < 0)
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
+
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
-            if(attackCollider != null)
+
+            if(attackCollider != null && attackAnimation.IsPlaying)
             {
                 //attackCollider.Draw(spriteBatch);
-                attackAnimation.Draw(spriteBatch, attackCollider.Bounds.Position);
+                attackAnimation.Draw(spriteBatch, attackCollider.Bounds.Position + attackAnimation.CurrentSprite.Bounds.Size.ToVector2() / 2);
             }
 
             //spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Blue, 3);

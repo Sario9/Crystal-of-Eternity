@@ -10,6 +10,7 @@ namespace Crystal_of_Eternity
         public bool IsPlaying { get; private set; }
         public bool IsLoop { get; private set; }
         public Vector2 Scale { get; private set; }
+        public Texture2D CurrentSprite => sprites[currentFrame];
 
         private List<Texture2D> sprites;
         private readonly float tick;
