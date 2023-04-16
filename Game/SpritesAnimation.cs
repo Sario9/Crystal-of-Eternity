@@ -69,11 +69,11 @@ namespace Crystal_of_Eternity
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects spriteEffect)
         {
             if(currentFrame != -1)
                 spriteBatch.Draw(sprites[currentFrame], position, null, Color.White,
-                    rotation, new(sprites[currentFrame].Width / 2, sprites[currentFrame].Height / 2), Scale, SpriteEffects.None, 0);
+                    rotation, new(sprites[currentFrame].Width / 2, sprites[currentFrame].Height / 2), Scale, spriteEffect, 0);
         }
     }
 }

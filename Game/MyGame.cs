@@ -42,7 +42,6 @@ namespace Crystal_of_Eternity
         protected override void Update(GameTime gameTime)
         {
             UserInput.Update(gameTime);
-            Player.Update(gameTime);
             Camera.Update(gameTime, Player);
             CurrentLevel.Update(gameTime);
             base.Update(gameTime);

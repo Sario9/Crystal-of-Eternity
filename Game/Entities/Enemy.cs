@@ -4,6 +4,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace Crystal_of_Eternity
@@ -41,7 +42,9 @@ namespace Crystal_of_Eternity
         private Vector2 maxPosition;
 
         private bool canGetHit = true;
-        private float iTimer;
+        private float iTimer = -1;
+
+        private Player player;
 
         #endregion
 
@@ -51,7 +54,8 @@ namespace Crystal_of_Eternity
             Position = position;
             currentHP = maxHP;
             this.maxHP = maxHP;
-            walkAnimation = new WalkAnimation(moveSpeed * 1.2f, 0.2f);
+            walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
+            player = MyGame.Instance.CurrentLevel.Player;
             LoadContent();
 
             minPosition = Vector2.Zero;
@@ -73,13 +77,23 @@ namespace Crystal_of_Eternity
 
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
-            if(canGetHit)
-                TakeHit();
+            var other = collisionInfo.Other;
+            var deltaWhenCollide = collisionInfo.PenetrationVector * 1.1f + collisionInfo.PenetrationVector.Rotate(MathF.PI / 2) * 1.1f; ;
+            if (other is Collider)
+            {
+                var otherCollider = (Collider)other;
+                if (otherCollider.Type == ColliderType.Attack && canGetHit)
+                    TakeHit();
+                else if (otherCollider.Type == ColliderType.Obstacle)
+                    Position -= deltaWhenCollide;
+            }
+            else if (other is Enemy)
+                Position -= deltaWhenCollide;
         }
 
         public void TakeHit()
         {
-            Debug.Print("Get hit");
+            Debug.Print("Get hit" + DateTime.Now.Millisecond);
             canGetHit = false;
             iTimer = 0;
         }
@@ -95,11 +109,31 @@ namespace Crystal_of_Eternity
                     iTimer = -1;
                 }    
             }
+
+            if(player != null) 
+            {
+                var directionToPlayer = player.Position - Position;
+                var distance = directionToPlayer.Length();
+                if(distance > 5)
+                {
+                    directionToPlayer.Normalize();
+                    Move(directionToPlayer, gameTime);
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Sprite.Draw(spriteBatch, Position, 0, new(1, 1));
+            walkAnimation.Play(gameTime);
+
+            if (velocity.X > 0)
+                flip = SpriteEffects.FlipHorizontally;
+            if (velocity.X < 0)
+                flip = SpriteEffects.None;
+            Sprite.Effect = flip;
+
+            Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
+            spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Red);
         }
     }
 }

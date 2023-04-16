@@ -7,6 +7,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
@@ -30,28 +31,13 @@ namespace Crystal_of_Eternity
                     Die();
             }
         }
+        public bool IsAlive { get; private set; }
 
         public Sprite Sprite { get; private set; }
         public IShapeF Bounds => Sprite.GetBoundingRectangle(Position + new Vector2(0, 16) * 0.5f, 0, new(0.6f, 0.6f));
         
 
         #endregion
-
-        public Player(string name, Vector2 position, float maxHP, RectangleF mapBounds)
-        {
-            Name = name;
-            Position = position;
-            currentHP = maxHP;
-            this.maxHP = maxHP;
-            walkAnimation = new WalkAnimation(moveSpeed * 1.2f, 0.2f);
-            attackAnimation = new(0.02f, new(2,2f));
-            LoadContent();
-
-            minPosition = Vector2.Zero;
-            maxPosition = mapBounds.BottomRight;
-
-            collisionComponent = MyGame.Instance.CurrentLevel.collisionComponent;
-        }
 
         #region Private
 
@@ -74,9 +60,31 @@ namespace Crystal_of_Eternity
         private SpritesAnimation attackAnimation;
         private Collider attackCollider;
         private bool canAttack => !attackAnimation.IsPlaying;
+        private SpriteEffects attackFlip = SpriteEffects.None;
+
         private CollisionComponent collisionComponent;
 
+        private float iTimer;
+        private bool canGetHit;
+
         #endregion
+
+        public Player(string name, Vector2 position, float maxHP, RectangleF mapBounds)
+        {
+            Name = name;
+            Position = position;
+            currentHP = maxHP;
+            this.maxHP = maxHP;
+            walkAnimation = new WalkAnimation(moveSpeed * 1.2f, 0.2f);
+            attackAnimation = new(0.05f, new(2, 2f));
+            IsAlive = true;
+            LoadContent();
+
+            minPosition = Vector2.Zero;
+            maxPosition = mapBounds.BottomRight;
+
+            collisionComponent = MyGame.Instance.CurrentLevel.collisionComponent;
+        }
 
         public void Move(Vector2 direction, GameTime gameTime)
         {
@@ -86,6 +94,7 @@ namespace Crystal_of_Eternity
 
         public void Attack(Vector2 direction, float attackRange, Vector2 size)
         {
+            attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             direction.Normalize();
             var attackPosition = Position + direction * attackRange;
             attackAnimation.SetRotation(Vector2Extensions.ToAngle(attackPosition - Position));
@@ -97,7 +106,7 @@ namespace Crystal_of_Eternity
 
         public void TakeHit()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void Die()
@@ -133,11 +142,28 @@ namespace Crystal_of_Eternity
             attackAnimation.Update(gameTime);
             if(attackCollider != null && !attackAnimation.IsPlaying && collisionComponent.Contains(attackCollider))
                 collisionComponent.Remove(attackCollider);
+
+            if (iTimer >= 0)
+            {
+                iTimer += gameTime.GetElapsedSeconds();
+                if (iTimer >= 0.2f)
+                {
+                    canGetHit = true;
+                    iTimer = -1;
+                }
+            }
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
             Position -= collisionInfo.PenetrationVector * 1.1f;
+            var other = collisionInfo.Other;
+            if (canGetHit && other is Enemy)
+            {
+                var enemy = (Enemy)other;
+                TakeHit();
+                Debug.Print(enemy.Name);
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -158,10 +184,10 @@ namespace Crystal_of_Eternity
             if(attackCollider != null && attackAnimation.IsPlaying)
             {
                 //attackCollider.Draw(spriteBatch);
-                attackAnimation.Draw(spriteBatch, attackCollider.Bounds.Position + attackAnimation.CurrentSprite.Bounds.Size.ToVector2() / 2);
+                attackAnimation.Draw(spriteBatch, attackCollider.Bounds.Position + attackAnimation.CurrentSprite.Bounds.Size.ToVector2() / 2, attackFlip);
             }
 
-            //spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Blue, 3);
+            spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Blue, 3);
 
         }
     }

@@ -29,7 +29,8 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             Player = new Player("Player", PlayerStartPosition, 100.0f, bounds);
-            Entities.Add(new Enemy("Skeleton", new(15,15), 25, bounds));
+            Entities.Add(new Enemy("Skeleton1", new(15,15), 25, bounds));
+            Entities.Add(new Enemy("Skeleton2", new(15,125), 25, bounds));
 
             collisionComponent.Insert(Player);
 
@@ -42,9 +43,10 @@ namespace Crystal_of_Eternity
 
         public void Update(GameTime gameTime)
         {
-            collisionComponent.Update(gameTime);
+            Player.Update(gameTime);
             foreach (var entity in Entities)
                 entity.Update(gameTime);
+            collisionComponent.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
