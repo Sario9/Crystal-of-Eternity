@@ -66,7 +66,7 @@ namespace Crystal_of_Eternity
         public void LoadContent()
         {
             var content = MyGame.Instance.Content;
-            texture = content.Load<Texture2D>(SpriteNames.Skeleton1);
+            texture = content.Load<Texture2D>(SpriteNames.Skeleton_1);
             Sprite = new Sprite(texture);
         }
 
