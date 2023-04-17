@@ -6,7 +6,7 @@ namespace Crystal_of_Eternity
 {
     public static class Randomizer
     {
-        public static Random Random;
+        public static Random Random { get; private set; }
 
         static Randomizer()
         {
