@@ -60,6 +60,7 @@ namespace Crystal_of_Eternity
 
             minPosition = Vector2.Zero;
             maxPosition = mapBounds.BottomRight;
+            moveSpeed += (float)Randomizer.Random.NextDouble() / 5;
         }
 
         public void LoadContent()
@@ -78,7 +79,8 @@ namespace Crystal_of_Eternity
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
             var other = collisionInfo.Other;
-            var deltaWhenCollide = collisionInfo.PenetrationVector * 1.1f + collisionInfo.PenetrationVector.Rotate(MathF.PI / 2) * 1.1f; ;
+            var deltaWhenCollide = collisionInfo.PenetrationVector * 1.1f 
+                + collisionInfo.PenetrationVector.Rotate(-MathF.PI / 2) * 1.5f; ;
             if (other is Collider)
             {
                 var otherCollider = (Collider)other;
@@ -87,8 +89,7 @@ namespace Crystal_of_Eternity
                 else if (otherCollider.Type == ColliderType.Obstacle)
                     Position -= deltaWhenCollide;
             }
-            else if (other is Enemy)
-                Position -= deltaWhenCollide;
+            
         }
 
         public void TakeHit()

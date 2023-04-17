@@ -34,7 +34,7 @@ namespace Crystal_of_Eternity
                     switch (type)
                     {
                         case LevelType.Level1:
-                            var index = Randomizer.SelectRandomWithProbability(0.05, 0.04, 0.05, 0.86);
+                            var index = Randomizer.SelectRandomWithProbability(0.02, 0.01, 0.02, 0.95);
                             if (index == 3) continue;
                             tiles[i, j] = Tiles.Environment[type][index];
                             break;
