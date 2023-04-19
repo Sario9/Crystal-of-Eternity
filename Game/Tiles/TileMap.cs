@@ -39,7 +39,7 @@ namespace Crystal_of_Eternity
                 {
                     if (environment[i, j] != null)
                         obstacles[i, j] = new Collider(new((new Vector2(i, j) - Vector2.One / 4)
-                            * Tiles.TileSize.X, Tiles.TileSize * 0.4f), ColliderType.Obstacle);
+                            * Tiles.TileSize.X, Tiles.TileSize * 0.4f), ColliderType.Obstacle, 0.0f);
                 }
             }
         }

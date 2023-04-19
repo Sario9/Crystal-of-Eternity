@@ -15,6 +15,7 @@ namespace Crystal_of_Eternity
         public string Name { get; private set; }
 
         public Vector2 Position { get; private set; }
+        public float Damage { get; private set; }
 
         public float CurrentHP
         {
@@ -48,19 +49,22 @@ namespace Crystal_of_Eternity
         private Vector2 maxPosition;
 
         private bool canGetHit = true;
+        private bool canAttack = true;
         private float iTimer = -1;
+        private float aTimer = -1;
 
         private Player player;
 
         #endregion
 
-        public Enemy(string name, string spritePath, string corpsePath, Vector2 position, float maxHP, float moveSpeed, RectangleF mapBounds)
+        public Enemy(string name, string spritePath, string corpsePath, Vector2 position, float maxHP, float moveSpeed, float damage, RectangleF mapBounds)
         {
             Name = name;
             Position = position;
             this.maxHP = maxHP;
             currentHP = maxHP;
-            this.moveSpeed = moveSpeed;
+            this.moveSpeed = moveSpeed + (float)Randomizer.Random.NextDouble() * 0.05f;
+            Damage = damage;
             walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
             player = MyGame.Instance.CurrentLevel.Player;
             CorpseSpritePath = corpsePath;
@@ -88,15 +92,22 @@ namespace Crystal_of_Eternity
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
             var other = collisionInfo.Other;
-            var deltaWhenCollide = collisionInfo.PenetrationVector * 1.1f
-                + collisionInfo.PenetrationVector.Rotate(-MathF.PI / 2) * 1.5f; ;
+            
             if (other is Collider)
             {
                 var otherCollider = (Collider)other;
                 if (otherCollider.Type == ColliderType.Attack && canGetHit)
-                    TakeHit();
+                    TakeHit(otherCollider.CollideDamge);
                 else if (otherCollider.Type == ColliderType.Obstacle)
-                    Position -= deltaWhenCollide;
+                    Position -= collisionInfo.PenetrationVector * 1.1f +
+                        collisionInfo.PenetrationVector.Rotate(-MathF.PI / 2) * 1.5f;
+            }
+            else if (canAttack && other is Player)
+            {
+                var player = other as Player;
+                player.TakeHit(Damage);
+                canAttack = false;
+                aTimer = 0;
             }
         }
 
@@ -106,12 +117,12 @@ namespace Crystal_of_Eternity
             level.KillEntity(this);
         }
 
-        public void TakeHit()
+        public void TakeHit(float damage)
         {
-            CurrentHP -= 10;
-            Debug.Print("{0} has {1}/{2} HP", Name, currentHP, maxHP);
+            CurrentHP -= damage;
             canGetHit = false;
             iTimer = 0;
+            //Debug.Print("{0} has {1}/{2} HP", Name, currentHP, maxHP);
         }
 
         public void Update(GameTime gameTime)
@@ -126,11 +137,21 @@ namespace Crystal_of_Eternity
                 }
             }
 
+            if(aTimer >= 0)
+            {
+                aTimer += gameTime.GetElapsedSeconds();
+                if(aTimer >= 0.1f)
+                {
+                    canAttack = true;
+                    aTimer = -1;
+                }
+            }
+
             if (player != null)
             {
                 var directionToPlayer = player.Position - Position;
                 var distance = directionToPlayer.Length();
-                if (distance > 5)
+                if (distance > 1)
                 {
                     directionToPlayer.Normalize();
                     Move(directionToPlayer, gameTime);

@@ -8,12 +8,14 @@ namespace Crystal_of_Eternity
     public class Collider : ICollisionActor
     {
         public IShapeF Bounds { get; private set; }
+        public float CollideDamge { get; private set; }
         public readonly ColliderType Type;
 
-        public Collider(RectangleF bounds, ColliderType type)
+        public Collider(RectangleF bounds, ColliderType type, float damage)
         {
             Bounds = bounds;
             Type = type;
+            CollideDamge = damage;
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)

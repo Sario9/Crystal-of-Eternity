@@ -63,9 +63,6 @@ namespace Crystal_of_Eternity
 
         private CollisionComponent collisionComponent;
 
-        private float iTimer;
-        private bool canGetHit;
-
         #endregion
 
         public Player(string name, Vector2 position, float maxHP, RectangleF mapBounds)
@@ -99,13 +96,14 @@ namespace Crystal_of_Eternity
             attackAnimation.SetRotation(Vector2Extensions.ToAngle(attackPosition - Position));
             attackAnimation.Play();
             attackCollider = new(new(attackPosition - attackAnimation.CurrentSprite.Bounds.Size.ToVector2() / 2,
-                size * attackAnimation.Scale), ColliderType.Attack);
+                size * attackAnimation.Scale), ColliderType.Attack, Randomizer.Random.Next(7, 11));
             collisionComponent.Insert(attackCollider);
         }
 
-        public void TakeHit()
+        public void TakeHit(float damage)
         {
-
+            CurrentHP -= damage;
+            Debug.Print("{0}/{1}", CurrentHP, maxHP);
         }
 
         private void Die()
@@ -141,16 +139,6 @@ namespace Crystal_of_Eternity
             attackAnimation.Update(gameTime);
             if (attackCollider != null && !attackAnimation.IsPlaying && collisionComponent.Contains(attackCollider))
                 collisionComponent.Remove(attackCollider);
-
-            if (iTimer >= 0)
-            {
-                iTimer += gameTime.GetElapsedSeconds();
-                if (iTimer >= 0.2f)
-                {
-                    canGetHit = true;
-                    iTimer = -1;
-                }
-            }
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)
@@ -158,16 +146,6 @@ namespace Crystal_of_Eternity
             var other = collisionInfo.Other;
             if (other is Collider)
                 Position -= collisionInfo.PenetrationVector * 1.1f;
-            if (canGetHit && other is Enemy)
-            {
-                var enemy = (Enemy)other;
-                if (enemy.IsAlive)
-                {
-                    TakeHit();
-                    Position -= collisionInfo.PenetrationVector * 1.1f;
-                    Debug.Print(enemy.Name);
-                }
-            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -182,7 +160,6 @@ namespace Crystal_of_Eternity
             if (velocity.X < 0)
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
-
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
 
             if (attackCollider != null && attackAnimation.IsPlaying)

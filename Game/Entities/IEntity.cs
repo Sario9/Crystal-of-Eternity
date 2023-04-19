@@ -16,7 +16,7 @@ namespace Crystal_of_Eternity
         public Sprite Sprite { get; }
         public string CorpseSpritePath { get; }
 
-        public void TakeHit();
+        public void TakeHit(float damage);
 
         public void Update(GameTime gameTime);
 
