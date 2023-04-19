@@ -14,6 +14,7 @@ namespace Crystal_of_Eternity
         public float CurrentHP { get; }
 
         public Sprite Sprite { get; }
+        public string CorpseSpritePath { get; }
 
         public void TakeHit();
 

@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
-using System;
-using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
@@ -20,7 +18,7 @@ namespace Crystal_of_Eternity
 
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
-            
+
         }
 
         public void Draw(SpriteBatch spriteBatch)

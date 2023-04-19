@@ -18,27 +18,40 @@ namespace Crystal_of_Eternity
 
         public readonly CollisionComponent collisionComponent;
 
+        private List<Corpse> corpses;
+
         public Level(LevelType levelType, Point size, Vector2 playerStartPosition)
         {
             Map = new TileMap(levelType, size.X, size.Y);
             PlayerStartPosition = playerStartPosition;
             collisionComponent = new CollisionComponent(new RectangleF(0, 0, Map.Size.X * 32, Map.Size.Y * 32));
             Entities = new List<IEntity>();
+            corpses = new List<Corpse>();
         }
 
         public void Initialize()
         {
             Player = new Player("Player", PlayerStartPosition, 100.0f, bounds);
-            Entities.Add(new Enemy("Skeleton1", new(15,15), 25, bounds));
-            Entities.Add(new Enemy("Skeleton2", new(15,125), 25, bounds));
+            Entities.Add(new Skeleton(new(25, 125), bounds));
+            Entities.Add(new Skeleton(new(512, 212), bounds));
+            Entities.Add(new Skeleton(new(21, 643), bounds));
+            Entities.Add(new Rogue(1, new(525, 125), bounds));
+            Entities.Add(new Rogue(2, new(125, 525), bounds));
 
             collisionComponent.Insert(Player);
 
-            foreach(var entity in Entities) 
+            foreach (var entity in Entities)
                 collisionComponent.Insert(entity);
 
             foreach (var obstacle in Map.GetObstacles().Where(x => x != null))
                 collisionComponent.Insert(obstacle);
+        }
+
+        public void KillEntity(IEntity entity)
+        {
+            collisionComponent.Remove(entity);
+            Entities.Remove(entity);
+            corpses.Add(new Corpse(entity.CorpseSpritePath, entity.Position));
         }
 
         public void Update(GameTime gameTime)
@@ -51,9 +64,10 @@ namespace Crystal_of_Eternity
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            foreach (var corpse in corpses)
+                corpse.Draw(spriteBatch);
             foreach (var entity in Entities)
                 entity.Draw(gameTime, spriteBatch);
-
             Player.Draw(gameTime, spriteBatch);
             //spriteBatch.DrawRectangle(bounds, Color.Green, 5);
         }

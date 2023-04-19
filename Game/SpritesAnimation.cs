@@ -18,7 +18,7 @@ namespace Crystal_of_Eternity
         private int currentFrame;
         private float rotation;
 
-        public SpritesAnimation(float tickTime, Vector2 scale, bool playFromStart = false, bool isLoop = false) 
+        public SpritesAnimation(float tickTime, Vector2 scale, bool playFromStart = false, bool isLoop = false)
         {
             sprites = new List<Texture2D>();
             tick = tickTime;
@@ -51,7 +51,7 @@ namespace Crystal_of_Eternity
 
         public void Update(GameTime gameTime)
         {
-            if(IsPlaying)
+            if (IsPlaying)
             {
                 timer += gameTime.GetElapsedSeconds();
                 if (timer > tick)
@@ -60,9 +60,9 @@ namespace Crystal_of_Eternity
                     currentFrame++;
                     if (currentFrame >= sprites.Count)
                     {
-                        if(!IsLoop)
+                        if (!IsLoop)
                             Stop();
-                        else 
+                        else
                             currentFrame = 0;
                     }
                 }
@@ -71,7 +71,7 @@ namespace Crystal_of_Eternity
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects spriteEffect)
         {
-            if(currentFrame != -1)
+            if (currentFrame != -1)
                 spriteBatch.Draw(sprites[currentFrame], position, null, Color.White,
                     rotation, new(sprites[currentFrame].Width / 2, sprites[currentFrame].Height / 2), Scale, spriteEffect, 0);
         }

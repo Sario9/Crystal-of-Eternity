@@ -25,7 +25,7 @@ namespace Crystal_of_Eternity
 
         public IEnumerable<Collider> GetObstacles()
         {
-            foreach (var obstacle in obstacles) 
+            foreach (var obstacle in obstacles)
                 yield return obstacle;
         }
 

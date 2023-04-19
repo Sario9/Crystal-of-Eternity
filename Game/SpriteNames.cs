@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crystal_of_Eternity
+﻿namespace Crystal_of_Eternity
 {
     public static class SpriteNames
     {
@@ -19,10 +12,12 @@ namespace Crystal_of_Eternity
 
         //Спрайты скелетов
         public const string Skeleton_1 = "Game/General/Entities/Enemies/Skeleton/Skeleton_1";
+        public const string Skeleton_corpse = "Game/General/Entities/Enemies/Skeleton/Skeleton_corpse";
 
         //Спрайты разбойников
         public const string Rogue_1 = "Game/General/Entities/Enemies/Rogue/Rogue_1";
         public const string Rogue_2 = "Game/General/Entities/Enemies/Rogue/Rogue_2";
+        public const string Rogue_corpse = "Game/General/Entities/Enemies/Rogue/Rogue_corpse";
 
         //Анимация слайма
         public const string Slime1 = "Game/General/Entities/Enemies/Slime/Slime1";
@@ -30,7 +25,7 @@ namespace Crystal_of_Eternity
         public const string Slime3 = "Game/General/Entities/Enemies/Slime/Slime3";
         public const string Slime4 = "Game/General/Entities/Enemies/Slime/Slime4";
         public const string Slime5 = "Game/General/Entities/Enemies/Slime/Slime5";
-        
+
         #endregion
 
         #region Attacks

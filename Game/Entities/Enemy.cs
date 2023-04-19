@@ -4,7 +4,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace Crystal_of_Eternity
@@ -17,9 +16,15 @@ namespace Crystal_of_Eternity
 
         public Vector2 Position { get; private set; }
 
-        public float CurrentHP { get; private set; }
+        public float CurrentHP
+        {
+            get { return currentHP; }
+            set { currentHP = value; if (currentHP <= 0) Die(); }
+        }
+        public bool IsAlive => currentHP > 0;
 
         public Sprite Sprite { get; private set; }
+        public string CorpseSpritePath { get; private set; }
         public IShapeF Bounds => Sprite.GetBoundingRectangle(Position + new Vector2(0, 16) * 0.5f, 0, new(0.6f, 0.6f));
 
         #endregion
@@ -27,6 +32,7 @@ namespace Crystal_of_Eternity
         #region Private
 
         private Texture2D texture;
+        private string spritePath;
 
         private float currentHP;
         private float maxHP;
@@ -48,14 +54,17 @@ namespace Crystal_of_Eternity
 
         #endregion
 
-        public Enemy(string name, Vector2 position, float maxHP, RectangleF mapBounds)
+        public Enemy(string name, string spritePath, string corpsePath, Vector2 position, float maxHP, float moveSpeed, RectangleF mapBounds)
         {
             Name = name;
             Position = position;
-            currentHP = maxHP;
             this.maxHP = maxHP;
+            currentHP = maxHP;
+            this.moveSpeed = moveSpeed;
             walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
             player = MyGame.Instance.CurrentLevel.Player;
+            CorpseSpritePath = corpsePath;
+            this.spritePath = spritePath;
             LoadContent();
 
             minPosition = Vector2.Zero;
@@ -66,7 +75,7 @@ namespace Crystal_of_Eternity
         public void LoadContent()
         {
             var content = MyGame.Instance.Content;
-            texture = content.Load<Texture2D>(SpriteNames.Skeleton_1);
+            texture = content.Load<Texture2D>(spritePath);
             Sprite = new Sprite(texture);
         }
 
@@ -79,7 +88,7 @@ namespace Crystal_of_Eternity
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
             var other = collisionInfo.Other;
-            var deltaWhenCollide = collisionInfo.PenetrationVector * 1.1f 
+            var deltaWhenCollide = collisionInfo.PenetrationVector * 1.1f
                 + collisionInfo.PenetrationVector.Rotate(-MathF.PI / 2) * 1.5f; ;
             if (other is Collider)
             {
@@ -89,12 +98,18 @@ namespace Crystal_of_Eternity
                 else if (otherCollider.Type == ColliderType.Obstacle)
                     Position -= deltaWhenCollide;
             }
-            
+        }
+
+        private void Die()
+        {
+            var level = MyGame.Instance.CurrentLevel;
+            level.KillEntity(this);
         }
 
         public void TakeHit()
         {
-            Debug.Print("Get hit" + DateTime.Now.Millisecond);
+            CurrentHP -= 10;
+            Debug.Print("{0} has {1}/{2} HP", Name, currentHP, maxHP);
             canGetHit = false;
             iTimer = 0;
         }
@@ -104,18 +119,18 @@ namespace Crystal_of_Eternity
             if (iTimer >= 0)
             {
                 iTimer += gameTime.GetElapsedSeconds();
-                if(iTimer >= 0.2f)
+                if (iTimer >= 0.2f)
                 {
                     canGetHit = true;
                     iTimer = -1;
-                }    
+                }
             }
 
-            if(player != null) 
+            if (player != null)
             {
                 var directionToPlayer = player.Position - Position;
                 var distance = directionToPlayer.Length();
-                if(distance > 5)
+                if (distance > 5)
                 {
                     directionToPlayer.Normalize();
                     Move(directionToPlayer, gameTime);
@@ -133,8 +148,13 @@ namespace Crystal_of_Eternity
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
 
+            if (!canGetHit)
+                Sprite.Color = Color.Red;
+            else
+                Sprite.Color = Color.White;
+
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
-            spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Red);
+            //spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Red);
         }
     }
 }
