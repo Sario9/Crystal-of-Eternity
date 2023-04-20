@@ -26,7 +26,7 @@ namespace Crystal_of_Eternity
 
         public Sprite Sprite { get; private set; }
         public string CorpseSpritePath { get; private set; }
-        public IShapeF Bounds => Sprite.GetBoundingRectangle(Position + new Vector2(0, 16) * 0.5f, 0, new(0.6f, 0.6f));
+        public IShapeF Bounds { get; private set; }
 
         #endregion
 
@@ -73,7 +73,7 @@ namespace Crystal_of_Eternity
 
             minPosition = Vector2.Zero;
             maxPosition = mapBounds.BottomRight;
-            moveSpeed += (float)Randomizer.Random.NextDouble() / 5;
+            Bounds = Sprite.GetBoundingRectangle(Position, 0, new(0.8f, 0.8f));
         }
 
         public void LoadContent()
@@ -87,12 +87,12 @@ namespace Crystal_of_Eternity
         {
             velocity = direction * moveSpeed * (float)gameTime.GetElapsedSeconds() * baseMoveSpeed;
             Position = Vector2.Clamp(Position + velocity, minPosition, maxPosition);
+            Bounds.Position = Position - new Vector2(16, 16) * 0.8f;
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
             var other = collisionInfo.Other;
-            
             if (other is Collider)
             {
                 var otherCollider = (Collider)other;
@@ -102,9 +102,12 @@ namespace Crystal_of_Eternity
                     Position -= collisionInfo.PenetrationVector * 1.1f +
                         collisionInfo.PenetrationVector.Rotate(-MathF.PI / 2) * 1.5f;
             }
+            else if (other is Enemy)
+            {
+                Position -= collisionInfo.PenetrationVector * .1f;
+            }
             else if (canAttack && other is Player)
             {
-                var player = other as Player;
                 player.TakeHit(Damage);
                 canAttack = false;
                 aTimer = 0;
@@ -140,7 +143,7 @@ namespace Crystal_of_Eternity
             if(aTimer >= 0)
             {
                 aTimer += gameTime.GetElapsedSeconds();
-                if(aTimer >= 0.1f)
+                if(aTimer >= 0.2f)
                 {
                     canAttack = true;
                     aTimer = -1;
@@ -175,7 +178,11 @@ namespace Crystal_of_Eternity
                 Sprite.Color = Color.White;
 
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
-            //spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Red);
+        }
+
+        public void DrawBounds(SpriteBatch spriteBatch) 
+        {
+            spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Red);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Crystal_of_Eternity
@@ -32,11 +33,12 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             Player = new Player("Player", PlayerStartPosition, 100.0f, bounds);
-            Entities.Add(new Skeleton(new(25, 125), bounds));
-            Entities.Add(new Skeleton(new(512, 212), bounds));
-            Entities.Add(new Skeleton(new(21, 643), bounds));
-            Entities.Add(new Rogue(1, new(525, 125), bounds));
-            Entities.Add(new Rogue(2, new(125, 525), bounds));
+            //for (int i = 0; i < 5; i++)
+            //    Entities.Add(new Skeleton(new(Randomizer.Random.Next((int)bounds.Width), Randomizer.Random.Next((int)bounds.Height)), bounds));
+            //for (int i = 0; i < 5; i++)
+            //    Entities.Add(new Rogue(1, new(Randomizer.Random.Next((int)bounds.Width), Randomizer.Random.Next((int)bounds.Height)), bounds));
+            //for (int i = 0; i < 5; i++)
+            //    Entities.Add(new Rogue(2, new(Randomizer.Random.Next((int)bounds.Width), Randomizer.Random.Next((int)bounds.Height)), bounds));
 
             collisionComponent.Insert(Player);
 
@@ -50,6 +52,7 @@ namespace Crystal_of_Eternity
         public void KillEntity(IEntity entity)
         {
             collisionComponent.Remove(entity);
+            collisionComponent.Dispose();
             Entities.Remove(entity);
             corpses.Add(new Corpse(entity.CorpseSpritePath, entity.Position));
         }
@@ -69,7 +72,16 @@ namespace Crystal_of_Eternity
             foreach (var entity in Entities)
                 entity.Draw(gameTime, spriteBatch);
             Player.Draw(gameTime, spriteBatch);
-            //spriteBatch.DrawRectangle(bounds, Color.Green, 5);
+            DrawBounds(spriteBatch);
+        }
+
+        private void DrawBounds(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawRectangle(bounds, Color.Green, 5);
+
+            Player.DrawBounds(spriteBatch);
+            foreach (var entity in Entities)
+                entity.DrawBounds(spriteBatch);
         }
     }
 }

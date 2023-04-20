@@ -33,7 +33,7 @@ namespace Crystal_of_Eternity
 
         public Sprite Sprite { get; private set; }
         public string CorpseSpritePath { get; private set; }
-        public IShapeF Bounds => Sprite.GetBoundingRectangle(Position + new Vector2(0, 16) * 0.5f, 0, new(0.6f, 0.6f));
+        public IShapeF Bounds { get; private set; }
 
 
         #endregion
@@ -56,12 +56,7 @@ namespace Crystal_of_Eternity
         private Vector2 minPosition;
         private Vector2 maxPosition;
 
-        private SpritesAnimation attackAnimation;
-        private Collider attackCollider;
-        private bool canAttack => !attackAnimation.IsPlaying;
-        private SpriteEffects attackFlip = SpriteEffects.None;
-
-        private CollisionComponent collisionComponent;
+        private Attack attack;
 
         #endregion
 
@@ -72,37 +67,36 @@ namespace Crystal_of_Eternity
             currentHP = maxHP;
             this.maxHP = maxHP;
             walkAnimation = new WalkAnimation(moveSpeed * 1.2f, 0.2f);
-            attackAnimation = new(0.01f, new(2, 2f));
+            attack = new(10.0f, 0.05f,
+            new[]
+            {
+                SpriteNames.Attack_1,
+                SpriteNames.Attack_2,
+                SpriteNames.Attack_3,
+                SpriteNames.Attack_4,
+                SpriteNames.Attack_5,
+                SpriteNames.Attack_6
+            },
+            new(2, 2));
             IsAlive = true;
             LoadContent();
 
             minPosition = Vector2.Zero;
             maxPosition = mapBounds.BottomRight;
 
-            collisionComponent = MyGame.Instance.CurrentLevel.collisionComponent;
+            Bounds = Sprite.GetBoundingRectangle(Position, 0, new(0.8f, 0.8f));
         }
 
         public void Move(Vector2 direction, GameTime gameTime)
         {
             velocity = direction * moveSpeed * (float)gameTime.GetElapsedSeconds() * baseMoveSpeed;
             Position = Vector2.Clamp(Position + velocity, minPosition, maxPosition);
-        }
-
-        public void Attack(Vector2 direction, float attackRange, Vector2 size)
-        {
-            attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            direction.Normalize();
-            var attackPosition = Position + direction * attackRange;
-            attackAnimation.SetRotation(Vector2Extensions.ToAngle(attackPosition - Position));
-            attackAnimation.Play();
-            attackCollider = new(new(attackPosition - attackAnimation.CurrentSprite.Bounds.Size.ToVector2() / 2,
-                size * attackAnimation.Scale), ColliderType.Attack, Randomizer.Random.Next(7, 11));
-            collisionComponent.Insert(attackCollider);
+            Bounds.Position = Position - new Vector2(16, 16) * 0.8f;
         }
 
         public void TakeHit(float damage)
         {
-            CurrentHP -= damage;
+            //CurrentHP -= damage;
             Debug.Print("{0}/{1}", CurrentHP, maxHP);
         }
 
@@ -116,29 +110,19 @@ namespace Crystal_of_Eternity
             var content = MyGame.Instance.Content;
             texture = content.Load<Texture2D>(SpriteNames.Character_knight);
             Sprite = new Sprite(texture);
-            attackAnimation.AddMany
-            (
-                content.Load<Texture2D>(SpriteNames.Attack_1),
-                content.Load<Texture2D>(SpriteNames.Attack_2),
-                content.Load<Texture2D>(SpriteNames.Attack_3),
-                content.Load<Texture2D>(SpriteNames.Attack_4),
-                content.Load<Texture2D>(SpriteNames.Attack_5),
-                content.Load<Texture2D>(SpriteNames.Attack_6)
-            );
         }
 
         public void Update(GameTime gameTime)
         {
             Move(UserInput.MovePlayer(), gameTime);
-            if (UserInput.IsLMBPressed() && canAttack)
+            attack.Update(gameTime);
+
+            if (UserInput.IsLMBPressed() && attack.CanAttack)
             {
                 var camera = MyGame.Instance.Camera.Main;
                 var mouseWorldPosition = camera.ScreenToWorld(UserInput.GetMousePosition().ToVector2());
-                Attack(mouseWorldPosition - Position, 35, new(8, 8));
+                attack.MakeAttack(mouseWorldPosition - Position, Position, 35);
             }
-            attackAnimation.Update(gameTime);
-            if (attackCollider != null && !attackAnimation.IsPlaying && collisionComponent.Contains(attackCollider))
-                collisionComponent.Remove(attackCollider);
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)
@@ -161,15 +145,13 @@ namespace Crystal_of_Eternity
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
+            attack.Draw(spriteBatch);
+        }
 
-            if (attackCollider != null && attackAnimation.IsPlaying)
-            {
-                //attackCollider.Draw(spriteBatch);
-                attackAnimation.Draw(spriteBatch, attackCollider.Bounds.Position + attackAnimation.CurrentSprite.Bounds.Size.ToVector2() / 2, attackFlip);
-            }
-
-            //spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Blue, 3);
-
+        public void DrawBounds(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Blue, 3);
+            attack.DrawBounds(spriteBatch);
         }
     }
 }

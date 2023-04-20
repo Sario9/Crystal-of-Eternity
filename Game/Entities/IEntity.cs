@@ -21,5 +21,6 @@ namespace Crystal_of_Eternity
         public void Update(GameTime gameTime);
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        public void DrawBounds(SpriteBatch spriteBatch);
     }
 }
