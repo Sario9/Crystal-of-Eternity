@@ -43,15 +43,19 @@ namespace Crystal_of_Eternity
             lastMouseState = MouseState;
             MouseState = Mouse.GetState();
 
-            var isStateChaged = MouseState != lastMouseState;
-            if (isStateChaged) 
+            var isLMBStateChaged = MouseState.LeftButton != lastMouseState.LeftButton;
+            var isRMBStateChaged = MouseState.RightButton != lastMouseState.RightButton;
+            if (isLMBStateChaged)
             {
-                if(MouseState.LeftButton == ButtonState.Pressed && OnLMBPressed != null)
+                if (MouseState.LeftButton == ButtonState.Pressed && OnLMBPressed != null)
                     OnLMBPressed.Invoke();
-                if(MouseState.RightButton == ButtonState.Pressed && OnRMBPressed != null)
-                    OnRMBPressed.Invoke();
                 if (MouseState.LeftButton == ButtonState.Released && OnLMBReleased != null)
                     OnLMBReleased.Invoke();
+            }
+            if (isRMBStateChaged)
+            {
+                if (MouseState.RightButton == ButtonState.Pressed && OnRMBPressed != null)
+                    OnRMBPressed.Invoke();
                 if (MouseState.RightButton == ButtonState.Released && OnRMBReleased != null)
                     OnRMBReleased.Invoke();
             }
@@ -81,7 +85,8 @@ namespace Crystal_of_Eternity
             if (KeyboardState.IsKeyDown(KeyBinds.PlayerMoveRight))
                 direction += new Vector2(1, 0);
 
-            OnMove.Invoke(direction, gameTime);
+            if(OnMove != null)
+                OnMove.Invoke(direction, gameTime);
         }
 
         public static void Update(GameTime gameTime)

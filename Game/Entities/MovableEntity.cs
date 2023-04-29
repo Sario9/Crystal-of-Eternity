@@ -4,7 +4,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Timers;
-using System;
 using System.Diagnostics;
 
 namespace Crystal_of_Eternity
@@ -13,65 +12,66 @@ namespace Crystal_of_Eternity
     {
         #region Public
 
-        public string Name { get; private set; }
+        public string Name { get; protected set; }
 
-        public Vector2 Position { get; private set; }
-        public float Damage { get; private set; }
+        public Vector2 Position { get; protected set; }
+        public float CollisionDamage { get; protected set; }
 
         public float CurrentHP
         {
             get { return currentHP; }
-            set { currentHP = value; if (currentHP <= 0) Die(); }
+            set 
+            { 
+                currentHP = value;
+                if (currentHP <= 0) Die();
+                if (currentHP > maxHP) currentHP = maxHP;
+            }
         }
         public bool IsAlive => currentHP > 0;
 
-        public Sprite Sprite { get; private set; }
-        public string CorpseSpritePath { get; private set; }
-        public IShapeF Bounds { get; private set; }
+        public Sprite Sprite { get; protected set; }
+        public string CorpseSpritePath { get; protected set; }
+        public IShapeF Bounds { get; protected set; }
 
-        public delegate void DeathHandler(IEntity entity);
+        public delegate void DeathHandler(MovableEntity entity);
         public DeathHandler OnDeath;
 
         #endregion
 
         #region Private
 
-        private Texture2D texture;
-        private string spritePath;
+        protected string spritePath;
 
-        private float currentHP;
-        private float maxHP;
+        protected float currentHP;
+        protected float maxHP;
 
-        private readonly float baseMoveSpeed = 100.0f;
-        private float moveSpeed = 0.5f;
-        private Vector2 velocity;
+        protected readonly float baseMoveSpeed = 100.0f;
+        protected float moveSpeed = 0.5f;
+        protected Vector2 velocity;
 
-        private SpriteEffects flip = SpriteEffects.None;
-        private WalkAnimation walkAnimation;
+        protected SpriteEffects flip = SpriteEffects.None;
+        protected WalkAnimation walkAnimation;
 
-        private Vector2 minPosition;
-        private Vector2 maxPosition;
+        protected Vector2 minPosition;
+        protected Vector2 maxPosition;
 
-        private bool canGetHit = true;
-        private bool canAttack = true;
+        protected bool canGetHit => iTimer.State == TimerState.Completed;
+
         private float iIntevral;
-        private float attackIntevral;
-        private CountdownTimer iTimer;
-        private CountdownTimer attackTimer;
+        protected CountdownTimer iTimer;
 
         #endregion
 
         public MovableEntity(string name, string spritePath, string corpsePath, Vector2 position, float maxHP,
-            float moveSpeed, float damage, float iInterval, float aInterval, RectangleF mapBounds)
+            float moveSpeed, float damage, float iInterval, RectangleF mapBounds)
         {
             Name = name;
             Position = position;
             this.maxHP = maxHP;
             currentHP = maxHP;
-            this.moveSpeed = moveSpeed + (float)Randomizer.Random.NextDouble() * 0.05f;
-            Damage = damage;
+            this.moveSpeed = moveSpeed;
+            CollisionDamage = damage;
             iIntevral = iInterval;
-            attackIntevral = aInterval;
             walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
             CorpseSpritePath = corpsePath;
             this.spritePath = spritePath;
@@ -82,44 +82,43 @@ namespace Crystal_of_Eternity
             Bounds = Sprite.GetBoundingRectangle(Position, 0, new(0.8f, 0.8f));
 
             iTimer = new CountdownTimer(iIntevral);
-            attackTimer = new CountdownTimer(attackIntevral);
+            iTimer.Start();
         }
 
-        public void LoadContent()
+        public virtual void LoadContent()
         {
             var content = MyGame.Instance.Content;
-            texture = content.Load<Texture2D>(spritePath);
-            Sprite = new Sprite(texture);
+            Sprite = new Sprite(content.Load<Texture2D>(spritePath));
         }
 
-        public void Move(Vector2 direction, GameTime gameTime)
+        public virtual void Move(Vector2 direction, GameTime gameTime)
         {
             velocity = direction * moveSpeed * (float)gameTime.GetElapsedSeconds() * baseMoveSpeed;
             Position = Vector2.Clamp(Position + velocity, minPosition, maxPosition);
             Bounds.Position = Position - new Vector2(16, 16) * 0.8f;
         }
 
-        public void OnCollision(CollisionEventArgs collisionInfo)
+        public virtual void OnCollision(CollisionEventArgs collisionInfo)
         {
 
         }
 
-        private void Die()
+        protected virtual void Die()
         {
             OnDeath.Invoke(this);
         }
 
-        public void TakeHit(float damage)
+        public virtual void TakeHit(float damage)
         {
-            
+
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
-            
+
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             walkAnimation.Play(gameTime);
 
@@ -137,7 +136,7 @@ namespace Crystal_of_Eternity
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
         }
 
-        public void DrawBounds(SpriteBatch spriteBatch)
+        public virtual void DrawBounds(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Red);
         }

@@ -1,17 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collisions;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Crystal_of_Eternity
 {
-    public class Attack : ICollisionActor
+    public class Weapon : ICollisionActor
     {
         public float Damage { get; private set; }
         public bool CanAttack => !animation.IsPlaying;
@@ -22,25 +20,24 @@ namespace Crystal_of_Eternity
         private string[] animationPaths;
         private SpriteEffects attackFlip;
 
-        private float attackSpeed;
-        private Vector2 size;
         private Vector2 position;
+        private float attackRange;
 
         private CollisionComponent collisionComponent;
 
-        public Attack(float damage, float attackSpeed, string[] animationPaths, Vector2 size)
+        public Weapon(float damage, float attackSpeed, float attackRange, string[] animationPaths, float size)
         {
             Damage = damage;
-            this.size = size;
-            this.attackSpeed = attackSpeed;
             this.animationPaths = animationPaths;
+            this.attackRange = attackRange;
 
-            animation = new(attackSpeed, size);
+            animation = new(attackSpeed, Vector2.One * size);
 
             collisionComponent = MyGame.Instance.CurrentLevel.collisionComponent;
 
             LoadContent();
-            Bounds = new RectangleF(animation.CurrentSprite.Bounds.Location, animation.CurrentSprite.Bounds.Size);
+            Bounds = new CircleF(animation.CurrentSprite.Bounds.Location,
+                animation.CurrentSprite.Bounds.Size.X * size * 0.4f);
         }
 
         private void LoadContent()
@@ -50,25 +47,27 @@ namespace Crystal_of_Eternity
             animation.AddMany(textures);
         }
 
-        public void MakeAttack(Vector2 direction, Vector2 playerPosition, float attackRange)
+        public void MakeAttack(Vector2 direction, Vector2 playerPosition, float mouseDistance)
         {
             attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             direction.Normalize();
-            position = playerPosition + direction * attackRange;
+            position = playerPosition + direction * MathHelper.Clamp(mouseDistance, 15, attackRange);
             animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
             animation.Play();
             Bounds.Position = position;
+            collisionComponent.Insert(this);
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
-            Debug.Print("Attack!");
+            
         }
 
         public void Update(GameTime gameTime)
         {
             animation.Update(gameTime);
-            collisionComponent.Remove(this);
+            if(CanAttack)
+                collisionComponent.Remove(this);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -76,9 +75,9 @@ namespace Crystal_of_Eternity
             animation.Draw(spriteBatch, position, attackFlip);
         }
 
-        public void DrawBounds(SpriteBatch spriteBatch) 
+        public void DrawBounds(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Yellow, 1);
+            spriteBatch.DrawCircle((CircleF)Bounds, 12, Color.Yellow, 1);
         }
     }
 }

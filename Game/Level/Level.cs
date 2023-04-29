@@ -13,7 +13,7 @@ namespace Crystal_of_Eternity
     {
         public TileMap Map { get; private set; }
         public Player Player { get; private set; }
-        public List<IEntity> Entities { get; private set; }
+        public List<MovableEntity> MovableEntities { get; private set; }
         public RectangleF bounds => new RectangleF(Vector2.Zero - Vector2.One * 4, new(Map.Size.X * 31, Map.Size.Y * 31));
 
         public Vector2 PlayerStartPosition { get; private set; }
@@ -27,69 +27,69 @@ namespace Crystal_of_Eternity
             Map = new TileMap(levelType, size.X, size.Y);
             PlayerStartPosition = playerStartPosition;
             collisionComponent = new CollisionComponent(new RectangleF(0, 0, Map.Size.X * 32, Map.Size.Y * 32));
-            Entities = new List<IEntity>();
+            MovableEntities = new List<MovableEntity>();
             corpses = new List<Corpse>();
         }
 
         public void Initialize()
         {
-            Player = new Player("Player", PlayerStartPosition, 100.0f, bounds);
-            SpawnEntity(() => new Skeleton(randomPosition, bounds), 5);
-            SpawnEntity(() => new Rogue(1, randomPosition, bounds), 5);
-            SpawnEntity(() => new Rogue(2, randomPosition, bounds), 5);
-            collisionComponent.Insert(Player);
+            Player = new Player(RandomPosition, 100.0f, 0.7f, 0.0f, bounds);
+            SpawnEntity(() => new Skeleton(RandomPosition, bounds), 5);
+            SpawnEntity(() => new Rogue(1, RandomPosition, bounds), 5);
+            SpawnEntity(() => new Rogue(2, RandomPosition, bounds), 5);
+            SpawnEntity(() => Player, 1);
 
-            foreach (var entity in Entities)
+            foreach (var entity in MovableEntities)
+            {
                 collisionComponent.Insert(entity);
+                entity.OnDeath += KillEntity;
+            }
 
             foreach (var obstacle in Map.GetObstacles().Where(x => x != null))
                 collisionComponent.Insert(obstacle);
-
-            Player.OnDeath += KillEntity;
         }
 
-        public void KillEntity(IEntity entity)
+        public void KillEntity(MovableEntity entity)
         {
+            Debug.Print(entity.Name + " died");
             collisionComponent.Remove(entity);
-            collisionComponent.Dispose();
-            Entities.Remove(entity);
-            if(entity.CorpseSpritePath != "")
+            MovableEntities.Remove(entity);
+            if (entity.CorpseSpritePath != "")
                 corpses.Add(new Corpse(entity.CorpseSpritePath, entity.Position));
+            entity.OnDeath -= KillEntity;
         }
 
-        public void SpawnEntity(Func<IEntity> entity, int count)
+        public void SpawnEntity(Func<MovableEntity> entity, int count)
         {
             for (int i = 0; i < count; i++)
-                Entities.Add(entity());
+                MovableEntities.Add(entity());
         }
 
         public void Update(GameTime gameTime)
         {
             Player.Update(gameTime);
-            foreach (var entity in Entities)
+            foreach (var entity in MovableEntities)
                 entity.Update(gameTime);
             collisionComponent.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            Map.Draw(gameTime, spriteBatch);
             foreach (var corpse in corpses)
                 corpse.Draw(spriteBatch);
-            foreach (var entity in Entities)
+            foreach (var entity in MovableEntities)
                 entity.Draw(gameTime, spriteBatch);
-            Player.Draw(gameTime, spriteBatch);
             //DrawBounds(spriteBatch);
         }
 
         private void DrawBounds(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawRectangle(bounds, Color.Green, 5);
-
-            Player.DrawBounds(spriteBatch);
-            foreach (var entity in Entities)
+            foreach (var entity in MovableEntities)
                 entity.DrawBounds(spriteBatch);
         }
 
-        private Vector2 randomPosition => Randomizer.NextVector2((int)bounds.Width, (int)bounds.Height);
+        private Vector2 RandomPosition => Randomizer.NextVector2((int)bounds.Width, (int)bounds.Height);
     }
 }
