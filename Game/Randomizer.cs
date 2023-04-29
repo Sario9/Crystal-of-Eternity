@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -37,5 +38,7 @@ namespace Crystal_of_Eternity
             }
             return 0;
         }
+
+        public static Vector2 NextVector2(int maxX, int maxY) => new Vector2(Random.Next(maxX), Random.Next(maxY));
     }
 }

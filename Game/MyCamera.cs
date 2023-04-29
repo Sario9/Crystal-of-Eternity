@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 
 namespace Crystal_of_Eternity
@@ -8,12 +9,15 @@ namespace Crystal_of_Eternity
     {
         public readonly OrthographicCamera Main;
 
+        private const float maxZoomSpeed = 0.1f;
+
         private GraphicsDevice device;
 
         public MyCamera(GraphicsDevice device)
         {
             this.device = device;
             Main = new OrthographicCamera(device);
+            UserInput.OnWheel += MakeZoom;
             Initialize();
         }
 
@@ -26,8 +30,12 @@ namespace Crystal_of_Eternity
 
         public void Update(GameTime gameTime, Player player)
         {
-            Main.ZoomIn(UserInput.MakeZoom(0.1f));
             Main.LookAt(MapClampedPosition(player.Position));
+        }
+
+        private void MakeZoom(float delta)
+        {
+            Main.ZoomIn(MathHelper.Clamp(delta, -maxZoomSpeed, maxZoomSpeed));
         }
 
         private Vector2 MapClampedPosition(Vector2 position)

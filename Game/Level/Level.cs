@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -33,13 +34,9 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             Player = new Player("Player", PlayerStartPosition, 100.0f, bounds);
-            //for (int i = 0; i < 5; i++)
-            //    Entities.Add(new Skeleton(new(Randomizer.Random.Next((int)bounds.Width), Randomizer.Random.Next((int)bounds.Height)), bounds));
-            //for (int i = 0; i < 5; i++)
-            //    Entities.Add(new Rogue(1, new(Randomizer.Random.Next((int)bounds.Width), Randomizer.Random.Next((int)bounds.Height)), bounds));
-            //for (int i = 0; i < 5; i++)
-            //    Entities.Add(new Rogue(2, new(Randomizer.Random.Next((int)bounds.Width), Randomizer.Random.Next((int)bounds.Height)), bounds));
-
+            SpawnEntity(() => new Skeleton(randomPosition, bounds), 5);
+            SpawnEntity(() => new Rogue(1, randomPosition, bounds), 5);
+            SpawnEntity(() => new Rogue(2, randomPosition, bounds), 5);
             collisionComponent.Insert(Player);
 
             foreach (var entity in Entities)
@@ -47,6 +44,8 @@ namespace Crystal_of_Eternity
 
             foreach (var obstacle in Map.GetObstacles().Where(x => x != null))
                 collisionComponent.Insert(obstacle);
+
+            Player.OnDeath += KillEntity;
         }
 
         public void KillEntity(IEntity entity)
@@ -54,7 +53,14 @@ namespace Crystal_of_Eternity
             collisionComponent.Remove(entity);
             collisionComponent.Dispose();
             Entities.Remove(entity);
-            corpses.Add(new Corpse(entity.CorpseSpritePath, entity.Position));
+            if(entity.CorpseSpritePath != "")
+                corpses.Add(new Corpse(entity.CorpseSpritePath, entity.Position));
+        }
+
+        public void SpawnEntity(Func<IEntity> entity, int count)
+        {
+            for (int i = 0; i < count; i++)
+                Entities.Add(entity());
         }
 
         public void Update(GameTime gameTime)
@@ -72,7 +78,7 @@ namespace Crystal_of_Eternity
             foreach (var entity in Entities)
                 entity.Draw(gameTime, spriteBatch);
             Player.Draw(gameTime, spriteBatch);
-            DrawBounds(spriteBatch);
+            //DrawBounds(spriteBatch);
         }
 
         private void DrawBounds(SpriteBatch spriteBatch)
@@ -83,5 +89,7 @@ namespace Crystal_of_Eternity
             foreach (var entity in Entities)
                 entity.DrawBounds(spriteBatch);
         }
+
+        private Vector2 randomPosition => Randomizer.NextVector2((int)bounds.Width, (int)bounds.Height);
     }
 }

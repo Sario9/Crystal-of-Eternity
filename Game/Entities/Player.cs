@@ -44,6 +44,8 @@ namespace Crystal_of_Eternity
 
         private float currentHP;
         private float maxHP;
+        public delegate void DeathHandler(IEntity entity);
+        public DeathHandler OnDeath;
 
         private readonly float baseMoveSpeed = 100.0f;
         private float moveSpeed = 1.0f;
@@ -85,6 +87,9 @@ namespace Crystal_of_Eternity
             maxPosition = mapBounds.BottomRight;
 
             Bounds = Sprite.GetBoundingRectangle(Position, 0, new(0.8f, 0.8f));
+
+            UserInput.OnLMBPressed += Attack;
+            UserInput.OnMove += Move;
         }
 
         public void Move(Vector2 direction, GameTime gameTime)
@@ -96,13 +101,13 @@ namespace Crystal_of_Eternity
 
         public void TakeHit(float damage)
         {
-            //CurrentHP -= damage;
+            CurrentHP -= damage;
             Debug.Print("{0}/{1}", CurrentHP, maxHP);
         }
 
         private void Die()
         {
-            throw new NotImplementedException();
+            OnDeath.Invoke(this);
         }
 
         public void LoadContent()
@@ -110,19 +115,22 @@ namespace Crystal_of_Eternity
             var content = MyGame.Instance.Content;
             texture = content.Load<Texture2D>(SpriteNames.Character_knight);
             Sprite = new Sprite(texture);
+            CorpseSpritePath = SpriteNames.Rogue_corpse;
         }
 
-        public void Update(GameTime gameTime)
+        private void Attack()
         {
-            Move(UserInput.MovePlayer(), gameTime);
-            attack.Update(gameTime);
-
-            if (UserInput.IsLMBPressed() && attack.CanAttack)
+            if (attack.CanAttack)
             {
                 var camera = MyGame.Instance.Camera.Main;
                 var mouseWorldPosition = camera.ScreenToWorld(UserInput.GetMousePosition().ToVector2());
                 attack.MakeAttack(mouseWorldPosition - Position, Position, 35);
             }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            attack.Update(gameTime);
         }
 
         public void OnCollision(CollisionEventArgs collisionInfo)
