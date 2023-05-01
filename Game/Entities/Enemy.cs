@@ -18,7 +18,7 @@ namespace Crystal_of_Eternity
 
         public Enemy(string name, string spritePath, string corpsePath, Vector2 position, float maxHP,
             float moveSpeed, float damage, float attackInterval, RectangleF mapBounds)
-            : base(name, spritePath, corpsePath, position, maxHP, moveSpeed, damage, 0.2f, mapBounds)
+            : base(name, spritePath, corpsePath, position, maxHP, moveSpeed, damage, 0.15f, mapBounds)
         {
             Name = name;
             Position = position;
@@ -55,10 +55,14 @@ namespace Crystal_of_Eternity
                 if(otherEnemy.IsAlive)
                     Position -= collisionInfo.PenetrationVector * 0.1f;
             }
-            else if (canGetHit && other is Weapon)
+            else if (canGetHit && other is PlayerWeapon)
             {
-                var attack = (Weapon)other;
-                TakeHit(attack.Damage);
+                var attack = (PlayerWeapon)other;
+                if(!attack.WasAttacked(this))
+                {
+                    attack.AddToAttacked(this);
+                    TakeHit(attack.Damage);
+                }
             }
             else if (canAttack && other is Player)
             {

@@ -10,14 +10,14 @@ namespace Crystal_of_Eternity
 {
     public class Player : MovableEntity
     {
-        public Weapon PlayerAttack { get; private set; }
+        public PlayerWeapon PlayerAttack { get; private set; }
         private bool isIdle => velocity == Vector2.Zero;
 
         public Player(Vector2 position, float maxHP, float moveSpeed, float damage, RectangleF mapBounds) :
             base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, position, maxHP,
                 moveSpeed, damage, 0.05f, mapBounds)
         {
-            PlayerAttack = new Spear(1);
+            PlayerAttack = new Sword(2);
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Crystal_of_Eternity
 {
-    public class Spear : Weapon
+    public class Spear : PlayerWeapon
     {
         public Spear(float size) :
             base
             (
-                10.0f, 0.05f, 100.0f,
+                10.0f, 0.05f, 0.5f, 60.0f,
                 new[]
                 {
                     SpriteNames.Attack_1,
