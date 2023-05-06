@@ -30,13 +30,24 @@
 
         #region Attacks
 
-        public const string AttackSpriteSheet = "Game/General/Entities/Player/Animations/Attack/AttackSpriteSheet";
+        //Атака меча
         public const string Attack_1 = "Game/General/Entities/Player/Animations/Attack/Attack_1";
         public const string Attack_2 = "Game/General/Entities/Player/Animations/Attack/Attack_2";
         public const string Attack_3 = "Game/General/Entities/Player/Animations/Attack/Attack_3";
         public const string Attack_4 = "Game/General/Entities/Player/Animations/Attack/Attack_4";
         public const string Attack_5 = "Game/General/Entities/Player/Animations/Attack/Attack_5";
         public const string Attack_6 = "Game/General/Entities/Player/Animations/Attack/Attack_6";
+
+        //Атака копья
+        public const string SpearAttack_1 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_1";
+        public const string SpearAttack_2 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_2";
+        public const string SpearAttack_3 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_3";
+        public const string SpearAttack_4 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_4";
+        public const string SpearAttack_5 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_5";
+        public const string SpearAttack_6 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_6";
+        public const string SpearAttack_7 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_7";
+        public const string SpearAttack_8 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_8";
+        public const string SpearAttack_9 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_9";
 
         #endregion
     }

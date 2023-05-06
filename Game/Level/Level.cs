@@ -22,6 +22,9 @@ namespace Crystal_of_Eternity
 
         private List<Corpse> corpses;
 
+        public delegate void EnemiesHandler(int count);
+        public event EnemiesHandler onEnemyDie;
+
         public Level(LevelType levelType, Point size, Vector2 playerStartPosition)
         {
             Map = new TileMap(levelType, size.X, size.Y);
@@ -34,7 +37,7 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             Player = new Player(RandomPosition, 100.0f, 0.7f, 0.0f, bounds);
-            SpawnEntity(() => new Skeleton(RandomPosition, bounds), 5);
+            SpawnEntity(() => new Skeleton(RandomPosition, bounds), 25);
             SpawnEntity(() => new Rogue(1, RandomPosition, bounds), 5);
             SpawnEntity(() => new Rogue(2, RandomPosition, bounds), 5);
             SpawnEntity(() => Player, 1);
@@ -57,6 +60,8 @@ namespace Crystal_of_Eternity
             if (entity.CorpseSpritePath != "")
                 corpses.Add(new Corpse(entity.CorpseSpritePath, entity.Position));
             entity.OnDeath -= KillEntity;
+            if (entity is Enemy)
+                onEnemyDie.Invoke(MovableEntities.Count - 1);
         }
 
         public void SpawnEntity(Func<MovableEntity> entity, int count)

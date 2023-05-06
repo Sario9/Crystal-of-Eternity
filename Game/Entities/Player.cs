@@ -13,6 +13,9 @@ namespace Crystal_of_Eternity
         public PlayerWeapon PlayerAttack { get; private set; }
         private bool isIdle => velocity == Vector2.Zero;
 
+        public delegate void HitHandler(float currentHealth, float maxHealth);
+        public event HitHandler onTakehit;
+
         public Player(Vector2 position, float maxHP, float moveSpeed, float damage, RectangleF mapBounds) :
             base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, position, maxHP,
                 moveSpeed, damage, 0.05f, mapBounds)
@@ -21,11 +24,13 @@ namespace Crystal_of_Eternity
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
+            
         }
 
         public override void TakeHit(float damage)
         {
             CurrentHP -= damage;
+            onTakehit?.Invoke(CurrentHP, maxHP);
             Debug.Print("{0}/{1}", CurrentHP, maxHP);
         }
 

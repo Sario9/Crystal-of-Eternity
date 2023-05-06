@@ -13,7 +13,7 @@ namespace Crystal_of_Eternity
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private readonly CollisionComponent collisionComponent;
+        private MyControls controls;
 
         public MyGame()
         {
@@ -27,11 +27,18 @@ namespace Crystal_of_Eternity
 
         protected override void Initialize()
         {
+            controls = new MyControls(this);
+            Components.Add(controls);
             CurrentLevel = new Level(LevelType.Level1, new(32, 32), Vector2.One * 128);
             CurrentLevel.Initialize();
             Player = CurrentLevel.Player;
+            Player.onTakehit += controls.UpdatePlayerHP;
+            Player.OnDeath += controls.EndGame;
+            CurrentLevel.onEnemyDie += controls.UpdateEnemyCount;
             Camera = new MyCamera(GraphicsDevice);
             base.Initialize();
+
+            controls.UpdateEnemyCount(CurrentLevel.MovableEntities.Count - 1);
         }
 
         protected override void LoadContent()

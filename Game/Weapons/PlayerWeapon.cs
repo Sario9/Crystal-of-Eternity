@@ -18,16 +18,16 @@ namespace Crystal_of_Eternity
 
         public IShapeF Bounds { get; private set; }
 
-        private SpritesAnimation animation;
-        private string[] animationPaths;
-        private SpriteEffects attackFlip;
+        protected SpritesAnimation animation;
+        protected string[] animationPaths;
+        protected SpriteEffects attackFlip;
 
-        private Vector2 position;
-        private float attackRange;
+        protected Vector2 position;
+        protected float attackRange;
 
-        private CollisionComponent collisionComponent;
-        private CountdownTimer attackTimer;
-        private List<IEntity> attackedEntities;
+        protected CollisionComponent collisionComponent;
+        protected CountdownTimer attackTimer;
+        protected List<IEntity> attackedEntities;
 
         public PlayerWeapon(float damage, float animationSpeed, float attackInterval, float attackRange, string[] animationPaths, float size)
         {
@@ -55,7 +55,7 @@ namespace Crystal_of_Eternity
             animation.AddMany(textures);
         }
 
-        public void MakeAttack(Vector2 direction, Vector2 playerPosition, float mouseDistance)
+        public virtual void MakeAttack(Vector2 direction, Vector2 playerPosition, float mouseDistance)
         {
             if(CanAttack)
             {
@@ -65,7 +65,6 @@ namespace Crystal_of_Eternity
                 position = playerPosition + direction * MathHelper.Clamp(mouseDistance, 15, attackRange);
                 animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
                 animation.Play();
-                Bounds.Position = position;
                 collisionComponent.Insert(this);
                 attackTimer.Restart();
             }
@@ -80,12 +79,14 @@ namespace Crystal_of_Eternity
 
         public bool WasAttacked(IEntity entity) => attackedEntities.Contains(entity);
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             animation.Update(gameTime);
             attackTimer.Update(gameTime);
             if(CanAttack)
                 collisionComponent.Remove(this);
+            else
+                Bounds.Position = position;
         }
 
         public void Draw(SpriteBatch spriteBatch)
