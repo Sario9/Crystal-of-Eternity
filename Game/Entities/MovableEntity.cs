@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
@@ -41,6 +42,9 @@ namespace Crystal_of_Eternity
         #region Private
 
         protected string spritePath;
+        protected string hitSoundPath;
+
+        protected SoundEffect hitSound;
 
         protected float currentHP;
         protected float maxHP;
@@ -62,7 +66,7 @@ namespace Crystal_of_Eternity
 
         #endregion
 
-        public MovableEntity(string name, string spritePath, string corpsePath, Vector2 position, float maxHP,
+        public MovableEntity(string name, string spritePath, string corpsePath, string hitSoundPath, Vector2 position, float maxHP,
             float moveSpeed, float damage, float iInterval, RectangleF mapBounds)
         {
             Name = name;
@@ -75,6 +79,7 @@ namespace Crystal_of_Eternity
             walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
             CorpseSpritePath = corpsePath;
             this.spritePath = spritePath;
+            this.hitSoundPath = hitSoundPath;
             LoadContent();
 
             minPosition = Vector2.Zero;
@@ -89,6 +94,8 @@ namespace Crystal_of_Eternity
         {
             var content = MyGame.Instance.Content;
             Sprite = new Sprite(content.Load<Texture2D>(spritePath));
+            if(hitSoundPath != "")
+                hitSound = content.Load<SoundEffect>(hitSoundPath);
         }
 
         public virtual void Move(Vector2 direction, GameTime gameTime)
@@ -110,7 +117,7 @@ namespace Crystal_of_Eternity
 
         public virtual void TakeHit(float damage)
         {
-
+            hitSound?.Play();
         }
 
         public virtual void Update(GameTime gameTime)

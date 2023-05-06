@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Timers;
 using System;
 using System.Collections.Generic;
@@ -29,11 +32,17 @@ namespace Crystal_of_Eternity
         protected CountdownTimer attackTimer;
         protected List<IEntity> attackedEntities;
 
-        public PlayerWeapon(float damage, float animationSpeed, float attackInterval, float attackRange, string[] animationPaths, float size)
+        protected string[] soundPaths;
+        protected List<SoundEffect> attackSound;
+
+        public PlayerWeapon(float damage, float animationSpeed, float attackInterval, float attackRange, string[] animationPaths, string[] soundPaths, float size)
         {
             Damage = damage;
             this.animationPaths = animationPaths;
             this.attackRange = attackRange;
+
+            this.soundPaths = soundPaths;
+            attackSound = new List<SoundEffect>();
 
             attackedEntities = new List<IEntity>();
 
@@ -53,6 +62,8 @@ namespace Crystal_of_Eternity
             var content = MyGame.Instance.Content;
             var textures = animationPaths.Select(x => content.Load<Texture2D>(x)).ToArray();
             animation.AddMany(textures);
+            foreach(var sound in soundPaths) 
+                attackSound.Add(content.Load<SoundEffect>(sound));
         }
 
         public virtual void MakeAttack(Vector2 direction, Vector2 playerPosition, float mouseDistance)
@@ -65,6 +76,7 @@ namespace Crystal_of_Eternity
                 position = playerPosition + direction * MathHelper.Clamp(mouseDistance, 15, attackRange);
                 animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
                 animation.Play();
+                Randomizer.RandomFromList(attackSound).Play();
                 collisionComponent.Insert(this);
                 attackTimer.Restart();
             }

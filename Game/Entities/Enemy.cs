@@ -16,9 +16,9 @@ namespace Crystal_of_Eternity
         private CountdownTimer attackTimer;
         private bool canAttack => attackTimer.State == TimerState.Completed;
 
-        public Enemy(string name, string spritePath, string corpsePath, Vector2 position, float maxHP,
+        public Enemy(string name, string spritePath, string corpsePath, string hitSoundPath, Vector2 position, float maxHP,
             float moveSpeed, float damage, float attackInterval, RectangleF mapBounds)
-            : base(name, spritePath, corpsePath, position, maxHP, moveSpeed, damage, 0.15f, mapBounds)
+            : base(name, spritePath, corpsePath, hitSoundPath, position, maxHP, moveSpeed, damage, 0.15f, mapBounds)
         {
             Name = name;
             Position = position;
@@ -76,6 +76,7 @@ namespace Crystal_of_Eternity
             CurrentHP -= damage;
             iTimer.Restart();
             Debug.Print("{0} has {1}/{2} HP", Name, currentHP, maxHP);
+            base.TakeHit(damage);
         }
 
         public override void Update(GameTime gameTime)

@@ -23,7 +23,9 @@ namespace Crystal_of_Eternity
                     SpriteNames.SpearAttack_7,
                     SpriteNames.SpearAttack_8,
                     SpriteNames.SpearAttack_9
-                }, size)
+                },
+                new[] {SoundNames.Sword1, SoundNames.Sword2},
+                size)
         {
 
         }
@@ -37,6 +39,7 @@ namespace Crystal_of_Eternity
             attackEndPoint = position + direction * MathHelper.Clamp(mouseDistance, 5, attackRange - 16);
             animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
             animation.Play();
+            Randomizer.RandomFromList(attackSound).Play();
             collisionComponent.Insert(this);
             attackTimer.Restart();
         }

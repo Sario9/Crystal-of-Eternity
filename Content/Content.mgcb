@@ -454,3 +454,21 @@
 /processorParam:TextureFormat=Color
 /build:Game/Level1/Sprites/Tiles/Grass_5.png
 
+#begin Game/Sounds/Skeleton_hit.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/Skeleton_hit.mp3
+
+#begin Game/Sounds/sword1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/sword1.mp3
+
+#begin Game/Sounds/sword2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/sword2.mp3
+

@@ -39,6 +39,8 @@ namespace Crystal_of_Eternity
             return 0;
         }
 
+        public static T RandomFromList<T>(List<T> list) => list[Random.Next(list.Count)];
+
         public static Vector2 NextVector2(int maxX, int maxY) => new Vector2(Random.Next(maxX), Random.Next(maxY));
     }
 }

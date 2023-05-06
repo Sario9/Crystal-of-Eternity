@@ -20,7 +20,9 @@ namespace Crystal_of_Eternity
                     SpriteNames.Attack_4,
                     SpriteNames.Attack_5,
                     SpriteNames.Attack_6
-                }, size)
+                },
+                new[] { SoundNames.Sword1 }, 
+                size)
         {
 
         }
