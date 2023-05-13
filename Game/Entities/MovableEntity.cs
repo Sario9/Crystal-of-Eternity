@@ -28,6 +28,7 @@ namespace Crystal_of_Eternity
                 if (currentHP > maxHP) currentHP = maxHP;
             }
         }
+        public float MaxHP { get { return maxHP; } }
         public bool IsAlive => currentHP > 0;
 
         public Sprite Sprite { get; protected set; }

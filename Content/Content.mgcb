@@ -454,6 +454,54 @@
 /processorParam:TextureFormat=Color
 /build:Game/Level1/Sprites/Tiles/Grass_5.png
 
+#begin Game/Level2/Sprites/Environment/Barrel_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/Level2/Sprites/Environment/Barrel_1.png
+
+#begin Game/Level2/Sprites/Environment/Vase_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/Level2/Sprites/Environment/Vase_1.png
+
+#begin Game/Level2/Sprites/Environment/Vase_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/Level2/Sprites/Environment/Vase_2.png
+
+#begin Game/Level2/Sprites/Environment/Vase_3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/Level2/Sprites/Environment/Vase_3.png
+
 #begin Game/Level2/Sprites/Tiles/DungeonFloor_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -501,6 +549,24 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Game/Level2/Sprites/Tiles/DungeonFloor_4.png
+
+#begin Game/Level2/Sprites/Tiles/DungeonFloor_5.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/Level2/Sprites/Tiles/DungeonFloor_5.png
+
+#begin Game/Sounds/Human_hit.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/Human_hit.mp3
 
 #begin Game/Sounds/Skeleton_hit.mp3
 /importer:Mp3Importer

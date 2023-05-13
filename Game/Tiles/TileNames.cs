@@ -9,6 +9,8 @@
 
         #region level2
         public const string Bricks = "Sprites/Tiles/DungeonFloor_";
+        public const string Vase = "Sprites/Environment/Vase_";
+        public const string Barrel = "Sprites/Environment/Barrel_";
         #endregion
 
         #region level3

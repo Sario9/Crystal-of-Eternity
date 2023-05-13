@@ -39,9 +39,14 @@ namespace Crystal_of_Eternity
             Map = currentRoom.Map;
         }
 
+        private void CompleteRoom()
+        {
+
+        }
+
         public void Update(GameTime gameTime)
         {
-           currentRoom.Update(gameTime);
+            currentRoom.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)

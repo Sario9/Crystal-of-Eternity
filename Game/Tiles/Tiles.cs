@@ -22,6 +22,7 @@ namespace Crystal_of_Eternity
             LoadContent(LevelType.Level1, TileType.Ground);
             LoadContent(LevelType.Level1, TileType.Environment);
             LoadContent(LevelType.Level2, TileType.Ground);
+            LoadContent(LevelType.Level2, TileType.Environment);
         }
 
         private static void LoadContent(LevelType levelType, TileType tileType)
@@ -31,10 +32,10 @@ namespace Crystal_of_Eternity
                 switch (levelType)
                 {
                     case LevelType.Level1:
-                            AddTiles(Ground, levelType, TileNames.Grass, 5);
-                            break;
+                        AddTiles(Ground, levelType, TileNames.Grass, 5);
+                        break;
                     case LevelType.Level2:
-                        AddTiles(Ground, levelType, TileNames.Bricks, 4);
+                        AddTiles(Ground, levelType, TileNames.Bricks, 5);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -48,7 +49,9 @@ namespace Crystal_of_Eternity
                         AddTiles(Environment, levelType, TileNames.Tree, 3);
                         break;
                     case LevelType.Level2:
-                        break;
+                            AddTiles(Environment, levelType, TileNames.Vase, 3);
+                            AddTiles(Environment, levelType, TileNames.Barrel, 1);
+                            break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -62,7 +65,10 @@ namespace Crystal_of_Eternity
             for (var i = 1; i <= count; i++)
                 tilesList.Add(game.Content.Load<Texture2D>(string.Format("Game/{0}/{1}{2}", type.ToString(), path, i)));
 
-            tiles.Add(type, tilesList);
+            if(!tiles.ContainsKey(type))
+                tiles.Add(type, tilesList);
+            else
+                tiles[type].AddRange(tilesList);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collisions;
+using System.Collections.Generic;
 
 namespace Crystal_of_Eternity
 {
@@ -8,6 +9,7 @@ namespace Crystal_of_Eternity
     {
         public static MyGame Instance { get; private set; }
         public Level CurrentLevel { get; private set; }
+        public List<Level> Levels { get; private set; }
         public Player Player { get; private set; }
         public MyCamera Camera { get; private set; }
 
@@ -27,10 +29,16 @@ namespace Crystal_of_Eternity
 
         protected override void Initialize()
         {
+            Levels = new List<Level>()
+            {
+                new Level(LevelType.Level1),
+                new Level(LevelType.Level2),
+            };
+            if (CurrentLevel == null)
+                CurrentLevel = Levels[1];
+            CurrentLevel.Initialize();
             controls = new MyControls(this);
             Components.Add(controls);
-            CurrentLevel = new Level(LevelType.Level1);
-            CurrentLevel.Initialize();
             Player = CurrentLevel.Player;
             Player.onTakehit += controls.UpdatePlayerHP;
             Player.OnDeath += controls.EndGame;
@@ -39,12 +47,18 @@ namespace Crystal_of_Eternity
             base.Initialize();
 
             controls.UpdateEnemyCount(CurrentLevel.MovableEntities.Count - 1);
-            
+            controls.UpdatePlayerHP(Player.CurrentHP, Player.MaxHP);
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+        }
+
+        private void ChangeLevel(int index)
+        {
+            CurrentLevel = Levels[index];
+            Initialize();
         }
 
         protected override void Update(GameTime gameTime)

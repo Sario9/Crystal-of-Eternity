@@ -25,7 +25,7 @@ namespace Crystal_of_Eternity
                     SpriteNames.SpearAttack_8,
                     SpriteNames.SpearAttack_9
                 },
-                new[] {SoundNames.Sword1, SoundNames.Sword2},
+                new[] {SoundNames.Sword2},
                 size, collisionComponent)
         {
 

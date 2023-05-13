@@ -12,11 +12,13 @@ namespace Crystal_of_Eternity
     public class Room
     {
         public readonly CollisionComponent CollisionComponent;
+        public bool isCompleted;
 
         public TileMap Map { get; private set; }
         public Player Player { get; private set; }
 
         public List<MovableEntity> MovableEntities { get; private set; }
+        public int EnemiesCount => MovableEntities.Count - 1;
         private List<Corpse> corpses;
 
         public delegate void EnemiesHandler(int count);
@@ -38,9 +40,9 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             Player = new Player(playerStartPosition, 100.0f, 0.7f, 0.0f, Bounds, CollisionComponent);
-            SpawnEntity(() => new Skeleton(RandomPosition, Bounds, Player), 1);
-            SpawnEntity(() => new Rogue(1, RandomPosition, Bounds, Player), 1);
-            SpawnEntity(() => new Rogue(2, RandomPosition, Bounds, Player), 1);
+            SpawnEntity(() => new Skeleton(RandomPosition, Bounds, Player), 15);
+            SpawnEntity(() => new Rogue(1, RandomPosition, Bounds, Player), 15);
+            SpawnEntity(() => new Rogue(2, RandomPosition, Bounds, Player), 15);
             SpawnEntity(() => Player, 1);
 
             foreach (var entity in MovableEntities)
@@ -71,12 +73,19 @@ namespace Crystal_of_Eternity
                 MovableEntities.Add(entity());
         }
 
+        private void CompleteRoom()
+        {
+            isCompleted = true;
+        }
+
         public void Update(GameTime gameTime)
         {
             Player.Update(gameTime);
             foreach (var entity in MovableEntities)
                 entity.Update(gameTime);
             CollisionComponent.Update(gameTime);
+            if(EnemiesCount == 0 && !isCompleted)
+                CompleteRoom();
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime, bool drawBounds)

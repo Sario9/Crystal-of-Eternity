@@ -6,5 +6,6 @@
         public const string Sword2 = "Game/Sounds/sword2";
 
         public const string SkeletonHit = "Game/Sounds/Skeleton_hit";
+        public const string HumanHit = "Game/Sounds/Human_hit";
     }
 }

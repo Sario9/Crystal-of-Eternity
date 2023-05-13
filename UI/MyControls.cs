@@ -13,6 +13,7 @@ namespace Crystal_of_Eternity
     public class MyControls : ControlManager
     {
         private Progressbar playerHealthBar;
+        private Label playerHealthText;
         private Label enemyCounter;
 
         public MyControls(Game game) : base(game)
@@ -31,6 +32,13 @@ namespace Crystal_of_Eternity
                 Max = 100,
                 Value = 100,
             };
+            playerHealthText = new Label()
+            {
+                Size = new(250,25),
+                Location= new(100, 25),
+                TextColor = Color.White,
+                Text = "HP/MaxHP",
+            };
             enemyCounter = new Label()
             {
                 Size = new(250, 25),
@@ -39,12 +47,14 @@ namespace Crystal_of_Eternity
                 FontName = "Font32"
             };
             Controls.Add(playerHealthBar);
+            Controls.Add(playerHealthText);
             Controls.Add(enemyCounter);
         }
 
         public void UpdatePlayerHP(float hp, float maxHP)
         {
             playerHealthBar.Value = (int)(hp/maxHP * 100);
+            playerHealthText.Text = string.Format("{0}/{1}", (int)hp, maxHP);
             Debug.Print(playerHealthBar.Value.ToString());
         }
 
