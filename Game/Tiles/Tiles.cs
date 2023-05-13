@@ -21,22 +21,37 @@ namespace Crystal_of_Eternity
 
             LoadContent(LevelType.Level1, TileType.Ground);
             LoadContent(LevelType.Level1, TileType.Environment);
+            LoadContent(LevelType.Level2, TileType.Ground);
         }
 
         private static void LoadContent(LevelType levelType, TileType tileType)
         {
-            switch (tileType)
+            if(tileType == TileType.Ground)
             {
-                case TileType.Ground:
-                    AddTiles(Ground, levelType, TileNames.Grass, 5);
-                    break;
-
-                case TileType.Environment:
-                    AddTiles(Environment, levelType, TileNames.Tree, 3);
-                    break;
-
-                default:
-                    throw new NotImplementedException();
+                switch (levelType)
+                {
+                    case LevelType.Level1:
+                            AddTiles(Ground, levelType, TileNames.Grass, 5);
+                            break;
+                    case LevelType.Level2:
+                        AddTiles(Ground, levelType, TileNames.Bricks, 4);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            else if(tileType == TileType.Environment)
+            {
+                switch (levelType)
+                {
+                    case LevelType.Level1:
+                        AddTiles(Environment, levelType, TileNames.Tree, 3);
+                        break;
+                    case LevelType.Level2:
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
         }
 

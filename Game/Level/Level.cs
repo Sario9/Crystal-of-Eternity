@@ -21,11 +21,11 @@ namespace Crystal_of_Eternity
         private List<Room> rooms;
         public Room currentRoom;
 
-        public Level(LevelType levelType, Point size, Vector2 playerStartPosition)
+        public Level(LevelType levelType)
         {
             rooms = new List<Room>()
             {
-                new Room(levelType, size, playerStartPosition)
+                new Room(levelType, new(25,25), new(25,25))
             };
             currentRoom = rooms[0];
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 
 namespace Crystal_of_Eternity
 {
@@ -8,7 +9,7 @@ namespace Crystal_of_Eternity
     {
         private Vector2 attackEndPoint;
 
-        public Spear(float size) :
+        public Spear(float size, CollisionComponent collisionComponent) :
             base
             (
                 10.0f, 0.03f, 0.4f, 125.0f,
@@ -25,7 +26,7 @@ namespace Crystal_of_Eternity
                     SpriteNames.SpearAttack_9
                 },
                 new[] {SoundNames.Sword1, SoundNames.Sword2},
-                size)
+                size, collisionComponent)
         {
 
         }

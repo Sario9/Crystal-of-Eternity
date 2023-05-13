@@ -37,10 +37,10 @@ namespace Crystal_of_Eternity
 
         public void Initialize()
         {
-            Player = new Player(playerStartPosition, 100.0f, 0.7f, 0.0f, Bounds);
-            SpawnEntity(() => new Skeleton(RandomPosition, Bounds, Player), 5);
-            SpawnEntity(() => new Rogue(1, RandomPosition, Bounds, Player), 5);
-            SpawnEntity(() => new Rogue(2, RandomPosition, Bounds, Player), 5);
+            Player = new Player(playerStartPosition, 100.0f, 0.7f, 0.0f, Bounds, CollisionComponent);
+            SpawnEntity(() => new Skeleton(RandomPosition, Bounds, Player), 1);
+            SpawnEntity(() => new Rogue(1, RandomPosition, Bounds, Player), 1);
+            SpawnEntity(() => new Rogue(2, RandomPosition, Bounds, Player), 1);
             SpawnEntity(() => Player, 1);
 
             foreach (var entity in MovableEntities)

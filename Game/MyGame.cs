@@ -29,7 +29,7 @@ namespace Crystal_of_Eternity
         {
             controls = new MyControls(this);
             Components.Add(controls);
-            CurrentLevel = new Level(LevelType.Level1, new(32, 32), Vector2.One * 128);
+            CurrentLevel = new Level(LevelType.Level1);
             CurrentLevel.Initialize();
             Player = CurrentLevel.Player;
             Player.onTakehit += controls.UpdatePlayerHP;
@@ -39,6 +39,7 @@ namespace Crystal_of_Eternity
             base.Initialize();
 
             controls.UpdateEnemyCount(CurrentLevel.MovableEntities.Count - 1);
+            
         }
 
         protected override void LoadContent()

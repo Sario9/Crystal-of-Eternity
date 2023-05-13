@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonoGame.Extended.Collisions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Crystal_of_Eternity
 {
     public class Sword : PlayerWeapon
     {
-        public Sword(float size) :
+        public Sword(float size, CollisionComponent collisionComponent) :
             base
             (
                 20.0f, 0.03f, 0.75f, 35.0f,
@@ -22,7 +23,7 @@ namespace Crystal_of_Eternity
                     SpriteNames.Attack_6
                 },
                 new[] { SoundNames.Sword1 }, 
-                size)
+                size, collisionComponent)
         {
 
         }

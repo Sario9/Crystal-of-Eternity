@@ -16,11 +16,11 @@ namespace Crystal_of_Eternity
         public delegate void HitHandler(float currentHealth, float maxHealth);
         public event HitHandler onTakehit;
 
-        public Player(Vector2 position, float maxHP, float moveSpeed, float damage, RectangleF mapBounds) :
+        public Player(Vector2 position, float maxHP, float moveSpeed, float damage, RectangleF mapBounds, CollisionComponent collisionComponent) :
             base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, "", position, maxHP,
                 moveSpeed, damage, 0.05f, mapBounds)
         {
-            PlayerAttack = new Sword(2f);
+            PlayerAttack = new Sword(2f, collisionComponent);
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;

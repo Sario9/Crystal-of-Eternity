@@ -36,7 +36,7 @@ namespace Crystal_of_Eternity
         protected List<SoundEffect> attackSound;
 
         public PlayerWeapon(float damage, float animationSpeed, float attackInterval, float attackRange, string[] animationPaths, string[] soundPaths,
-            float size)
+            float size, CollisionComponent collisionComponent)
         {
             Damage = damage;
             this.animationPaths = animationPaths;
@@ -49,7 +49,7 @@ namespace Crystal_of_Eternity
 
             animation = new(animationSpeed, Vector2.One * size);
 
-            collisionComponent = MyGame.Instance.CurrentLevel.CollisionComponent;
+            this.collisionComponent = collisionComponent;
 
             attackTimer = new CountdownTimer(attackInterval);
 
