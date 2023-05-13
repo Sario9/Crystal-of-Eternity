@@ -17,7 +17,7 @@ namespace Crystal_of_Eternity
         private bool canAttack => attackTimer.State == TimerState.Completed;
 
         public Enemy(string name, string spritePath, string corpsePath, string hitSoundPath, Vector2 position, float maxHP,
-            float moveSpeed, float damage, float attackInterval, RectangleF mapBounds)
+            float moveSpeed, float damage, float attackInterval, RectangleF mapBounds, Player player)
             : base(name, spritePath, corpsePath, hitSoundPath, position, maxHP, moveSpeed, damage, 0.15f, mapBounds)
         {
             Name = name;
@@ -27,7 +27,7 @@ namespace Crystal_of_Eternity
             this.moveSpeed = moveSpeed + (float)Randomizer.Random.NextDouble() * 0.05f;
             CollisionDamage = damage;
             walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
-            player = MyGame.Instance.CurrentLevel.Player;
+            this.player = player;
             CorpseSpritePath = corpsePath;
             this.spritePath = spritePath;
             LoadContent();

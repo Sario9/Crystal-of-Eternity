@@ -34,7 +34,7 @@ namespace Crystal_of_Eternity
             Player = CurrentLevel.Player;
             Player.onTakehit += controls.UpdatePlayerHP;
             Player.OnDeath += controls.EndGame;
-            CurrentLevel.onEnemyDie += controls.UpdateEnemyCount;
+            CurrentLevel.currentRoom.onEnemyDie += controls.UpdateEnemyCount;
             Camera = new MyCamera(GraphicsDevice);
             base.Initialize();
 
