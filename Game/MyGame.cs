@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GeonBit.UI;
+using GeonBit.UI.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collisions;
 using System.Collections.Generic;
 
 namespace Crystal_of_Eternity
@@ -15,7 +16,7 @@ namespace Crystal_of_Eternity
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private MyControls controls;
+        private UI ui;
 
         public MyGame()
         {
@@ -23,12 +24,13 @@ namespace Crystal_of_Eternity
             graphics.PreferredBackBufferWidth = GameSettings.DefaultScreenSize.X;
             graphics.PreferredBackBufferHeight = GameSettings.DefaultScreenSize.Y;
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
             Instance = this;
         }
 
         protected override void Initialize()
         {
+            UserInterface.Initialize(Content, BuiltinThemes.hd);
+            ui = new UI();
             Levels = new List<Level>()
             {
                 new Level(LevelType.Level1),
@@ -37,17 +39,9 @@ namespace Crystal_of_Eternity
             if (CurrentLevel == null)
                 CurrentLevel = Levels[1];
             CurrentLevel.Initialize();
-            controls = new MyControls(this);
-            Components.Add(controls);
             Player = CurrentLevel.Player;
-            Player.onTakehit += controls.UpdatePlayerHP;
-            Player.OnDeath += controls.EndGame;
-            CurrentLevel.currentRoom.onEnemyDie += controls.UpdateEnemyCount;
             Camera = new MyCamera(GraphicsDevice);
             base.Initialize();
-
-            controls.UpdateEnemyCount(CurrentLevel.MovableEntities.Count - 1);
-            controls.UpdatePlayerHP(Player.CurrentHP, Player.MaxHP);
         }
 
         protected override void LoadContent()
@@ -63,6 +57,8 @@ namespace Crystal_of_Eternity
 
         protected override void Update(GameTime gameTime)
         {
+
+            UserInterface.Active.Update(gameTime);
             UserInput.Update(gameTime);
             Camera.Update(gameTime, Player);
             CurrentLevel.Update(gameTime);
@@ -76,6 +72,7 @@ namespace Crystal_of_Eternity
                 SamplerState.PointClamp, null, null, null, Camera.Main.GetViewMatrix());
             CurrentLevel.Draw(spriteBatch, gameTime);
             spriteBatch.End();
+            UserInterface.Active.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }

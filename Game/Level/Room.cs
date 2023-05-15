@@ -64,7 +64,7 @@ namespace Crystal_of_Eternity
                 corpses.Add(new Corpse(entity.CorpseSpritePath, entity.Position));
             entity.OnDeath -= KillEntity;
             if (entity is Enemy)
-                onEnemyDie.Invoke(MovableEntities.Count - 1);
+                onEnemyDie?.Invoke(MovableEntities.Count - 1);
         }
 
         public void SpawnEntity(Func<MovableEntity> entity, int count)
