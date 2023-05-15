@@ -19,42 +19,25 @@ namespace Crystal_of_Eternity
             Ground = new Dictionary<LevelType, List<Texture2D>>();
             Environment = new Dictionary<LevelType, List<Texture2D>>();
 
-            LoadContent(LevelType.Level1, TileType.Ground);
-            LoadContent(LevelType.Level1, TileType.Environment);
-            LoadContent(LevelType.Level2, TileType.Ground);
-            LoadContent(LevelType.Level2, TileType.Environment);
+            LoadContent(LevelType.Level1);
+            LoadContent(LevelType.Level2);
         }
 
-        private static void LoadContent(LevelType levelType, TileType tileType)
+        private static void LoadContent(LevelType levelType)
         {
-            if(tileType == TileType.Ground)
+            switch(levelType)
             {
-                switch (levelType)
-                {
-                    case LevelType.Level1:
-                        AddTiles(Ground, levelType, TileNames.Grass, 5);
-                        break;
-                    case LevelType.Level2:
-                        AddTiles(Ground, levelType, TileNames.Bricks, 5);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-            else if(tileType == TileType.Environment)
-            {
-                switch (levelType)
-                {
-                    case LevelType.Level1:
-                        AddTiles(Environment, levelType, TileNames.Tree, 3);
-                        break;
-                    case LevelType.Level2:
-                            AddTiles(Environment, levelType, TileNames.Vase, 3);
-                            AddTiles(Environment, levelType, TileNames.Barrel, 1);
-                            break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                case (LevelType.Level1):
+                    AddTiles(Ground, levelType, TileNames.Grass, 5);
+                    AddTiles(Environment, levelType, TileNames.Tree, 3);
+                    break;
+                case (LevelType.Level2):
+                    AddTiles(Ground, levelType, TileNames.Bricks, 5);
+                    AddTiles(Environment, levelType, TileNames.Vase, 3);
+                    AddTiles(Environment, levelType, TileNames.Barrel, 1);
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
         }
 

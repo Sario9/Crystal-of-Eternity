@@ -26,7 +26,6 @@ namespace Crystal_of_Eternity
             currentHP = maxHP;
             this.moveSpeed = moveSpeed + (float)Randomizer.Random.NextDouble() * 0.05f;
             CollisionDamage = damage;
-            walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
             this.player = player;
             CorpseSpritePath = corpsePath;
             this.spritePath = spritePath;
