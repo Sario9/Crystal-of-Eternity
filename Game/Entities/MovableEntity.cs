@@ -24,7 +24,11 @@ namespace Crystal_of_Eternity
             set 
             { 
                 currentHP = value;
-                if (currentHP <= 0) Die();
+                if (currentHP <= 0)
+                {
+                    currentHP = 0;
+                    Die();
+                }
                 if (currentHP > maxHP) currentHP = maxHP;
             }
         }

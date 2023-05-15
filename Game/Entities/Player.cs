@@ -24,7 +24,6 @@ namespace Crystal_of_Eternity
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
-            
         }
 
         public override void TakeHit(float damage)

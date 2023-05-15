@@ -2,6 +2,7 @@
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Crystal_of_Eternity
@@ -9,7 +10,7 @@ namespace Crystal_of_Eternity
     public class MyGame : Game
     {
         public static MyGame Instance { get; private set; }
-        public Level CurrentLevel { get; private set; }
+        public Level CurrentLevel => Levels[currentLevelIndex];
         public List<Level> Levels { get; private set; }
         public Player Player { get; private set; }
         public MyCamera Camera { get; private set; }
@@ -17,6 +18,7 @@ namespace Crystal_of_Eternity
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private UI ui;
+        private int currentLevelIndex = 0;
 
         public MyGame()
         {
@@ -30,16 +32,17 @@ namespace Crystal_of_Eternity
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
-            ui = new UI();
+            ui = new UI(this);
             Levels = new List<Level>()
             {
                 new Level(LevelType.Level1),
                 new Level(LevelType.Level2),
             };
-            if (CurrentLevel == null)
-                CurrentLevel = Levels[1];
             CurrentLevel.Initialize();
             Player = CurrentLevel.Player;
+            Player.onTakehit += ui.UpdateHealth;
+            Player.OnDeath += ui.ShowPlayerDeathText;
+            CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
             Camera = new MyCamera(GraphicsDevice);
             base.Initialize();
         }
@@ -51,8 +54,13 @@ namespace Crystal_of_Eternity
 
         private void ChangeLevel(int index)
         {
-            CurrentLevel = Levels[index];
+            currentLevelIndex = index;
             Initialize();
+        }
+
+        private void RestartLevel()
+        {
+            ChangeLevel(currentLevelIndex);
         }
 
         protected override void Update(GameTime gameTime)
