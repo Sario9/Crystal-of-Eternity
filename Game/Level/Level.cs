@@ -11,37 +11,43 @@ namespace Crystal_of_Eternity
 {
     public class Level
     {
-        public TileMap Map { get; private set; }
-        public Player Player { get; private set; }
-        public List<MovableEntity> MovableEntities { get; private set; }
-        public RectangleF bounds;
+        public TileMap Map => currentRoom.Map;
+        public Player Player => currentRoom.Player;
+        public List<MovableEntity> MovableEntities => currentRoom.MovableEntities;
+        public RectangleF bounds => currentRoom.Bounds;
+
+        private LevelType levelType;
 
         public CollisionComponent CollisionComponent => currentRoom.CollisionComponent;
 
         private List<Room> rooms;
-        public Room currentRoom;
+        private int currentRoomIndex = 0;
+        public Room currentRoom => rooms[currentRoomIndex];
 
         public Level(LevelType levelType)
         {
-            rooms = new List<Room>()
-            {
-                new Room(levelType, new(25,25), new(25,25))
-            };
-            currentRoom = rooms[0];
+            this.levelType = levelType;
         }
 
         public void Initialize()
         {
+            rooms = new List<Room>()
+            {
+                new Room(levelType, new(25,25), new(25,25)),
+                new Room(levelType, new(35,35), new(125,125))
+            };
             currentRoom.Initialize();
-            MovableEntities = currentRoom.MovableEntities;
-            Player = currentRoom.Player;
-            bounds = currentRoom.Bounds;
-            Map = currentRoom.Map;
         }
 
         private void CompleteRoom()
         {
 
+        }
+
+        public void ChangeRoom(int index)
+        {
+            currentRoomIndex = index;
+            currentRoom.Initialize();
         }
 
         public void Update(GameTime gameTime)

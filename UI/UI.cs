@@ -18,7 +18,7 @@ namespace Crystal_of_Eternity
         private Paragraph playerDeathText;
         private MyGame game;
 
-        private Dictionary<string, SpriteFont> fonts;
+        private readonly Dictionary<string, SpriteFont> fonts;
 
         public UI(MyGame game)
         {
@@ -43,7 +43,7 @@ namespace Crystal_of_Eternity
             healthBar = new ProgressBar(0, 100, new(500, 50), Anchor.Auto);
             healthBar.Opacity = 250;
             healthBar.Value = 100;
-            healthText = new Paragraph("xxx/XXX", Anchor.Center, scale: 1.2f);
+            healthText = new Paragraph("XXX/XXX", Anchor.Center, scale: 1.2f);
             healthText.TextStyle = FontStyle.Bold;
 
             healthBar.AddChild(healthText);
@@ -51,7 +51,6 @@ namespace Crystal_of_Eternity
             playerHealthPanel.AddChild(healthBar);
 
             UserInterface.Active.AddEntity(playerHealthPanel);
-
         }
 
         private void LoadContent()
@@ -62,23 +61,23 @@ namespace Crystal_of_Eternity
 
         public void UpdateHealth(float currentHP, float maxHP)
         {
-            healthBar.Value = (int)(currentHP/maxHP * 100);
+            healthBar.Value = (int)(currentHP / maxHP * 100);
             healthText.Text = string.Format("{0}/{1}", currentHP, maxHP);
         }
-        
+
         public void UpdateEnemies(int count)
         {
             enemiesLeft.Text = string.Format("Enemies left: {0}", count);
-
-            playerDeathPanel = new Panel(new(1200, 400), PanelSkin.None, Anchor.Center);
-            playerDeathText = new Paragraph("YOU ARE DEAD!", Anchor.TopCenter, Color.DarkRed, 1.5f);
-            playerDeathText.FontOverride = fonts["72"];
-            playerDeathPanel.AddChild(CreateButton("Restart", fonts["32"], anchor: Anchor.BottomLeft, size: new(250, 70)));
-            playerDeathPanel.AddChild(playerDeathText);
         }
 
         public void ShowPlayerDeathText(MovableEntity player)
         {
+            playerDeathPanel = new Panel(new(1200, 400), PanelSkin.None, Anchor.Center);
+            playerDeathText = new Paragraph("YOU ARE DEAD!", Anchor.CenterRight, Color.DarkRed, 1.5f);
+            playerDeathText.FontOverride = fonts["72"];
+            playerDeathPanel.AddChild(CreateButton("Restart", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70)));
+            playerDeathPanel.AddChild(playerDeathText);
+
             UserInterface.Active.AddEntity(playerDeathPanel);
         }
 

@@ -32,13 +32,14 @@ namespace Crystal_of_Eternity
             Map = new TileMap(levelType, size.X, size.Y);
             Bounds = new RectangleF(Vector2.Zero - Vector2.One * 4, new(Map.Size.X * 31, Map.Size.Y * 31));
             CollisionComponent = new CollisionComponent(Bounds);
-            MovableEntities = new List<MovableEntity>();
-            corpses = new List<Corpse>();
             this.playerStartPosition = playerStartPosition;
         }
 
         public void Initialize()
         {
+            MovableEntities = new List<MovableEntity>();
+            corpses = new List<Corpse>();
+
             Player = new Player(playerStartPosition, 100.0f, 0.7f, 0.0f, Bounds, CollisionComponent);
             SpawnEntity(() => new Skeleton(RandomPosition, Bounds, Player), 15);
             SpawnEntity(() => new Rogue(1, RandomPosition, Bounds, Player), 15);

@@ -1,8 +1,7 @@
 ﻿using GeonBit.UI;
-using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace Crystal_of_Eternity
@@ -31,19 +30,26 @@ namespace Crystal_of_Eternity
 
         protected override void Initialize()
         {
-            UserInterface.Initialize(Content, BuiltinThemes.hd);
-            ui = new UI(this);
             Levels = new List<Level>()
             {
                 new Level(LevelType.Level1),
                 new Level(LevelType.Level2),
             };
             CurrentLevel.Initialize();
+
             Player = CurrentLevel.Player;
+
+            Camera = new MyCamera(GraphicsDevice);
+
+            UserInterface.Initialize(Content, BuiltinThemes.hd);
+            ui = new UI(this);
+
             Player.onTakehit += ui.UpdateHealth;
             Player.OnDeath += ui.ShowPlayerDeathText;
             CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
-            Camera = new MyCamera(GraphicsDevice);
+
+            Player.TakeHit(0);
+
             base.Initialize();
         }
 
@@ -52,19 +58,25 @@ namespace Crystal_of_Eternity
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
-        private void ChangeLevel(int index)
+        public void ChangeLevel(int index)
         {
             currentLevelIndex = index;
-            Initialize();
+            RestartLevel();
         }
 
-        private void RestartLevel()
+        public void RestartLevel()
         {
-            ChangeLevel(currentLevelIndex);
+            CurrentLevel.Initialize();
+            Player = CurrentLevel.Player;
+            Player.onTakehit += ui.UpdateHealth;
+            Player.OnDeath += ui.ShowPlayerDeathText;
+            CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
+            Camera = new MyCamera(GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
         {
+            
 
             UserInterface.Active.Update(gameTime);
             UserInput.Update(gameTime);
