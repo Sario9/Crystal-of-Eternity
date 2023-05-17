@@ -33,7 +33,7 @@ namespace Crystal_of_Eternity
         {
             rooms = new List<Room>()
             {
-                new Room(levelType, new(25,25), new(25,25)),
+                new Room(levelType, new(25,25), new(400,400)),
                 new Room(levelType, new(35,35), new(125,125))
             };
             currentRoom.Initialize();
@@ -41,7 +41,7 @@ namespace Crystal_of_Eternity
 
         private void CompleteRoom()
         {
-
+            throw new NotImplementedException();
         }
 
         public void ChangeRoom(int index)
@@ -53,6 +53,11 @@ namespace Crystal_of_Eternity
         public void Update(GameTime gameTime)
         {
             currentRoom.Update(gameTime);
+            //if (currentRoom.isCompleted)
+            //{
+            //    if(currentRoomIndex + 1 < rooms.Count)
+            //        ChangeRoom(currentRoomIndex + 1);
+            //}
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)

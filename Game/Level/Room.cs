@@ -49,7 +49,8 @@ namespace Crystal_of_Eternity
             foreach (var entity in MovableEntities)
             {
                 CollisionComponent.Insert(entity);
-                entity.OnDeath += KillEntity;
+                if(!(entity is Player))
+                    entity.OnDeath += KillEntity;
             }
 
             foreach (var obstacle in Map.GetObstacles().Where(x => x != null))

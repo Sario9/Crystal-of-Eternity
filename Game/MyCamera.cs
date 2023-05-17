@@ -22,9 +22,11 @@ namespace Crystal_of_Eternity
 
         public void Initialize()
         {
-            Main.Zoom = 2.5f;
-            Main.MaximumZoom = 3f;
-            Main.MinimumZoom = 2.5f;
+            var scale = GameSettings.DefaultScreenSize.X / 1080;
+
+            Main.MaximumZoom = 3f * scale;
+            Main.MinimumZoom = 2.5f * scale;
+            Main.Zoom = Main.MinimumZoom;
         }
 
         public void Update(GameTime gameTime, Player player)

@@ -32,7 +32,7 @@ namespace Crystal_of_Eternity
         {
             CreatePlayerHealthPanel();
 
-            enemiesLeft = new Paragraph("Enemies left: ???", Anchor.TopRight, new(300, 50), new(25, 25), 1f);
+            enemiesLeft = new Paragraph("Осталось врагов: ???", Anchor.TopRight, new(300, 50), new(25, 25), 1f);
 
             UserInterface.Active.AddEntity(enemiesLeft);
         }
@@ -67,18 +67,31 @@ namespace Crystal_of_Eternity
 
         public void UpdateEnemies(int count)
         {
-            enemiesLeft.Text = string.Format("Enemies left: {0}", count);
+            enemiesLeft.Text = string.Format("Осталось врагов: {0}", count);
         }
 
         public void ShowPlayerDeathText(MovableEntity player)
         {
+            var restartButton = CreateButton("Restart", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
+            restartButton.OnClick += (btn) =>
+            {
+                game.ChangeLevel(1);
+                Restart();
+            };
+
             playerDeathPanel = new Panel(new(1200, 400), PanelSkin.None, Anchor.Center);
-            playerDeathText = new Paragraph("YOU ARE DEAD!", Anchor.CenterRight, Color.DarkRed, 1.5f);
+            playerDeathText = new Paragraph("ПОМЕР", Anchor.Center, Color.DarkRed, 1.5f);
             playerDeathText.FontOverride = fonts["72"];
-            playerDeathPanel.AddChild(CreateButton("Restart", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70)));
+            playerDeathPanel.AddChild(restartButton);
             playerDeathPanel.AddChild(playerDeathText);
 
             UserInterface.Active.AddEntity(playerDeathPanel);
+        }
+
+        private void Restart()
+        {
+            UserInterface.Active.Clear();
+            Initialize();
         }
 
         private Button CreateButton(string text, SpriteFont font, ButtonSkin skin = ButtonSkin.Default,

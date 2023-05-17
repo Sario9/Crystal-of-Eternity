@@ -47,7 +47,6 @@ namespace Crystal_of_Eternity
             Player.onTakehit += ui.UpdateHealth;
             Player.OnDeath += ui.ShowPlayerDeathText;
             CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
-
             Player.TakeHit(0);
 
             base.Initialize();
@@ -61,12 +60,18 @@ namespace Crystal_of_Eternity
         public void ChangeLevel(int index)
         {
             currentLevelIndex = index;
+            CurrentLevel.Initialize();
+            RestartLevel();
+        }
+
+        public void ChangeRoom() 
+        {
+            CurrentLevel.ChangeRoom(1);
             RestartLevel();
         }
 
         public void RestartLevel()
         {
-            CurrentLevel.Initialize();
             Player = CurrentLevel.Player;
             Player.onTakehit += ui.UpdateHealth;
             Player.OnDeath += ui.ShowPlayerDeathText;
@@ -76,8 +81,6 @@ namespace Crystal_of_Eternity
 
         protected override void Update(GameTime gameTime)
         {
-            
-
             UserInterface.Active.Update(gameTime);
             UserInput.Update(gameTime);
             Camera.Update(gameTime, Player);

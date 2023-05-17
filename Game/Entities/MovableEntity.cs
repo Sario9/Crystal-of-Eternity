@@ -5,7 +5,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Timers;
-using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
@@ -15,7 +14,7 @@ namespace Crystal_of_Eternity
 
         public string Name { get; protected set; }
 
-        public Vector2 Position { get; protected set; }
+        public Vector2 Position { get; set; }
         public float CollisionDamage { get; protected set; }
 
         public float CurrentHP
@@ -109,6 +108,8 @@ namespace Crystal_of_Eternity
             Position = Vector2.Clamp(Position + velocity, minPosition, maxPosition);
             Bounds.Position = Position - new Vector2(16, 16) * 0.8f;
         }
+
+        public virtual void SetMapBounds(RectangleF bounds) => maxPosition = bounds.BottomRight;
 
         public virtual void OnCollision(CollisionEventArgs collisionInfo)
         {

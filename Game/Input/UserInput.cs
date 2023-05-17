@@ -38,7 +38,7 @@ namespace Crystal_of_Eternity
             if (KeyboardState.IsKeyDown(Keys.R) && !lastKeyboardState.IsKeyDown(Keys.R))
                 game.RestartLevel();
             if (KeyboardState.IsKeyDown(Keys.T) && !lastKeyboardState.IsKeyDown(Keys.T))
-                game.CurrentLevel.ChangeRoom(1);
+                game.ChangeRoom();
             if (KeyboardState.IsKeyDown(Keys.Y) && !lastKeyboardState.IsKeyDown(Keys.Y))
                 game.ChangeLevel(1);
         }

@@ -20,7 +20,7 @@ namespace Crystal_of_Eternity
             base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, "", position, maxHP,
                 moveSpeed, damage, 0.05f, mapBounds)
         {
-            PlayerAttack = new Sword(2f, collisionComponent);
+            PlayerAttack = new Spear(2f, collisionComponent);
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
@@ -68,9 +68,9 @@ namespace Crystal_of_Eternity
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (!isIdle)
-                walkAnimation.Play(gameTime);
+                walkAnimation?.Play(gameTime);
             else
-                walkAnimation.Reset();
+                walkAnimation?.Reset();
 
             if (velocity.X > 0)
                 flip = SpriteEffects.FlipHorizontally;

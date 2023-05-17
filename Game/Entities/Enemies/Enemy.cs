@@ -86,7 +86,7 @@ namespace Crystal_of_Eternity
             {
                 var directionToPlayer = player.Position - Position;
                 var distance = directionToPlayer.Length();
-                if (distance > 2)
+                if (distance > 5)
                 {
                     directionToPlayer.Normalize();
                     Move(directionToPlayer, gameTime);
