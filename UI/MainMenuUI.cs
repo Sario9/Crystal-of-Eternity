@@ -1,6 +1,7 @@
 ﻿using Crystal_of_Eternity.UI;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -15,7 +16,10 @@ namespace Crystal_of_Eternity
         private ContentManager content;
         private GraphicsDevice device;
 
+        private Texture2D backgroundImage;
+
         private readonly Dictionary<string, SpriteFont> fonts;
+
 
         #endregion
 
@@ -33,25 +37,37 @@ namespace Crystal_of_Eternity
 
         private void Initialize()
         {
-            var panel = new Panel(new(500, 500));
-            var playButton = UIHelper.CreateButton("Play", fonts["32"]);
-            var quitButton = UIHelper.CreateButton("Quit", fonts["32"]);
+            var scale = UserInterface.Active.GlobalScale = GameSettings.Scale;
+            var background = new Image(backgroundImage, device.Viewport.Bounds.Size.ToVector2() / scale);
+            var panel = new Panel(new(750 * (scale + 1.2f)/2, device.Viewport.Height / scale), PanelSkin.Default, Anchor.TopLeft);
+            var label = new Label("CRYSTAL OF ETERNITY", Anchor.TopCenter);
+            var playButton = UIHelper.CreateButton("Играть", fonts["32"]);
+            var quitButton = UIHelper.CreateButton("Выйти из игры", fonts["32"]);
+            ((Label)quitButton.Children[0]).FillColor = Color.IndianRed;
 
             playButton.OnClick += (btn) => game.ChangeState(new GameState(game, content, device));
             quitButton.OnClick += (btn) => game.Exit();
 
-            panel.AddChild(new Label("MainMenu", Anchor.TopCenter));
+            label.FontOverride = fonts["52"];
+            label.FillColor = Color.Cyan;
+            label.AlignToCenter = true;
+
+            panel.AddChild(label);
             panel.AddChild(new HorizontalLine());
             panel.AddChild(playButton);
             panel.AddChild(quitButton);
 
+            UserInterface.Active.AddEntity(background);
             UserInterface.Active.AddEntity(panel);
         }
 
         private void LoadContent()
         {
             fonts.Add("72", game.Content.Load<SpriteFont>("Font72"));
+            fonts.Add("52", game.Content.Load<SpriteFont>("Font52"));
             fonts.Add("32", game.Content.Load<SpriteFont>("Font32"));
+
+            backgroundImage = game.Content.Load<Texture2D>(SpriteNames.MainMenuBG);
         }
 
         private void Restart()

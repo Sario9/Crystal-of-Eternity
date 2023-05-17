@@ -28,6 +28,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Font32.spritefont
 
+#begin Font52.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font52.spritefont
+
 #begin Font72.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -358,6 +365,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Game/General/Entities/Player/Sword.png
+
+#begin Game/General/MainMenuBG.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/MainMenuBG.jpg
 
 #begin Game/Level1/Sprites/Environment/Tree_1.png
 /importer:TextureImporter

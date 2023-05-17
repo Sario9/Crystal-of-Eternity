@@ -20,7 +20,6 @@ namespace Crystal_of_Eternity
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private GameUI ui;
         private int currentLevelIndex = 0;
         
         #endregion
@@ -28,14 +27,17 @@ namespace Crystal_of_Eternity
         public MyGame()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = GameSettings.DefaultScreenSize.X;
-            graphics.PreferredBackBufferHeight = GameSettings.DefaultScreenSize.Y;
+            graphics.PreferredBackBufferWidth = GameSettings.CurrentScreenSize.X;
+            graphics.PreferredBackBufferHeight = GameSettings.CurrentScreenSize.Y;
+            graphics.IsFullScreen = GameSettings.IsFullScreen;
             Content.RootDirectory = "Content";
             Instance = this;
         }
 
         protected override void Initialize()
         {
+            UserInput.OnMenuExit += ExitToMenu;
+
             base.Initialize();
         }
 
@@ -49,6 +51,11 @@ namespace Crystal_of_Eternity
         public void ChangeState(State state)
         {
             nextState = state;
+        }
+
+        private void ExitToMenu()
+        {
+            ChangeState(new MenuState(this, Content, GraphicsDevice));
         }
 
         protected override void Update(GameTime gameTime)

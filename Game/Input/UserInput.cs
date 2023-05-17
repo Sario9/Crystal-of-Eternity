@@ -14,16 +14,19 @@ namespace Crystal_of_Eternity
         private static MouseState lastMouseState;
 
         public delegate void MouseButtonsHandler();
-        public static MouseButtonsHandler OnLMBPressed;
-        public static MouseButtonsHandler OnLMBReleased;
-        public static MouseButtonsHandler OnRMBPressed;
-        public static MouseButtonsHandler OnRMBReleased;
+        public static MouseButtonsHandler OnLMBPressed { get; set; }
+        public static MouseButtonsHandler OnLMBReleased { get; set; }
+        public static MouseButtonsHandler OnRMBPressed { get; set; }
+        public static MouseButtonsHandler OnRMBReleased { get; set; }
 
         public delegate void MouseWheelHandler(float delta);
         public static MouseWheelHandler OnWheel;
 
         public delegate void MovementHandler(Vector2 direction, GameTime gameTime);
         public static MovementHandler OnMove;
+
+        public delegate void StateChangeHandler();
+        public static StateChangeHandler OnMenuExit { get; set; }
         #endregion
 
         static UserInput()
@@ -31,10 +34,10 @@ namespace Crystal_of_Eternity
             
         }
 
-        private static void General(MyGame game)
+        private static void ChangeState()
         {
             if (KeyboardState.IsKeyDown(KeyBinds.Exit))
-                game.Exit();
+                OnMenuExit?.Invoke();
         }
 
         public static void InGameGeneral(GameState gameState)
@@ -102,7 +105,7 @@ namespace Crystal_of_Eternity
         {
             UpdateKeyboardState(gameTime);
             UpdateMouseState(gameTime);
-            General(game);
+            ChangeState();
         }
     }
 }

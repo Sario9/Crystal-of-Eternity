@@ -26,7 +26,7 @@ namespace Crystal_of_Eternity
 
         public void Initialize()
         {
-            var scale = GameSettings.DefaultScreenSize.X / 1080;
+            var scale = GameSettings.Scale;
 
             Main.MaximumZoom = 3f * scale;
             Main.MinimumZoom = 2.5f * scale;

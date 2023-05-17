@@ -27,7 +27,6 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             UserInterface.Active.Clear();
-            UserInterface.Initialize(Content, BuiltinThemes.hd);
             ui = new GameUI(this);
 
             Player = new Player(this, 100.0f, 0.7f, 0);

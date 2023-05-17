@@ -50,5 +50,11 @@
         public const string SpearAttack_9 = "Game/General/Entities/Player/Animations/Attack/SpearAttack_9";
 
         #endregion
+
+        #region Backgrounds
+
+        public const string MainMenuBG = "Game/General/MainMenuBG";
+
+        #endregion
     }
 }
