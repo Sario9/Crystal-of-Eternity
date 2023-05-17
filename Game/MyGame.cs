@@ -30,25 +30,23 @@ namespace Crystal_of_Eternity
 
         protected override void Initialize()
         {
+            UserInterface.Initialize(Content, BuiltinThemes.hd);
+            ui = new UI(this);
+
+            Player = new Player(100.0f, 0.7f, 0);
+            Player.onHealthChanged += ui.UpdateHealth;
+            Player.OnDeath += ui.ShowPlayerDeathText;
+
             Levels = new List<Level>()
             {
                 new Level(LevelType.Level1),
                 new Level(LevelType.Level2),
             };
-            CurrentLevel.Initialize();
-
-            Player = CurrentLevel.Player;
+            CurrentLevel.Initialize(Player);
 
             Camera = new MyCamera(GraphicsDevice);
 
-            UserInterface.Initialize(Content, BuiltinThemes.hd);
-            ui = new UI(this);
-
-            Player.onTakehit += ui.UpdateHealth;
-            Player.OnDeath += ui.ShowPlayerDeathText;
             CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
-            Player.TakeHit(0);
-
             base.Initialize();
         }
 
@@ -60,21 +58,20 @@ namespace Crystal_of_Eternity
         public void ChangeLevel(int index)
         {
             currentLevelIndex = index;
-            CurrentLevel.Initialize();
             RestartLevel();
         }
 
-        public void ChangeRoom() 
+        public void ChangeRoom(int index) 
         {
-            CurrentLevel.ChangeRoom(1);
+            CurrentLevel.ChangeRoom(index);
             RestartLevel();
         }
 
         public void RestartLevel()
         {
-            Player = CurrentLevel.Player;
-            Player.onTakehit += ui.UpdateHealth;
-            Player.OnDeath += ui.ShowPlayerDeathText;
+            CurrentLevel.currentRoom.onEnemyDie -= ui.UpdateEnemies;
+            CurrentLevel.Initialize(Player);
+            Player.Restart();
             CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
             Camera = new MyCamera(GraphicsDevice);
         }

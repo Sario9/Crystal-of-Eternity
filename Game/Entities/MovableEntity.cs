@@ -17,9 +17,9 @@ namespace Crystal_of_Eternity
         public Vector2 Position { get; set; }
         public float CollisionDamage { get; protected set; }
 
-        public float CurrentHP
+        public virtual float CurrentHP
         {
-            get { return currentHP; }
+            get => currentHP;
             set 
             { 
                 currentHP = value;

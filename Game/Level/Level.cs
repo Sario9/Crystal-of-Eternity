@@ -29,14 +29,14 @@ namespace Crystal_of_Eternity
             this.levelType = levelType;
         }
 
-        public void Initialize()
+        public void Initialize(Player player)
         {
             rooms = new List<Room>()
             {
                 new Room(levelType, new(25,25), new(400,400)),
                 new Room(levelType, new(35,35), new(125,125))
             };
-            currentRoom.Initialize();
+            currentRoom.Initialize(player);
         }
 
         private void CompleteRoom()
@@ -47,7 +47,7 @@ namespace Crystal_of_Eternity
         public void ChangeRoom(int index)
         {
             currentRoomIndex = index;
-            currentRoom.Initialize();
+            currentRoom.Initialize(Player);
         }
 
         public void Update(GameTime gameTime)

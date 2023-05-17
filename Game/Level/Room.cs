@@ -35,16 +35,18 @@ namespace Crystal_of_Eternity
             this.playerStartPosition = playerStartPosition;
         }
 
-        public void Initialize()
+        public void Initialize(Player player)
         {
             MovableEntities = new List<MovableEntity>();
             corpses = new List<Corpse>();
+            player.Initialize(playerStartPosition, Bounds, CollisionComponent);
+            Player = player;
 
-            Player = new Player(playerStartPosition, 100.0f, 0.7f, 0.0f, Bounds, CollisionComponent);
-            SpawnEntity(() => new Skeleton(RandomPosition, Bounds, Player), 15);
-            SpawnEntity(() => new Rogue(1, RandomPosition, Bounds, Player), 15);
-            SpawnEntity(() => new Rogue(2, RandomPosition, Bounds, Player), 15);
-            SpawnEntity(() => Player, 1);
+            SpawnEntities
+            (
+                (() => new Skeleton(RandomPosition, Bounds, Player), 10),
+                (() => player, 1)
+            );
 
             foreach (var entity in MovableEntities)
             {
@@ -69,10 +71,13 @@ namespace Crystal_of_Eternity
                 onEnemyDie?.Invoke(MovableEntities.Count - 1);
         }
 
-        public void SpawnEntity(Func<MovableEntity> entity, int count)
+        public void SpawnEntities(params (Func<MovableEntity> entity, int count)[] spawners)
         {
-            for (int i = 0; i < count; i++)
-                MovableEntities.Add(entity());
+            foreach(var spawner in spawners)
+            {
+                for (int i = 0; i < spawner.count; i++)
+                    MovableEntities.Add(spawner.entity());
+            }
         }
 
         private void CompleteRoom()

@@ -13,23 +13,38 @@ namespace Crystal_of_Eternity
         public PlayerWeapon PlayerAttack { get; private set; }
         private bool isIdle => velocity == Vector2.Zero;
 
-        public delegate void HitHandler(float currentHealth, float maxHealth);
-        public event HitHandler onTakehit;
-
-        public Player(Vector2 position, float maxHP, float moveSpeed, float damage, RectangleF mapBounds, CollisionComponent collisionComponent) :
-            base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, "", position, maxHP,
-                moveSpeed, damage, 0.05f, mapBounds)
+        public override float CurrentHP
         {
-            PlayerAttack = new Spear(2f, collisionComponent);
+            get => currentHP;
+            set 
+            { 
+                base.CurrentHP = value;
+                onHealthChanged?.Invoke(value, maxHP);
+            }
+        }
 
+        public delegate void HitHandler(float currentHealth, float maxHealth);
+        public event HitHandler onHealthChanged;
+
+        public Player(float maxHP, float moveSpeed, float damage) :
+            base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, "", new(0, 0), maxHP,
+                moveSpeed, damage, 0.05f, new(0, 0, 500, 500))
+        {
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
+        }
+
+        public void Initialize(Vector2 position, RectangleF mapBounds, CollisionComponent collisionComponent)
+        {
+            Position = position;
+            maxPosition = mapBounds.BottomRight;
+            PlayerAttack = new Spear(2f, collisionComponent);
+            TakeHit(0);
         }
 
         public override void TakeHit(float damage)
         {
             CurrentHP -= damage;
-            onTakehit?.Invoke(CurrentHP, maxHP);
             Debug.Print("{0}/{1}", CurrentHP, maxHP);
         }
 
@@ -50,6 +65,11 @@ namespace Crystal_of_Eternity
 
             UserInput.OnLMBPressed -= Attack;
             UserInput.OnMove -= Move;
+        }
+
+        public void Restart()
+        {
+            CurrentHP = maxHP;
         }
 
         public override void Update(GameTime gameTime)
