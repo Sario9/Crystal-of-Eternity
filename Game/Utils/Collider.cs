@@ -7,9 +7,11 @@ namespace Crystal_of_Eternity
 {
     public class Collider : ICollisionActor
     {
+        #region Fields
         public IShapeF Bounds { get; private set; }
         public float CollideDamge { get; private set; }
-        public readonly ColliderType Type;
+        public readonly ColliderType Type; 
+        #endregion
 
         public Collider(RectangleF bounds, ColliderType type, float damage)
         {

@@ -6,12 +6,14 @@ namespace Crystal_of_Eternity
 {
     public class Corpse
     {
+        #region Fields
         private Sprite sprite;
         private string spritePath;
 
         private Vector2 position;
 
-        private float rotation;
+        private float rotation; 
+        #endregion
 
         public Corpse(string spritePath, Vector2 position)
         {

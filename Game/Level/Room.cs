@@ -11,6 +11,7 @@ namespace Crystal_of_Eternity
 {
     public class Room
     {
+        #region Fields
         public readonly CollisionComponent CollisionComponent;
         public bool isCompleted;
 
@@ -25,7 +26,8 @@ namespace Crystal_of_Eternity
         public event EnemiesHandler onEnemyDie;
 
         public RectangleF Bounds { get; private set; }
-        private Vector2 playerStartPosition;
+        private Vector2 playerStartPosition; 
+        #endregion
 
         public Room(LevelType levelType, Point size, Vector2 playerStartPosition)
         {
@@ -51,7 +53,7 @@ namespace Crystal_of_Eternity
             foreach (var entity in MovableEntities)
             {
                 CollisionComponent.Insert(entity);
-                if(!(entity is Player))
+                if (!(entity is Player))
                     entity.OnDeath += KillEntity;
             }
 
@@ -73,7 +75,7 @@ namespace Crystal_of_Eternity
 
         public void SpawnEntities(params (Func<MovableEntity> entity, int count)[] spawners)
         {
-            foreach(var spawner in spawners)
+            foreach (var spawner in spawners)
             {
                 for (int i = 0; i < spawner.count; i++)
                     MovableEntities.Add(spawner.entity());
@@ -91,7 +93,7 @@ namespace Crystal_of_Eternity
             foreach (var entity in MovableEntities)
                 entity.Update(gameTime);
             CollisionComponent.Update(gameTime);
-            if(EnemiesCount == 0 && !isCompleted)
+            if (EnemiesCount == 0 && !isCompleted)
                 CompleteRoom();
         }
 

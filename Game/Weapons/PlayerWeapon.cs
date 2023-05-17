@@ -1,21 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Content;
 using MonoGame.Extended.Timers;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Crystal_of_Eternity
 {
     public class PlayerWeapon : ICollisionActor
     {
+        #region Fields
         public float Damage { get; private set; }
         public bool CanAttack => !animation.IsPlaying && attackTimer.State == TimerState.Completed;
 
@@ -33,7 +29,8 @@ namespace Crystal_of_Eternity
         protected List<IEntity> attackedEntities;
 
         protected string[] soundPaths;
-        protected List<SoundEffect> attackSound;
+        protected List<SoundEffect> attackSound; 
+        #endregion
 
         public PlayerWeapon(float damage, float animationSpeed, float attackInterval, float attackRange, string[] animationPaths, string[] soundPaths,
             float size, CollisionComponent collisionComponent)
@@ -63,13 +60,13 @@ namespace Crystal_of_Eternity
             var content = MyGame.Instance.Content;
             var textures = animationPaths.Select(x => content.Load<Texture2D>(x)).ToArray();
             animation.AddMany(textures);
-            foreach(var sound in soundPaths) 
+            foreach (var sound in soundPaths)
                 attackSound.Add(content.Load<SoundEffect>(sound));
         }
 
         public virtual void MakeAttack(Vector2 direction, Vector2 playerPosition, float mouseDistance)
         {
-            if(CanAttack)
+            if (CanAttack)
             {
                 attackedEntities.Clear();
                 attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -85,7 +82,7 @@ namespace Crystal_of_Eternity
 
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
-            
+
         }
 
         public void AddToAttacked(IEntity entity) => attackedEntities.Add(entity);
@@ -96,7 +93,7 @@ namespace Crystal_of_Eternity
         {
             animation.Update(gameTime);
             attackTimer.Update(gameTime);
-            if(CanAttack)
+            if (CanAttack)
                 collisionComponent.Remove(this);
             else
                 Bounds.Position = position;

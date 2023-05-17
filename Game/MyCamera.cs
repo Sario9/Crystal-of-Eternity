@@ -6,14 +6,18 @@ namespace Crystal_of_Eternity
 {
     public class MyCamera
     {
+        #region Fields
         public readonly OrthographicCamera Main;
 
         private const float maxZoomSpeed = 0.1f;
 
-        private GraphicsDevice device;
+        private GraphicsDevice device; 
+        private GameState gameState;
+        #endregion
 
-        public MyCamera(GraphicsDevice device)
+        public MyCamera(GameState gameState, GraphicsDevice device)
         {
+            this.gameState = gameState;
             this.device = device;
             Main = new OrthographicCamera(device);
             UserInput.OnWheel += MakeZoom;
@@ -41,7 +45,7 @@ namespace Crystal_of_Eternity
 
         private Vector2 MapClampedPosition(Vector2 position)
         {
-            var level = MyGame.Instance.CurrentLevel;
+            var level = gameState.CurrentLevel;
             var cameraMax = new Vector2(level.Map.Size.X * 31 -
                 (device.Viewport.Width / Main.Zoom / 2),
                 level.Map.Size.Y * 31 -

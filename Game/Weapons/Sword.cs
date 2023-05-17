@@ -1,9 +1,4 @@
 ﻿using MonoGame.Extended.Collisions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Crystal_of_Eternity
 {
@@ -22,11 +17,11 @@ namespace Crystal_of_Eternity
                     SpriteNames.Attack_5,
                     SpriteNames.Attack_6
                 },
-                new[] { SoundNames.Sword1 }, 
+                new[] { SoundNames.Sword1 },
                 size, collisionComponent)
         {
 
         }
-        
+
     }
 }

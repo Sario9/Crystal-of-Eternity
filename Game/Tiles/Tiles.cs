@@ -7,12 +7,14 @@ namespace Crystal_of_Eternity
 {
     public static class Tiles
     {
+        #region Fields
         public static Vector2 TileSize => new(32, 32);
 
-        public readonly static Dictionary<LevelType, List<Texture2D>> Ground;
-        public readonly static Dictionary<LevelType, List<Texture2D>> Environment;
+        public static readonly Dictionary<LevelType, List<Texture2D>> Ground;
+        public static readonly Dictionary<LevelType, List<Texture2D>> Environment;
 
-        private static Game game = MyGame.Instance;
+        private static Game game = MyGame.Instance; 
+        #endregion
 
         static Tiles()
         {
@@ -25,7 +27,7 @@ namespace Crystal_of_Eternity
 
         private static void LoadContent(LevelType levelType)
         {
-            switch(levelType)
+            switch (levelType)
             {
                 case (LevelType.Level1):
                     AddTiles(Ground, levelType, TileNames.Grass, 5);
@@ -48,7 +50,7 @@ namespace Crystal_of_Eternity
             for (var i = 1; i <= count; i++)
                 tilesList.Add(game.Content.Load<Texture2D>(string.Format("Game/{0}/{1}{2}", type.ToString(), path, i)));
 
-            if(!tiles.ContainsKey(type))
+            if (!tiles.ContainsKey(type))
                 tiles.Add(type, tilesList);
             else
                 tiles[type].AddRange(tilesList);

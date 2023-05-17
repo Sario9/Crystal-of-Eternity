@@ -1,4 +1,5 @@
-﻿using GeonBit.UI;
+﻿using Crystal_of_Eternity.UI;
+using GeonBit.UI;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,8 +7,9 @@ using System.Collections.Generic;
 
 namespace Crystal_of_Eternity
 {
-    public class UI
+    public class GameUI
     {
+        #region Fields
         private Panel playerHealthPanel;
         private ProgressBar healthBar;
         private Paragraph healthText;
@@ -16,13 +18,14 @@ namespace Crystal_of_Eternity
 
         private Panel playerDeathPanel;
         private Paragraph playerDeathText;
-        private MyGame game;
+        private GameState gameState;
 
-        private readonly Dictionary<string, SpriteFont> fonts;
+        private readonly Dictionary<string, SpriteFont> fonts; 
+        #endregion
 
-        public UI(MyGame game)
+        public GameUI(GameState gameState)
         {
-            this.game = game;
+            this.gameState = gameState;
             fonts = new Dictionary<string, SpriteFont>();
             LoadContent();
             Initialize();
@@ -55,8 +58,8 @@ namespace Crystal_of_Eternity
 
         private void LoadContent()
         {
-            fonts.Add("72", game.Content.Load<SpriteFont>("Font72"));
-            fonts.Add("32", game.Content.Load<SpriteFont>("Font32"));
+            fonts.Add("72", gameState.Content.Load<SpriteFont>("Font72"));
+            fonts.Add("32", gameState.Content.Load<SpriteFont>("Font32"));
         }
 
         public void UpdateHealth(float currentHP, float maxHP)
@@ -72,10 +75,10 @@ namespace Crystal_of_Eternity
 
         public void ShowPlayerDeathText(MovableEntity player)
         {
-            var restartButton = CreateButton("Restart", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
+            var restartButton = UIHelper.CreateButton("Restart", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
             restartButton.OnClick += (btn) =>
             {
-                game.ChangeLevel(1);
+                gameState.ChangeLevel(1);
                 Restart();
             };
 
@@ -92,21 +95,6 @@ namespace Crystal_of_Eternity
         {
             UserInterface.Active.Clear();
             Initialize();
-        }
-
-        private Button CreateButton(string text, SpriteFont font, ButtonSkin skin = ButtonSkin.Default,
-            Anchor anchor = Anchor.Auto, Vector2? size = null, Vector2? offset = null)
-        {
-            var button = new Button("", skin, anchor, size, offset);
-
-            var buttonText = new Label(text, Anchor.Center);
-            buttonText.FontOverride = font;
-            buttonText.Locked = true;
-
-            button.ClearChildren();
-            button.AddChild(buttonText);
-
-            return button;
         }
     }
 }

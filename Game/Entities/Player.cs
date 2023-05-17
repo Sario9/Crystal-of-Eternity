@@ -10,26 +10,31 @@ namespace Crystal_of_Eternity
 {
     public class Player : MovableEntity
     {
+        #region Fields
         public PlayerWeapon PlayerAttack { get; private set; }
         private bool isIdle => velocity == Vector2.Zero;
+        private GameState gameState;
 
         public override float CurrentHP
         {
             get => currentHP;
-            set 
-            { 
+            set
+            {
                 base.CurrentHP = value;
                 onHealthChanged?.Invoke(value, maxHP);
             }
         }
 
         public delegate void HitHandler(float currentHealth, float maxHealth);
-        public event HitHandler onHealthChanged;
+        public event HitHandler onHealthChanged; 
+        #endregion
 
-        public Player(float maxHP, float moveSpeed, float damage) :
+        public Player(GameState gameState, float maxHP, float moveSpeed, float damage) :
             base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, "", new(0, 0), maxHP,
                 moveSpeed, damage, 0.05f, new(0, 0, 500, 500))
         {
+            this.gameState = gameState;
+
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
         }
@@ -52,7 +57,7 @@ namespace Crystal_of_Eternity
         {
             if (PlayerAttack.CanAttack)
             {
-                var camera = MyGame.Instance.Camera.Main;
+                var camera = gameState.Camera.Main;
                 var mouseWorldPosition = camera.ScreenToWorld(UserInput.GetMousePosition().ToVector2());
                 var distance = (mouseWorldPosition - Position).Length();
                 PlayerAttack.MakeAttack(mouseWorldPosition - Position, Position, distance);

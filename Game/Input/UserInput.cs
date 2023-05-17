@@ -6,6 +6,7 @@ namespace Crystal_of_Eternity
     public static class UserInput
     {
 
+        #region Fields
         public static KeyboardState KeyboardState { get; private set; }
         private static KeyboardState lastKeyboardState;
 
@@ -23,24 +24,27 @@ namespace Crystal_of_Eternity
 
         public delegate void MovementHandler(Vector2 direction, GameTime gameTime);
         public static MovementHandler OnMove;
-
-        private static MyGame game;
+        #endregion
 
         static UserInput()
         {
-            game = MyGame.Instance;
+            
         }
 
-        private static void General()
+        private static void General(MyGame game)
         {
             if (KeyboardState.IsKeyDown(KeyBinds.Exit))
                 game.Exit();
+        }
+
+        public static void InGameGeneral(GameState gameState)
+        {
             if (KeyboardState.IsKeyDown(Keys.R) && !lastKeyboardState.IsKeyDown(Keys.R))
-                game.RestartLevel();
+                gameState.RestartLevel();
             if (KeyboardState.IsKeyDown(Keys.T) && !lastKeyboardState.IsKeyDown(Keys.T))
-                game.ChangeRoom(1);
+                gameState.ChangeRoom(1);
             if (KeyboardState.IsKeyDown(Keys.Y) && !lastKeyboardState.IsKeyDown(Keys.Y))
-                game.ChangeLevel(1);
+                gameState.ChangeLevel(1);
         }
 
         public static Point GetMousePosition() => MouseState.Position;
@@ -91,14 +95,14 @@ namespace Crystal_of_Eternity
             if (KeyboardState.IsKeyDown(KeyBinds.PlayerMoveRight))
                 direction += new Vector2(1, 0);
 
-             OnMove?.Invoke(direction, gameTime);
+            OnMove?.Invoke(direction, gameTime);
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(MyGame game, GameTime gameTime)
         {
             UpdateKeyboardState(gameTime);
             UpdateMouseState(gameTime);
-            General();
+            General(game);
         }
     }
 }

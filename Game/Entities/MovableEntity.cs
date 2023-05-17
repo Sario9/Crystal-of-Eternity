@@ -10,8 +10,7 @@ namespace Crystal_of_Eternity
 {
     public class MovableEntity : IEntity
     {
-        #region Public
-
+        #region Fields
         public string Name { get; protected set; }
 
         public Vector2 Position { get; set; }
@@ -20,8 +19,8 @@ namespace Crystal_of_Eternity
         public virtual float CurrentHP
         {
             get => currentHP;
-            set 
-            { 
+            set
+            {
                 currentHP = value;
                 if (currentHP <= 0)
                 {
@@ -40,10 +39,6 @@ namespace Crystal_of_Eternity
 
         public delegate void DeathHandler(MovableEntity entity);
         public DeathHandler OnDeath;
-
-        #endregion
-
-        #region Private
 
         protected string spritePath;
         protected string hitSoundPath;
@@ -66,8 +61,7 @@ namespace Crystal_of_Eternity
         protected bool canGetHit => iTimer.State == TimerState.Completed;
 
         private float iIntevral;
-        protected CountdownTimer iTimer;
-
+        protected CountdownTimer iTimer; 
         #endregion
 
         public MovableEntity(string name, string spritePath, string corpsePath, string hitSoundPath, Vector2 position, float maxHP,
@@ -98,7 +92,7 @@ namespace Crystal_of_Eternity
         {
             var content = MyGame.Instance.Content;
             Sprite = new Sprite(content.Load<Texture2D>(spritePath));
-            if(hitSoundPath != "")
+            if (hitSoundPath != "")
                 hitSound = content.Load<SoundEffect>(hitSoundPath);
         }
 

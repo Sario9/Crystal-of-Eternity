@@ -4,17 +4,17 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Crystal_of_Eternity
 {
     public class Level
     {
+        #region Fields
         public TileMap Map => currentRoom.Map;
-        public Player Player => currentRoom.Player;
         public List<MovableEntity> MovableEntities => currentRoom.MovableEntities;
         public RectangleF bounds => currentRoom.Bounds;
+
+        public Player Player;
 
         private LevelType levelType;
 
@@ -27,10 +27,13 @@ namespace Crystal_of_Eternity
         public Level(LevelType levelType)
         {
             this.levelType = levelType;
-        }
+        } 
+        #endregion
 
         public void Initialize(Player player)
         {
+            Player = player;
+
             rooms = new List<Room>()
             {
                 new Room(levelType, new(25,25), new(400,400)),

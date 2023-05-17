@@ -7,6 +7,7 @@ namespace Crystal_of_Eternity
 {
     public class SpritesAnimation
     {
+        #region Fields
         public bool IsPlaying { get; private set; }
         public bool IsLoop { get; private set; }
         public Vector2 Scale { get; private set; }
@@ -16,7 +17,8 @@ namespace Crystal_of_Eternity
         private readonly float tick;
         private float timer;
         private int currentFrame;
-        private float rotation;
+        private float rotation; 
+        #endregion
 
         public SpritesAnimation(float tickTime, Vector2 scale, bool playFromStart = false, bool isLoop = false)
         {

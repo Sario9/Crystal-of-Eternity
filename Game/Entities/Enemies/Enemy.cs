@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
@@ -11,10 +10,12 @@ namespace Crystal_of_Eternity
 {
     public class Enemy : MovableEntity
     {
+        #region Fields
         private Player player;
 
         private CountdownTimer attackTimer;
-        private bool canAttack => attackTimer.State == TimerState.Completed;
+        private bool canAttack => attackTimer.State == TimerState.Completed; 
+        #endregion
 
         public Enemy(string name, string spritePath, string corpsePath, string hitSoundPath, Vector2 position, float maxHP,
             float moveSpeed, float damage, float attackInterval, RectangleF mapBounds, Player player)
@@ -51,13 +52,13 @@ namespace Crystal_of_Eternity
             else if (other is Enemy)
             {
                 var otherEnemy = (Enemy)other;
-                if(otherEnemy.IsAlive)
+                if (otherEnemy.IsAlive)
                     Position -= collisionInfo.PenetrationVector * 0.1f;
             }
             else if (canGetHit && other is PlayerWeapon)
             {
                 var attack = (PlayerWeapon)other;
-                if(!attack.WasAttacked(this))
+                if (!attack.WasAttacked(this))
                 {
                     attack.AddToAttacked(this);
                     TakeHit(attack.Damage);

@@ -6,12 +6,14 @@ namespace Crystal_of_Eternity
 {
     public class TileMap
     {
+        #region Fields
         public readonly Point Size;
         public readonly LevelType Type;
 
         private Texture2D[,] ground;
         private Texture2D[,] environment;
-        private Collider[,] obstacles;
+        private Collider[,] obstacles; 
+        #endregion
 
         public TileMap(LevelType levelType, int width, int height)
         {
