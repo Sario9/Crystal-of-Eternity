@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crystal_of_Eternity.Game.States
+namespace Crystal_of_Eternity
 {
     internal class MenuState
     {
