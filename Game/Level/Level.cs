@@ -33,11 +33,22 @@ namespace Crystal_of_Eternity
         public void Initialize(Player player)
         {
             Player = player;
+            var roomPrefs = new[]
+            {
+                new RoomPreferences(levelType, new(25,25), new(400,400), 25,
+                () => new Skeleton(RandomPosition, bounds, player),
+                () => new Rogue(1, RandomPosition, bounds, player),
+                () => new Rogue(2, RandomPosition, bounds, player)),
+
+                new RoomPreferences(levelType, new(35,35), new(125,125), 30,
+                () => new Skeleton(RandomPosition, bounds, player))
+            };
+
 
             rooms = new List<Room>()
             {
-                new Room(levelType, new(25,25), new(400,400)),
-                new Room(levelType, new(35,35), new(125,125))
+                new Room(roomPrefs[0]),
+                new Room(roomPrefs[1])
             };
             currentRoom.Initialize(player);
         }
@@ -67,5 +78,7 @@ namespace Crystal_of_Eternity
         {
             currentRoom.Draw(spriteBatch, gameTime, false);
         }
+
+        private Vector2 RandomPosition => Randomizer.NextVector2((int)bounds.Width, (int)bounds.Height);
     }
 }

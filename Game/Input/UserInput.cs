@@ -34,6 +34,11 @@ namespace Crystal_of_Eternity
             
         }
 
+        public static void ExitToMenu()
+        {
+            OnMenuExit?.Invoke();
+        }
+
         private static void ChangeState()
         {
             if (KeyboardState.IsKeyDown(KeyBinds.Exit))

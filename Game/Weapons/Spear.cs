@@ -12,7 +12,7 @@ namespace Crystal_of_Eternity
         public Spear(float size, CollisionComponent collisionComponent) :
             base
             (
-                10.0f, 0.03f, 0.4f, 125.0f,
+                5.0f, 0.07f, 0.6f, 100.0f,
                 new[]
                 {
                     SpriteNames.SpearAttack_1,
@@ -26,7 +26,7 @@ namespace Crystal_of_Eternity
                     SpriteNames.SpearAttack_9
                 },
                 new[] { SoundNames.Sword2 },
-                size, collisionComponent)
+                1.25f * size, collisionComponent)
         {
 
         }
@@ -36,7 +36,7 @@ namespace Crystal_of_Eternity
             attackedEntities.Clear();
             attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             direction.Normalize();
-            position = playerPosition + direction * 5;
+            position = playerPosition + direction;
             attackEndPoint = position + direction * MathHelper.Clamp(mouseDistance, 5, attackRange - 16);
             animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
             animation.Play();
@@ -48,7 +48,7 @@ namespace Crystal_of_Eternity
         public override void Update(GameTime gameTime)
         {
             if (!CanAttack)
-                position = Vector2.Lerp(position, attackEndPoint, (float)attackTimer.Interval.TotalSeconds);
+                position = Vector2.Lerp(position, attackEndPoint, 0.05f);
             base.Update(gameTime);
         }
 

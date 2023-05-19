@@ -21,7 +21,8 @@ namespace Crystal_of_Eternity
             set
             {
                 base.CurrentHP = value;
-                onHealthChanged?.Invoke(value, maxHP);
+                if(IsAlive)
+                    onHealthChanged?.Invoke(value, maxHP);
             }
         }
 
@@ -43,7 +44,7 @@ namespace Crystal_of_Eternity
         {
             Position = position;
             maxPosition = mapBounds.BottomRight;
-            PlayerAttack = new Spear(2f, collisionComponent);
+            PlayerAttack = new Spear(1f, collisionComponent);
             TakeHit(0);
         }
 
@@ -66,7 +67,7 @@ namespace Crystal_of_Eternity
 
         protected override void Die()
         {
-            OnDeath.Invoke(this);
+            base.Die();
 
             UserInput.OnLMBPressed -= Attack;
             UserInput.OnMove -= Move;

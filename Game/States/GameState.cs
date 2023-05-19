@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
@@ -91,6 +92,5 @@ namespace Crystal_of_Eternity
             CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
             Camera = new MyCamera(this, graphicsDevice);
         }
-
     }
 }

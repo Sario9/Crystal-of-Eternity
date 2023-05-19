@@ -37,6 +37,8 @@ namespace Crystal_of_Eternity
 
         private void Initialize()
         {
+            UserInterface.Active.Clear();
+
             var scale = UserInterface.Active.GlobalScale = GameSettings.Scale;
             var background = new Image(backgroundImage, device.Viewport.Bounds.Size.ToVector2() / scale);
             var panel = new Panel(new(750 * (scale + 1.2f)/2, device.Viewport.Height / scale), PanelSkin.Default, Anchor.TopLeft);

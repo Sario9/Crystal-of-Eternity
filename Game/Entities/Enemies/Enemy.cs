@@ -64,7 +64,7 @@ namespace Crystal_of_Eternity
                     TakeHit(attack.Damage);
                 }
             }
-            else if (canAttack && other is Player)
+            else if (canAttack && other is Player && player.IsAlive)
             {
                 player.TakeHit(CollisionDamage);
                 attackTimer.Restart();

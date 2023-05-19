@@ -21,17 +21,20 @@ namespace Crystal_of_Eternity
             get => currentHP;
             set
             {
-                currentHP = value;
-                if (currentHP <= 0)
+                if(IsAlive)
                 {
-                    currentHP = 0;
-                    Die();
+                    currentHP = value;
+                    if (currentHP <= 0)
+                    {
+                        currentHP = 0;
+                        Die();
+                    }
+                    if (currentHP > maxHP) currentHP = maxHP;
                 }
-                if (currentHP > maxHP) currentHP = maxHP;
             }
         }
         public float MaxHP { get { return maxHP; } }
-        public bool IsAlive => currentHP > 0;
+        public bool IsAlive = true;
 
         public Sprite Sprite { get; protected set; }
         public string CorpseSpritePath { get; protected set; }
@@ -112,6 +115,7 @@ namespace Crystal_of_Eternity
 
         protected virtual void Die()
         {
+            IsAlive = false;
             OnDeath.Invoke(this);
         }
 

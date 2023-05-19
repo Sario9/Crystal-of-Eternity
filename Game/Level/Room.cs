@@ -26,15 +26,27 @@ namespace Crystal_of_Eternity
         public event EnemiesHandler onEnemyDie;
 
         public RectangleF Bounds { get; private set; }
-        private Vector2 playerStartPosition; 
+        private Vector2 playerStartPosition;
+
+        private Func<MovableEntity>[] enemiesTypes;
+        private List<Func<MovableEntity>> enemies;
+        private int startEnemiesCount;
         #endregion
 
-        public Room(LevelType levelType, Point size, Vector2 playerStartPosition)
+        public Room(LevelType levelType, Point size, Vector2 playerStartPosition, int enemiesCount, params Func<MovableEntity>[] enemiesTypes)
         {
             Map = new TileMap(levelType, size.X, size.Y);
+            enemies = new List<Func<MovableEntity>>();
             Bounds = new RectangleF(Vector2.Zero - Vector2.One * 4, new(Map.Size.X * 31, Map.Size.Y * 31));
             CollisionComponent = new CollisionComponent(Bounds);
             this.playerStartPosition = playerStartPosition;
+            this.enemiesTypes = enemiesTypes;
+            startEnemiesCount = enemiesCount;
+        }
+
+        public Room(RoomPreferences prefs) : this(prefs.Level, prefs.Size, prefs.PlayerStartPosition, prefs.EnemiesCount, prefs.Enemies)
+        {
+
         }
 
         public void Initialize(Player player)
@@ -44,11 +56,9 @@ namespace Crystal_of_Eternity
             player.Initialize(playerStartPosition, Bounds, CollisionComponent);
             Player = player;
 
-            SpawnEntities
-            (
-                (() => new Skeleton(RandomPosition, Bounds, Player), 10),
-                (() => player, 1)
-            );
+            AddEnemies(startEnemiesCount);
+            SpawnEntities(enemies.ToArray());
+            SpawnEntities(() => player);
 
             foreach (var entity in MovableEntities)
             {
@@ -59,6 +69,15 @@ namespace Crystal_of_Eternity
 
             foreach (var obstacle in Map.GetObstacles().Where(x => x != null))
                 CollisionComponent.Insert(obstacle);
+        }
+
+        private void AddEnemies(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var enemy = Randomizer.RandomFromList(enemiesTypes.ToList());
+                enemies.Add(enemy);
+            }
         }
 
         public void KillEntity(MovableEntity entity)
@@ -73,13 +92,10 @@ namespace Crystal_of_Eternity
                 onEnemyDie?.Invoke(MovableEntities.Count - 1);
         }
 
-        public void SpawnEntities(params (Func<MovableEntity> entity, int count)[] spawners)
+        public void SpawnEntities(params Func<MovableEntity>[] spawners)
         {
             foreach (var spawner in spawners)
-            {
-                for (int i = 0; i < spawner.count; i++)
-                    MovableEntities.Add(spawner.entity());
-            }
+                MovableEntities.Add(spawner());
         }
 
         private void CompleteRoom()
@@ -114,7 +130,5 @@ namespace Crystal_of_Eternity
             foreach (var entity in MovableEntities)
                 entity.DrawBounds(spriteBatch);
         }
-
-        private Vector2 RandomPosition => Randomizer.NextVector2((int)Bounds.Width, (int)Bounds.Height);
     }
 }

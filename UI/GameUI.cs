@@ -4,6 +4,7 @@ using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
@@ -33,6 +34,8 @@ namespace Crystal_of_Eternity
 
         private void Initialize()
         {
+            UserInterface.Active.Clear();
+
             CreatePlayerHealthPanel();
 
             enemiesLeft = new Paragraph("Осталось врагов: ???", Anchor.TopRight, new(300, 50), new(25, 25), 1f);
@@ -75,11 +78,11 @@ namespace Crystal_of_Eternity
 
         public void ShowPlayerDeathText(MovableEntity player)
         {
-            var restartButton = UIHelper.CreateButton("Restart", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
+            var restartButton = UIHelper.CreateButton("В меню", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
             restartButton.OnClick += (btn) =>
             {
-                gameState.ChangeLevel(1);
-                Restart();
+                UserInterface.Active.Clear();
+                UserInput.ExitToMenu();
             };
 
             playerDeathPanel = new Panel(new(1200, 400), PanelSkin.None, Anchor.Center);
