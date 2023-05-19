@@ -13,7 +13,7 @@ namespace Crystal_of_Eternity
         public static readonly Dictionary<LevelType, List<Texture2D>> Ground;
         public static readonly Dictionary<LevelType, List<Texture2D>> Environment;
 
-        private static Game game = MyGame.Instance; 
+        private static Game game = MyGame.Instance;
         #endregion
 
         static Tiles()
@@ -21,26 +21,19 @@ namespace Crystal_of_Eternity
             Ground = new Dictionary<LevelType, List<Texture2D>>();
             Environment = new Dictionary<LevelType, List<Texture2D>>();
 
-            LoadContent(LevelType.Level1);
-            LoadContent(LevelType.Level2);
+            LoadContent();
         }
 
-        private static void LoadContent(LevelType levelType)
+        private static void LoadContent()
         {
-            switch (levelType)
-            {
-                case (LevelType.Level1):
-                    AddTiles(Ground, levelType, TileNames.Grass, 5);
-                    AddTiles(Environment, levelType, TileNames.Tree, 3);
-                    break;
-                case (LevelType.Level2):
-                    AddTiles(Ground, levelType, TileNames.Bricks, 5);
-                    AddTiles(Environment, levelType, TileNames.Vase, 3);
-                    AddTiles(Environment, levelType, TileNames.Barrel, 1);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+            //уровень 1
+            AddTiles(Ground, LevelType.Level1, TileType.Ground, TileNames.Grass);
+            AddTiles(Environment, LevelType.Level1, TileNames.Tree, 3);
+
+            //уровень 2
+            AddTiles(Ground, LevelType.Level2, TileType.Ground, TileNames.Bricks);
+            AddTiles(Environment, LevelType.Level2, TileNames.Vase, 3);
+            AddTiles(Environment, LevelType.Level2, TileNames.Barrel, 1);
         }
 
         private static void AddTiles(Dictionary<LevelType, List<Texture2D>> tiles, LevelType type, string path, int count)
@@ -54,6 +47,20 @@ namespace Crystal_of_Eternity
                 tiles.Add(type, tilesList);
             else
                 tiles[type].AddRange(tilesList);
+        }
+
+        private static void AddTiles(Dictionary<LevelType, List<Texture2D>> tiles, LevelType level, TileType type, string path)
+        {
+            var tilesList = new List<Texture2D>();
+            var count = TilesProbabilities.probabilities[(level, type)].Length;
+
+            for (var i = 1; i <= count; i++)
+                tilesList.Add(game.Content.Load<Texture2D>(string.Format("Game/{0}/{1}{2}", level.ToString(), path, i)));
+
+            if (!tiles.ContainsKey(level))
+                tiles.Add(level, tilesList);
+            else
+                tiles[level].AddRange(tilesList);
         }
     }
 }
