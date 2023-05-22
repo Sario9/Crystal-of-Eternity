@@ -41,7 +41,8 @@ namespace Crystal_of_Eternity
             currentRoom.Initialize(player, 25, new()
             {
                 new Skeleton(Vector2.One, currentRoom.Bounds, player),
-                new Rogue(1, Vector2.One, currentRoom.Bounds, player)
+                new Rogue(1, Vector2.One, currentRoom.Bounds, player),
+                new Rogue(2, Vector2.One, currentRoom.Bounds, player)
             });
         }
 

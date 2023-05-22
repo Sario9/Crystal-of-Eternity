@@ -93,7 +93,7 @@ namespace Crystal_of_Eternity
         {
             animation.Update(gameTime);
             attackTimer.Update(gameTime);
-            if (CanAttack)
+            if (!animation.IsPlaying)
                 collisionComponent.Remove(this);
             else
                 Bounds.Position = position;

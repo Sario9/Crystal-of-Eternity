@@ -45,7 +45,7 @@ namespace Crystal_of_Eternity
                 OnMenuExit?.Invoke();
         }
 
-        public static void InGameGeneral(GameState gameState)
+        public static void Debug(GameState gameState)
         {
             if (KeyboardState.IsKeyDown(Keys.R) && !lastKeyboardState.IsKeyDown(Keys.R))
                 gameState.RestartLevel();
