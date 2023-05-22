@@ -2,9 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
@@ -43,7 +41,7 @@ namespace Crystal_of_Eternity
 
             Camera = new MyCamera(this, graphicsDevice);
 
-            CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
+            CurrentLevel.currentRoom.OnEnemyDie += ui.UpdateEnemies;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -86,10 +84,10 @@ namespace Crystal_of_Eternity
 
         public void RestartLevel()
         {
-            CurrentLevel.currentRoom.onEnemyDie -= ui.UpdateEnemies;
+            CurrentLevel.currentRoom.OnEnemyDie -= ui.UpdateEnemies;
             CurrentLevel.Initialize(Player);
             Player.Restart();
-            CurrentLevel.currentRoom.onEnemyDie += ui.UpdateEnemies;
+            CurrentLevel.currentRoom.OnEnemyDie += ui.UpdateEnemies;
             Camera = new MyCamera(this, graphicsDevice);
         }
     }

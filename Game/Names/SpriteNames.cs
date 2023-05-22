@@ -56,5 +56,12 @@
         public const string MainMenuBG = "Game/General/MainMenuBG";
 
         #endregion
+
+        #region Interactable
+
+        public const string Hatch_idle = "Game/General/Environment/Hatch";
+        public const string Hatch_active = "Game/General/Environment/Hatch_open";
+
+        #endregion
     }
 }

@@ -5,6 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Timers;
+using System.Data;
 
 namespace Crystal_of_Eternity
 {
@@ -151,5 +152,7 @@ namespace Crystal_of_Eternity
         {
             spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Red);
         }
+
+        public virtual object Clone() => throw new DataException();
     }
 }

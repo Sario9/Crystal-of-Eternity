@@ -1,20 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace Crystal_of_Eternity
 {
-    public abstract class InteractableEntity
+    public abstract class InteractableEntity : IEntity
     {
         #region Fields
 
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; set; }
+
+        public IShapeF Bounds { get; private set; }
 
         protected string idleSpritePath;
         protected string activeSpritePath;
@@ -25,7 +26,7 @@ namespace Crystal_of_Eternity
         protected bool canInteract;
         protected Action onInteract;
 
-        private bool isActive;
+        private bool isActive = false;
 
         private ContentManager content;
         #endregion
@@ -40,6 +41,11 @@ namespace Crystal_of_Eternity
             LoadContent();
         }
 
+        public virtual void OnCollision(CollisionEventArgs collisionInfo)
+        {
+
+        }
+
         public virtual void Interact()
         {
             if(canInteract)
@@ -52,17 +58,24 @@ namespace Crystal_of_Eternity
             activeSprite = new Sprite(content.Load<Texture2D>(activeSpritePath));
         }
 
-        protected virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
 
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (!isActive)
                 idleSprite.Draw(spriteBatch, Position, 0, Vector2.One);
             else
                 activeSprite.Draw(spriteBatch, Position, 0, Vector2.One);
         }
+
+        public void DrawBounds(SpriteBatch spriteBatch)
+        {
+            
+        }
+
+        public virtual object Clone() => throw new DataException();
     }
 }

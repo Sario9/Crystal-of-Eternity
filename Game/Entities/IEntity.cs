@@ -1,26 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Sprites;
+using System;
 
 namespace Crystal_of_Eternity
 {
-    public interface IEntity : ICollisionActor
+    public interface IEntity : ICollisionActor, ICloneable
     {
-        public string Name { get; }
-
-        public Vector2 Position { get; }
-
-        public float CurrentHP { get; }
-
-        public Sprite Sprite { get; }
-        public string CorpseSpritePath { get; }
-
-        public void TakeHit(float damage);
+        public Vector2 Position { get; set; }
 
         public void Update(GameTime gameTime);
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+
         public void DrawBounds(SpriteBatch spriteBatch);
     }
 }

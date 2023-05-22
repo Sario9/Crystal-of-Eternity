@@ -11,7 +11,6 @@ namespace Crystal_of_Eternity
     {
         #region Fields
         public TileMap Map => currentRoom.Map;
-        public List<MovableEntity> MovableEntities => currentRoom.MovableEntities;
         public RectangleF bounds => currentRoom.Bounds;
 
         public Player Player;
@@ -36,14 +35,14 @@ namespace Crystal_of_Eternity
 
             rooms = new List<Room>()
             {
-                new Room(levelType, RoomType.Arena, new(25,25), new(400,400), 25,
-                () => new Skeleton(RandomPosition, bounds, player),
-                () => new Rogue(1, RandomPosition, bounds, player),
-                () => new Rogue(2, RandomPosition, bounds, player)),
-                new Room(levelType, RoomType.Arena, new(35,35), new(125,125), 30,
-                () => new Skeleton(RandomPosition, bounds, player))
+                new DefaultRoom(levelType, new(25,25), new(125,125)),
+                new DefaultRoom(levelType, new(25,45), new(75,325)),
             };
-            currentRoom.Initialize(player);
+            currentRoom.Initialize(player, 25, new()
+            {
+                new Skeleton(Vector2.One, currentRoom.Bounds, player),
+                new Rogue(1, Vector2.One, currentRoom.Bounds, player)
+            });
         }
 
         private void CompleteRoom()
@@ -54,7 +53,7 @@ namespace Crystal_of_Eternity
         public void ChangeRoom(int index)
         {
             currentRoomIndex = index;
-            currentRoom.Initialize(Player);
+            currentRoom.Initialize(Player, 25, new() { new Skeleton(Vector2.One, currentRoom.Bounds, Player) });
         }
 
         public void Update(GameTime gameTime)

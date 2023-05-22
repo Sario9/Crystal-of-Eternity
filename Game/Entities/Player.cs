@@ -44,7 +44,7 @@ namespace Crystal_of_Eternity
         {
             Position = position;
             maxPosition = mapBounds.BottomRight;
-            PlayerAttack = new Spear(1f, collisionComponent);
+            PlayerAttack = new Sword(2f, collisionComponent);
             TakeHit(0);
         }
 

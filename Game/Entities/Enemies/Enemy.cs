@@ -14,7 +14,10 @@ namespace Crystal_of_Eternity
         private Player player;
 
         private CountdownTimer attackTimer;
-        private bool canAttack => attackTimer.State == TimerState.Completed; 
+        private float attackInterval;
+        private bool canAttack => attackTimer.State == TimerState.Completed;
+
+        private RectangleF mapBounds;
         #endregion
 
         public Enemy(string name, string spritePath, string corpsePath, string hitSoundPath, Vector2 position, float maxHP,
@@ -30,6 +33,8 @@ namespace Crystal_of_Eternity
             this.player = player;
             CorpseSpritePath = corpsePath;
             this.spritePath = spritePath;
+            this.attackInterval = attackInterval;
+            this.mapBounds = mapBounds;
             LoadContent();
 
             minPosition = Vector2.Zero;
@@ -94,5 +99,9 @@ namespace Crystal_of_Eternity
                 }
             }
         }
+
+        public override object Clone() =>
+            new Enemy(Name, spritePath, CorpseSpritePath, hitSoundPath, Position, maxHP,
+                moveSpeed, CollisionDamage, attackInterval, mapBounds, player);
     }
 }
