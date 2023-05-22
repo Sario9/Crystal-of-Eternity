@@ -33,22 +33,15 @@ namespace Crystal_of_Eternity
         public void Initialize(Player player)
         {
             Player = player;
-            var roomPrefs = new[]
-            {
-                new RoomPreferences(levelType, new(25,25), new(400,400), 25,
-                () => new Skeleton(RandomPosition, bounds, player),
-                () => new Rogue(1, RandomPosition, bounds, player),
-                () => new Rogue(2, RandomPosition, bounds, player)),
-
-                new RoomPreferences(levelType, new(35,35), new(125,125), 30,
-                () => new Skeleton(RandomPosition, bounds, player))
-            };
-
 
             rooms = new List<Room>()
             {
-                new Room(roomPrefs[0]),
-                new Room(roomPrefs[1])
+                new Room(levelType, RoomType.Arena, new(25,25), new(400,400), 25,
+                () => new Skeleton(RandomPosition, bounds, player),
+                () => new Rogue(1, RandomPosition, bounds, player),
+                () => new Rogue(2, RandomPosition, bounds, player)),
+                new Room(levelType, RoomType.Arena, new(35,35), new(125,125), 30,
+                () => new Skeleton(RandomPosition, bounds, player))
             };
             currentRoom.Initialize(player);
         }

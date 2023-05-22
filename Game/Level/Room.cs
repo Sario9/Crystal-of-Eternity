@@ -33,7 +33,7 @@ namespace Crystal_of_Eternity
         private int startEnemiesCount;
         #endregion
 
-        public Room(LevelType levelType, Point size, Vector2 playerStartPosition, int enemiesCount, params Func<MovableEntity>[] enemiesTypes)
+        public Room(LevelType levelType, RoomType roomType, Point size, Vector2 playerStartPosition, int enemiesCount, params Func<MovableEntity>[] enemiesTypes)
         {
             Map = new TileMap(levelType, size.X, size.Y);
             enemies = new List<Func<MovableEntity>>();
@@ -42,11 +42,6 @@ namespace Crystal_of_Eternity
             this.playerStartPosition = playerStartPosition;
             this.enemiesTypes = enemiesTypes;
             startEnemiesCount = enemiesCount;
-        }
-
-        public Room(RoomPreferences prefs) : this(prefs.Level, prefs.Size, prefs.PlayerStartPosition, prefs.EnemiesCount, prefs.Enemies)
-        {
-
         }
 
         public void Initialize(Player player)
