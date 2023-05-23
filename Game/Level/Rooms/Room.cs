@@ -16,49 +16,56 @@ namespace Crystal_of_Eternity
         public readonly RectangleF Bounds;
 
         public int EnemiesCount => entities.Where(x => x is Enemy).Count();
-        public bool isCompleted { get; private set; }
+        public bool IsCompleted { get; private set; }
         
         public delegate void EnemiesHandler(int count);
         public event EnemiesHandler OnEnemyDie;
-
-        protected RoomType roomType;
 
         protected Player player;
         protected Vector2 playerStartPosition;
 
         protected List<IEntity> entities;
+        protected int totalEnemies;
+        protected List<Enemy> enemiesTypes;
+
         protected List<IEntity> corpses;
+        private Point size;
 
         #endregion
 
-        public Room(LevelType levelType, RoomType roomType, Point size, Vector2 playerStartPosition)
+        public Room(LevelType levelType, Point size, Vector2 playerStartPosition,
+            int totalEnemies, List<Enemy> enemiesTypes)
         {
             Map = new TileMap(levelType, size.X, size.Y);
             Bounds = new RectangleF(Vector2.Zero - Vector2.One * 4, new(Map.Size.X * 31, Map.Size.Y * 31));
             CollisionComponent = new CollisionComponent(Bounds);
 
-            this.roomType = roomType;
             this.playerStartPosition = playerStartPosition;
+            this.totalEnemies = totalEnemies;
+            this.enemiesTypes = enemiesTypes;
         }
 
-        public virtual void Initialize(Player player, int totalEnemies, List<Enemy> enemiesTypes)
+        public virtual void Initialize(Player player)
         {
             CollisionComponent.Initialize();
             entities = new List<IEntity>();
             corpses = new List<IEntity>();
 
-            SpawnEnemies(totalEnemies, enemiesTypes);
+            SpawnEnemies(totalEnemies, enemiesTypes, player);
             SpawnPlayer(player);
             AddEntitesToColliders(entities.ToArray());
             AddObstaclesToColliders();
         }
 
-        private void SpawnEnemies(int totalEnemies, List<Enemy> enemiesTypes)
+        private void SpawnEnemies(int totalEnemies, List<Enemy> enemiesTypes, MovableEntity target)
         {
-            RandomSpawnEntities(totalEnemies, enemiesTypes.ToArray());
+            SpawnEntities(totalEnemies, enemiesTypes.ToArray());
             var enemies = entities.Where(x => x is Enemy).Select(x => x as Enemy).ToList();
             foreach (var enemy in enemies)
+            {
                 enemy.OnDeath += KillEnemy;
+                enemy.Spawn(RandomPosition, Bounds, target);
+            }
         }
 
         protected void AddObstaclesToColliders()
@@ -76,7 +83,7 @@ namespace Crystal_of_Eternity
         protected void SpawnPlayer(Player player)
         {
             this.player = player;
-            player.Initialize(playerStartPosition, Bounds, CollisionComponent);
+            player.Spawn(playerStartPosition, Bounds, CollisionComponent);
             CollisionComponent.Insert(player);
         }
 
@@ -123,6 +130,14 @@ namespace Crystal_of_Eternity
             }
         }
 
+        public void Update(GameTime gameTime)
+        {
+            player.Update(gameTime);
+            foreach (var entity in entities)
+                entity.Update(gameTime);
+            CollisionComponent.Update(gameTime);
+        }
+
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime, bool drawBounds)
         {
             Map.Draw(gameTime, spriteBatch);
@@ -149,13 +164,6 @@ namespace Crystal_of_Eternity
                 entity.DrawBounds(spriteBatch);
         }
 
-        public void Update(GameTime gameTime)
-        {
-            player.Update(gameTime);
-            foreach (var entity in entities)
-                entity.Update(gameTime);
-            CollisionComponent.Update(gameTime);
-        }
 
         protected Vector2 RandomPosition => Randomizer.NextVector2((int)Bounds.Width, (int)Bounds.Height);
     }

@@ -1,4 +1,5 @@
-﻿using Crystal_of_Eternity.UI;
+﻿using Autofac.Core;
+using Crystal_of_Eternity.UI;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
@@ -41,7 +42,7 @@ namespace Crystal_of_Eternity
 
             var scale = UserInterface.Active.GlobalScale = GameSettings.Scale;
             var background = new Image(backgroundImage, device.Viewport.Bounds.Size.ToVector2() / scale);
-            var panel = new Panel(new(750 * (scale + 1.2f)/2, device.Viewport.Height / scale), PanelSkin.Default, Anchor.TopLeft);
+            var panel = new Panel(new(device.Viewport.Width * 0.35f / scale, device.Viewport.Height / scale), PanelSkin.Default, Anchor.TopLeft);
             var label = new Label("CRYSTAL OF ETERNITY", Anchor.TopCenter);
             var playButton = UIHelper.CreateButton("Играть", fonts["32"]);
             var quitButton = UIHelper.CreateButton("Выйти из игры", fonts["32"]);
@@ -58,8 +59,31 @@ namespace Crystal_of_Eternity
             panel.AddChild(new HorizontalLine());
             panel.AddChild(playButton);
             panel.AddChild(quitButton);
+            panel.Opacity = 250;
 
             UserInterface.Active.AddEntity(background);
+            UserInterface.Active.AddEntity(panel);
+
+            //ShowSettingsPanel(scale);
+        }
+
+        private void ShowSettingsPanel(float scale)
+        {
+            var panel = new Panel(new(device.Viewport.Width * 0.6f / scale, device.Viewport.Height / scale), PanelSkin.Default, Anchor.Center);
+            var label = new Label("Настройки", Anchor.TopCenter);
+
+            var resolutionPanel = new Panel(new(700, 100), PanelSkin.Simple);
+            var resolutionList = new DropDown(new(500, 75), Anchor.Auto, null, PanelSkin.Fancy);
+
+            panel.Offset = new(device.Viewport.Width * 0.15f, 0);
+            label.FontOverride = fonts["32"];
+
+            resolutionPanel.AddChild(resolutionList);
+
+            panel.AddChild(label);
+            panel.AddChild(new HorizontalLine());
+            panel.AddChild(resolutionPanel);
+
             UserInterface.Active.AddEntity(panel);
         }
 

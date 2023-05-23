@@ -13,7 +13,7 @@ namespace Crystal_of_Eternity
         public TileMap Map => currentRoom.Map;
         public RectangleF bounds => currentRoom.Bounds;
 
-        public Player Player;
+        public Player Player { get; private set; }
 
         private LevelType levelType;
 
@@ -23,27 +23,17 @@ namespace Crystal_of_Eternity
         private int currentRoomIndex = 0;
         public Room currentRoom => rooms[currentRoomIndex];
 
-        public Level(LevelType levelType)
+        public Level(LevelType levelType, List<Room> rooms)
         {
             this.levelType = levelType;
+            this.rooms = rooms;
         } 
         #endregion
 
         public void Initialize(Player player)
         {
             Player = player;
-
-            rooms = new List<Room>()
-            {
-                new DefaultRoom(levelType, new(25,25), new(125,125)),
-                new DefaultRoom(levelType, new(25,45), new(75,325)),
-            };
-            currentRoom.Initialize(player, 25, new()
-            {
-                new Skeleton(Vector2.One, currentRoom.Bounds, player),
-                new Rogue(1, Vector2.One, currentRoom.Bounds, player),
-                new Rogue(2, Vector2.One, currentRoom.Bounds, player)
-            });
+            currentRoom.Initialize(player);
         }
 
         private void CompleteRoom()
@@ -54,17 +44,12 @@ namespace Crystal_of_Eternity
         public void ChangeRoom(int index)
         {
             currentRoomIndex = index;
-            currentRoom.Initialize(Player, 25, new() { new Skeleton(Vector2.One, currentRoom.Bounds, Player) });
+            currentRoom.Initialize(Player);
         }
 
         public void Update(GameTime gameTime)
         {
             currentRoom.Update(gameTime);
-            //if (currentRoom.isCompleted)
-            //{
-            //    if(currentRoomIndex + 1 < rooms.Count)
-            //        ChangeRoom(currentRoomIndex + 1);
-            //}
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)

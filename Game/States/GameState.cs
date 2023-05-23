@@ -34,8 +34,40 @@ namespace Crystal_of_Eternity
 
             Levels = new List<Level>()
             {
-                new Level(LevelType.Level1),
-                new Level(LevelType.Level2),
+                //Уровнь 1
+                new Level(LevelType.Level1,
+                new List<Room>()
+                {
+                    new DefaultRoom(LevelType.Level1, new(35,35), new(125,125),
+                    25, new()
+                    {
+                        new Skeleton(),
+                        new Rogue(1),
+                        new Rogue(2),
+                    }),
+                    new DefaultRoom(LevelType.Level1, new(50,25), new(255,125),
+                    50, new()
+                    {
+                        new Skeleton(),
+                    }),
+                }),
+                //Уровнь 2
+                new Level(LevelType.Level2,
+                new List<Room>()
+                {
+                    new DefaultRoom(LevelType.Level2, new(35,35), new(125,125),
+                    25, new()
+                    {
+                        new Skeleton(),
+                    }),
+                    new DefaultRoom(LevelType.Level2, new(50,25), new(255,125),
+                    50, new()
+                    {
+                        new Skeleton(),
+                        new Rogue(1),
+                        new Rogue(2)
+                    }),
+                }),
             };
             CurrentLevel.Initialize(Player);
 

@@ -1,5 +1,4 @@
-﻿using GeonBit.UI;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -8,6 +7,7 @@ namespace Crystal_of_Eternity
     public class MyGame : Game
     {
         #region Fields
+
         public static MyGame Instance { get; private set; }
 
         public Level CurrentLevel => Levels[currentLevelIndex];

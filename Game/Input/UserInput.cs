@@ -49,10 +49,26 @@ namespace Crystal_of_Eternity
         {
             if (KeyboardState.IsKeyDown(Keys.R) && !lastKeyboardState.IsKeyDown(Keys.R))
                 gameState.RestartLevel();
-            if (KeyboardState.IsKeyDown(Keys.T) && !lastKeyboardState.IsKeyDown(Keys.T))
+            if (KeyboardState.IsKeyDown(Keys.Z) && !lastKeyboardState.IsKeyDown(Keys.Z))
+            {
+                gameState.ChangeLevel(0);
+                gameState.ChangeRoom(0);
+            }
+            if (KeyboardState.IsKeyDown(Keys.X) && !lastKeyboardState.IsKeyDown(Keys.X))
+            {
+                gameState.ChangeLevel(0);
                 gameState.ChangeRoom(1);
-            if (KeyboardState.IsKeyDown(Keys.Y) && !lastKeyboardState.IsKeyDown(Keys.Y))
+            }
+            if (KeyboardState.IsKeyDown(Keys.C) && !lastKeyboardState.IsKeyDown(Keys.C))
+            {
                 gameState.ChangeLevel(1);
+                gameState.ChangeRoom(0);
+            }
+            if (KeyboardState.IsKeyDown(Keys.V) && !lastKeyboardState.IsKeyDown(Keys.V))
+            {
+                gameState.ChangeLevel(1);
+                gameState.ChangeRoom(1);
+            }
         }
 
         public static Point GetMousePosition() => MouseState.Position;

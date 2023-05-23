@@ -65,14 +65,15 @@ namespace Crystal_of_Eternity
         protected bool canGetHit => iTimer.State == TimerState.Completed;
 
         private float iIntevral;
-        protected CountdownTimer iTimer; 
+        protected CountdownTimer iTimer;
+
+        protected bool isSpawned = false; 
         #endregion
 
-        public MovableEntity(string name, string spritePath, string corpsePath, string hitSoundPath, Vector2 position, float maxHP,
-            float moveSpeed, float damage, float iInterval, RectangleF mapBounds)
+        public MovableEntity(string name, string spritePath, string corpsePath, string hitSoundPath, float maxHP, float moveSpeed,
+            float damage, float iInterval)
         {
             Name = name;
-            Position = position;
             this.maxHP = maxHP;
             currentHP = maxHP;
             this.moveSpeed = moveSpeed;
@@ -85,11 +86,18 @@ namespace Crystal_of_Eternity
             LoadContent();
 
             minPosition = Vector2.Zero;
-            maxPosition = mapBounds.BottomRight;
             Bounds = Sprite.GetBoundingRectangle(Position, 0, new(0.8f, 0.8f));
 
             iTimer = new CountdownTimer(iIntevral);
             iTimer.Start();
+        }
+
+        public virtual void Spawn(Vector2 position, RectangleF mapBounds)
+        {
+            Position = position;
+            SetMapBounds(mapBounds);
+
+            isSpawned = true;
         }
 
         public virtual void LoadContent()
@@ -103,7 +111,6 @@ namespace Crystal_of_Eternity
         public virtual void Move(Vector2 direction, GameTime gameTime)
         {
             velocity = direction * moveSpeed * (float)gameTime.GetElapsedSeconds() * baseMoveSpeed;
-            Position = Vector2.Clamp(Position + velocity, minPosition, maxPosition);
             Bounds.Position = Position - new Vector2(16, 16) * 0.8f;
         }
 
@@ -111,7 +118,11 @@ namespace Crystal_of_Eternity
 
         public virtual void OnCollision(CollisionEventArgs collisionInfo)
         {
+            if (!isSpawned) return;
 
+            var other = collisionInfo.Other;
+            if (other is Collider)
+                Position -= collisionInfo.PenetrationVector * 1.1f;
         }
 
         protected virtual void Die()
@@ -127,11 +138,15 @@ namespace Crystal_of_Eternity
 
         public virtual void Update(GameTime gameTime)
         {
+            if (!isSpawned) return;
 
+            Position = Vector2.Clamp(Position + velocity, minPosition, maxPosition);
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            if (!isSpawned) return;
+
             walkAnimation.Play(gameTime);
 
             if (velocity.X > 0)

@@ -31,8 +31,8 @@ namespace Crystal_of_Eternity
         #endregion
 
         public Player(GameState gameState, float maxHP, float moveSpeed, float damage) :
-            base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, "", new(0, 0), maxHP,
-                moveSpeed, damage, 0.05f, new(0, 0, 500, 500))
+            base("Player", SpriteNames.Character_knight, SpriteNames.Rogue_corpse, "", maxHP,
+                moveSpeed, damage, 0.05f)
         {
             this.gameState = gameState;
 
@@ -40,10 +40,9 @@ namespace Crystal_of_Eternity
             UserInput.OnMove += Move;
         }
 
-        public void Initialize(Vector2 position, RectangleF mapBounds, CollisionComponent collisionComponent)
+        public void Spawn(Vector2 position, RectangleF mapBounds, CollisionComponent collisionComponent)
         {
-            Position = position;
-            maxPosition = mapBounds.BottomRight;
+            base.Spawn(position, mapBounds);
             PlayerAttack = new Sword(2f, collisionComponent);
             TakeHit(0);
         }
@@ -56,7 +55,7 @@ namespace Crystal_of_Eternity
 
         private void Attack()
         {
-            if (PlayerAttack.CanAttack)
+            if (PlayerAttack.CanAttack && isSpawned)
             {
                 var camera = gameState.Camera.Main;
                 var mouseWorldPosition = camera.ScreenToWorld(UserInput.GetMousePosition().ToVector2());
@@ -80,15 +79,10 @@ namespace Crystal_of_Eternity
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             PlayerAttack.Update(gameTime);
             iTimer.Update(gameTime);
-        }
-
-        public override void OnCollision(CollisionEventArgs collisionInfo)
-        {
-            var other = collisionInfo.Other;
-            if (other is Collider)
-                Position -= collisionInfo.PenetrationVector * 1.1f;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
