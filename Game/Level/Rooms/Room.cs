@@ -45,13 +45,14 @@ namespace Crystal_of_Eternity
             this.enemiesTypes = enemiesTypes;
         }
 
-        public virtual void Initialize(Player player)
+        public virtual void Initialize(Player player, GameState gameState)
         {
             CollisionComponent.Initialize();
             entities = new List<IEntity>();
             corpses = new List<IEntity>();
 
-            SpawnEnemies(totalEnemies, enemiesTypes, player);
+            //SpawnEnemies(totalEnemies, enemiesTypes, player);
+            SpawnEntities(1, new Hatch(new(100, 100), player, gameState));
             SpawnPlayer(player);
             AddEntitesToColliders(entities.ToArray());
             AddObstaclesToColliders();

@@ -27,6 +27,9 @@ namespace Crystal_of_Eternity
 
         public delegate void StateChangeHandler();
         public static StateChangeHandler OnMenuExit { get; set; }
+
+        public delegate void InteractHandler();
+        public static InteractHandler OnInteract;
         #endregion
 
         static UserInput()
@@ -47,24 +50,24 @@ namespace Crystal_of_Eternity
 
         public static void Debug(GameState gameState)
         {
-            if (KeyboardState.IsKeyDown(Keys.R) && !lastKeyboardState.IsKeyDown(Keys.R))
+            if (IsKeyPressed(Keys.R))
                 gameState.RestartLevel();
-            if (KeyboardState.IsKeyDown(Keys.Z) && !lastKeyboardState.IsKeyDown(Keys.Z))
+            if (IsKeyPressed(Keys.Z))
             {
                 gameState.ChangeLevel(0);
                 gameState.ChangeRoom(0);
             }
-            if (KeyboardState.IsKeyDown(Keys.X) && !lastKeyboardState.IsKeyDown(Keys.X))
+            if (IsKeyPressed(Keys.X))
             {
                 gameState.ChangeLevel(0);
                 gameState.ChangeRoom(1);
             }
-            if (KeyboardState.IsKeyDown(Keys.C) && !lastKeyboardState.IsKeyDown(Keys.C))
+            if (IsKeyPressed(Keys.C))
             {
                 gameState.ChangeLevel(1);
                 gameState.ChangeRoom(0);
             }
-            if (KeyboardState.IsKeyDown(Keys.V) && !lastKeyboardState.IsKeyDown(Keys.V))
+            if (IsKeyPressed(Keys.V))
             {
                 gameState.ChangeLevel(1);
                 gameState.ChangeRoom(1);
@@ -122,11 +125,20 @@ namespace Crystal_of_Eternity
             OnMove?.Invoke(direction, gameTime);
         }
 
+        private static void Interact()
+        {
+            if (IsKeyPressed(KeyBinds.Interact))
+                OnInteract?.Invoke();
+        }
+
         public static void Update(MyGame game, GameTime gameTime)
         {
             UpdateKeyboardState(gameTime);
             UpdateMouseState(gameTime);
             ChangeState();
+            Interact();
         }
+
+        private static bool IsKeyPressed(Keys key) => KeyboardState.IsKeyDown(key) && !lastKeyboardState.IsKeyDown(key);
     }
 }

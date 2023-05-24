@@ -12,11 +12,14 @@ namespace Crystal_of_Eternity
 
         #region Player
 
-        public static readonly Keys PlayerMoveUp = Keys.W;
-        public static readonly Keys PlayerMoveDown = Keys.S;
-        public static readonly Keys PlayerMoveLeft = Keys.A;
-        public static readonly Keys PlayerMoveRight = Keys.D;
+        //Движение
+        public const Keys PlayerMoveUp = Keys.W;
+        public const Keys PlayerMoveDown = Keys.S;
+        public const Keys PlayerMoveLeft = Keys.A;
+        public const Keys PlayerMoveRight = Keys.D;
 
+        //Интерактив
+        public const Keys Interact = Keys.E;
         #endregion
 
     }

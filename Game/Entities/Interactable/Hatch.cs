@@ -1,26 +1,40 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Crystal_of_Eternity
 {
     public class Hatch : InteractableEntity
     {
-        private Player player;
+        private GameState gameState;
 
-        public Hatch(Vector2 position, ContentManager content, Player player) :
-            base(position, SpriteNames.Hatch_idle, SpriteNames.Hatch_active, content)
+        public Hatch(Vector2 position, Player player, GameState gameState) :
+            base(position, SpriteNames.Hatch_idle, SpriteNames.Hatch_active, player, 50)
         {
             this.player = player;
+            this.gameState = gameState;
+        }
+
+        public override void Interact()
+        {
+            Debug.Print("Change");
+            gameState.ChangeLevel(1);
+            UserInput.OnInteract -= Interact;
         }
 
         public override void Update(GameTime gameTime)
         {
-            var playerDistance = Vector2.Distance(player.Position, Position);
-            canInteract = playerDistance < 20;
-            if (canInteract)
-                Debug.Print("Can interact");
+            base.Update(gameTime);
 
+            if (canInteract && UserInput.OnInteract == null)
+                UserInput.OnInteract += Interact;
+
+            else if (!canInteract && UserInput.OnInteract != null)
+                    UserInput.OnInteract -= Interact;
+
+            isActive = canInteract;
         }
+
+        public override object Clone() => new Hatch(Position, player, gameState);
     }
 }

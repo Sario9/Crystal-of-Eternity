@@ -23,6 +23,8 @@ namespace Crystal_of_Eternity
         private int currentRoomIndex = 0;
         public Room currentRoom => rooms[currentRoomIndex];
 
+        private GameState gameState;
+
         public Level(LevelType levelType, List<Room> rooms)
         {
             this.levelType = levelType;
@@ -30,10 +32,11 @@ namespace Crystal_of_Eternity
         } 
         #endregion
 
-        public void Initialize(Player player)
+        public void Initialize(Player player, GameState gameState)
         {
             Player = player;
-            currentRoom.Initialize(player);
+            this.gameState = gameState;
+            currentRoom.Initialize(player, gameState);
         }
 
         private void CompleteRoom()
@@ -44,7 +47,7 @@ namespace Crystal_of_Eternity
         public void ChangeRoom(int index)
         {
             currentRoomIndex = index;
-            currentRoom.Initialize(Player);
+            currentRoom.Initialize(Player, gameState);
         }
 
         public void Update(GameTime gameTime)

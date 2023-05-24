@@ -69,7 +69,7 @@ namespace Crystal_of_Eternity
                     }),
                 }),
             };
-            CurrentLevel.Initialize(Player);
+            CurrentLevel.Initialize(Player, this);
 
             Camera = new MyCamera(this, graphicsDevice);
 
@@ -104,7 +104,6 @@ namespace Crystal_of_Eternity
         public void ChangeLevel(int index)
         {
             currentLevelIndex = index;
-            CurrentLevel.Initialize(Player);
             RestartLevel();
         }
 
@@ -117,7 +116,7 @@ namespace Crystal_of_Eternity
         public void RestartLevel()
         {
             CurrentLevel.currentRoom.OnEnemyDie -= ui.UpdateEnemies;
-            CurrentLevel.Initialize(Player);
+            CurrentLevel.Initialize(Player, this);
             Player.Restart();
             CurrentLevel.currentRoom.OnEnemyDie += ui.UpdateEnemies;
             Camera = new MyCamera(this, graphicsDevice);

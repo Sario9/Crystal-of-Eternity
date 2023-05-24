@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
-using System;
 using System.Data;
 
 namespace Crystal_of_Eternity
@@ -23,20 +21,21 @@ namespace Crystal_of_Eternity
         protected Sprite idleSprite;
         protected Sprite activeSprite;
 
+        protected float interactDistance;
         protected bool canInteract;
-        protected Action onInteract;
 
-        private bool isActive = false;
+        protected Player player;
 
-        private ContentManager content;
+        protected bool isActive = false;
         #endregion
 
-        protected InteractableEntity(Vector2 position, string idleSpritePath, string activeSpritePath, ContentManager content)
+        protected InteractableEntity(Vector2 position, string idleSpritePath, string activeSpritePath, Player player, float interactDistance)
         {
             Position = position;
-            this.content = content;
             this.activeSpritePath = activeSpritePath;
             this.idleSpritePath = idleSpritePath;
+            this.player = player;
+            this.interactDistance = interactDistance;
 
             LoadContent();
         }
@@ -48,32 +47,34 @@ namespace Crystal_of_Eternity
 
         public virtual void Interact()
         {
-            if(canInteract)
-                onInteract?.Invoke();
+            
         }
 
         protected virtual void LoadContent()
         {
+            var content = MyGame.Instance.Content;
+
             idleSprite = new Sprite(content.Load<Texture2D>(idleSpritePath));
             activeSprite = new Sprite(content.Load<Texture2D>(activeSpritePath));
+
+            Bounds = idleSprite.GetBoundingRectangle(Position, 0, Vector2.One);
         }
 
         public virtual void Update(GameTime gameTime)
         {
-
+            var playerDistance = Vector2.Distance(player.Position, Position);
+            canInteract = playerDistance < interactDistance;
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!isActive)
-                idleSprite.Draw(spriteBatch, Position, 0, Vector2.One);
-            else
-                activeSprite.Draw(spriteBatch, Position, 0, Vector2.One);
+            var currentSprite = isActive ? activeSprite : idleSprite;
+            currentSprite.Draw(spriteBatch, Position, 0, Vector2.One);
         }
 
         public void DrawBounds(SpriteBatch spriteBatch)
         {
-            
+            spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Blue);
         }
 
         public virtual object Clone() => throw new DataException();
