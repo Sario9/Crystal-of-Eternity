@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Crystal_of_Eternity
 {
@@ -18,7 +17,7 @@ namespace Crystal_of_Eternity
         public override void Interact()
         {
             Debug.Print("Change");
-            gameState.ChangeLevel(1);
+            gameState.NextRoom();
             UserInput.OnInteract -= Interact;
         }
 

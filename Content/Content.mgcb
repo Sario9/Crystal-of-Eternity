@@ -390,6 +390,18 @@
 /processorParam:TextureFormat=Color
 /build:Game/General/Environment/Hatch.png
 
+#begin Game/General/InteractCloud.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/InteractCloud.png
+
 #begin Game/General/MainMenuBG.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

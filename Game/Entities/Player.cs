@@ -15,6 +15,8 @@ namespace Crystal_of_Eternity
         private bool isIdle => velocity == Vector2.Zero;
         private GameState gameState;
 
+        private Sprite InteractCloud;
+
         public override float CurrentHP
         {
             get => currentHP;
@@ -51,6 +53,14 @@ namespace Crystal_of_Eternity
         {
             CurrentHP -= damage;
             Debug.Print("{0}/{1}", CurrentHP, maxHP);
+        }
+
+        public override void LoadContent()
+        {
+            var content = MyGame.Instance.Content;
+            base.LoadContent();
+
+            InteractCloud = new(content.Load<Texture2D>(SpriteNames.InteractCloud));
         }
 
         private void Attack()
@@ -97,6 +107,10 @@ namespace Crystal_of_Eternity
             if (velocity.X < 0)
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
+
+            if (UserInput.OnInteract != null)
+                InteractCloud.Draw(spriteBatch, Position + new Vector2(20, -25), 0, Vector2.One);
+
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
             PlayerAttack.Draw(spriteBatch);
         }

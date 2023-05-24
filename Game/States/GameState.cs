@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crystal_of_Eternity
 {
@@ -36,7 +37,7 @@ namespace Crystal_of_Eternity
             {
                 //Уровнь 1
                 new Level(LevelType.Level1,
-                new List<Room>()
+                new Queue<Room>(new List<Room>() 
                 {
                     new DefaultRoom(LevelType.Level1, new(35,35), new(125,125),
                     25, new()
@@ -50,10 +51,10 @@ namespace Crystal_of_Eternity
                     {
                         new Skeleton(),
                     }),
-                }),
+                })),
                 //Уровнь 2
                 new Level(LevelType.Level2,
-                new List<Room>()
+                new Queue<Room>(new List<Room>()
                 {
                     new DefaultRoom(LevelType.Level2, new(35,35), new(125,125),
                     25, new()
@@ -65,15 +66,16 @@ namespace Crystal_of_Eternity
                     {
                         new Skeleton(),
                         new Rogue(1),
-                        new Rogue(2)
+                        new Rogue(2),
                     }),
-                }),
+                })),
             };
+
             CurrentLevel.Initialize(Player, this);
 
             Camera = new MyCamera(this, graphicsDevice);
 
-            CurrentLevel.currentRoom.OnEnemyDie += ui.UpdateEnemies;
+            CurrentLevel.CurrentRoom.OnEnemyDie += ui.UpdateEnemies;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -103,22 +105,30 @@ namespace Crystal_of_Eternity
 
         public void ChangeLevel(int index)
         {
+            if (index >= Levels.Count)
+            {
+                UserInput.ExitToMenu();
+                return;
+            }
+
             currentLevelIndex = index;
+            CurrentLevel.NextRoom(Player);
             RestartLevel();
         }
 
-        public void ChangeRoom(int index)
+        public void NextRoom()
         {
-            CurrentLevel.ChangeRoom(index);
-            RestartLevel();
+            if (CurrentLevel.NextRoom(Player) == null)
+            {
+                ChangeLevel(currentLevelIndex + 1);
+            }
         }
 
         public void RestartLevel()
         {
-            CurrentLevel.currentRoom.OnEnemyDie -= ui.UpdateEnemies;
-            CurrentLevel.Initialize(Player, this);
+            CurrentLevel.CurrentRoom.OnEnemyDie -= ui.UpdateEnemies;
             Player.Restart();
-            CurrentLevel.currentRoom.OnEnemyDie += ui.UpdateEnemies;
+            CurrentLevel.CurrentRoom.OnEnemyDie += ui.UpdateEnemies;
             Camera = new MyCamera(this, graphicsDevice);
         }
     }

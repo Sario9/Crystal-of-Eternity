@@ -53,25 +53,7 @@ namespace Crystal_of_Eternity
             if (IsKeyPressed(Keys.R))
                 gameState.RestartLevel();
             if (IsKeyPressed(Keys.Z))
-            {
-                gameState.ChangeLevel(0);
-                gameState.ChangeRoom(0);
-            }
-            if (IsKeyPressed(Keys.X))
-            {
-                gameState.ChangeLevel(0);
-                gameState.ChangeRoom(1);
-            }
-            if (IsKeyPressed(Keys.C))
-            {
-                gameState.ChangeLevel(1);
-                gameState.ChangeRoom(0);
-            }
-            if (IsKeyPressed(Keys.V))
-            {
-                gameState.ChangeLevel(1);
-                gameState.ChangeRoom(1);
-            }
+                gameState.NextRoom();
         }
 
         public static Point GetMousePosition() => MouseState.Position;

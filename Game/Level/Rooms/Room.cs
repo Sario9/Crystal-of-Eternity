@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 
 namespace Crystal_of_Eternity
 {
@@ -11,12 +13,13 @@ namespace Crystal_of_Eternity
     {
         #region Fields
 
-        public CollisionComponent CollisionComponent { get; private set; }
-        public TileMap Map { get; private set; }
+        public CollisionComponent CollisionComponent { get; protected set; }
+        public TileMap Map { get; protected set; }
         public readonly RectangleF Bounds;
+        public readonly LevelType LevelType;
 
-        public int EnemiesCount => entities.Where(x => x is Enemy).Count();
-        public bool IsCompleted { get; private set; }
+        public virtual int EnemiesCount => entities.Where(x => x is Enemy).Count();
+        public bool IsCompleted { get; protected set; }
         
         public delegate void EnemiesHandler(int count);
         public event EnemiesHandler OnEnemyDie;
@@ -31,6 +34,8 @@ namespace Crystal_of_Eternity
         protected List<IEntity> corpses;
         private Point size;
 
+        protected GameState gameState;
+
         #endregion
 
         public Room(LevelType levelType, Point size, Vector2 playerStartPosition,
@@ -39,6 +44,7 @@ namespace Crystal_of_Eternity
             Map = new TileMap(levelType, size.X, size.Y);
             Bounds = new RectangleF(Vector2.Zero - Vector2.One * 4, new(Map.Size.X * 31, Map.Size.Y * 31));
             CollisionComponent = new CollisionComponent(Bounds);
+            LevelType = levelType;
 
             this.playerStartPosition = playerStartPosition;
             this.totalEnemies = totalEnemies;
@@ -47,15 +53,21 @@ namespace Crystal_of_Eternity
 
         public virtual void Initialize(Player player, GameState gameState)
         {
+            this.gameState = gameState;
+
             CollisionComponent.Initialize();
             entities = new List<IEntity>();
             corpses = new List<IEntity>();
 
-            //SpawnEnemies(totalEnemies, enemiesTypes, player);
-            SpawnEntities(1, new Hatch(new(100, 100), player, gameState));
+            SpawnEnemies(totalEnemies, enemiesTypes, player);
             SpawnPlayer(player);
             AddEntitesToColliders(entities.ToArray());
             AddObstaclesToColliders();
+        }
+
+        protected virtual void Complete()
+        {
+            SpawnEntities(1, new Hatch(new(100, 100), player, gameState));
         }
 
         private void SpawnEnemies(int totalEnemies, List<Enemy> enemiesTypes, MovableEntity target)
@@ -131,7 +143,7 @@ namespace Crystal_of_Eternity
             }
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             player.Update(gameTime);
             foreach (var entity in entities)

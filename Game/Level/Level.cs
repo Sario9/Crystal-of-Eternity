@@ -4,31 +4,31 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 
 namespace Crystal_of_Eternity
 {
     public class Level
     {
         #region Fields
-        public TileMap Map => currentRoom.Map;
-        public RectangleF bounds => currentRoom.Bounds;
+        public TileMap Map => CurrentRoom.Map;
+        public RectangleF bounds => CurrentRoom.Bounds;
+        public Queue<Room> Rooms { get; private set; }
 
         public Player Player { get; private set; }
 
         private LevelType levelType;
 
-        public CollisionComponent CollisionComponent => currentRoom.CollisionComponent;
+        public CollisionComponent CollisionComponent => CurrentRoom.CollisionComponent;
 
-        private List<Room> rooms;
-        private int currentRoomIndex = 0;
-        public Room currentRoom => rooms[currentRoomIndex];
+        public Room CurrentRoom { get; private set; }
 
         private GameState gameState;
 
-        public Level(LevelType levelType, List<Room> rooms)
+        public Level(LevelType levelType, Queue<Room> rooms)
         {
             this.levelType = levelType;
-            this.rooms = rooms;
+            Rooms = rooms;
         } 
         #endregion
 
@@ -36,30 +36,29 @@ namespace Crystal_of_Eternity
         {
             Player = player;
             this.gameState = gameState;
-            currentRoom.Initialize(player, gameState);
+            if (NextRoom(player) == null)
+                throw new ArgumentNullException();
         }
 
-        private void CompleteRoom()
+        public Room NextRoom(Player player)
         {
-            throw new NotImplementedException();
-        }
+            if (Rooms.Count == 0)
+                return null;
 
-        public void ChangeRoom(int index)
-        {
-            currentRoomIndex = index;
-            currentRoom.Initialize(Player, gameState);
+            Player = player;
+            CurrentRoom = Rooms.Dequeue();
+            CurrentRoom.Initialize(Player, gameState);
+            return CurrentRoom;
         }
 
         public void Update(GameTime gameTime)
         {
-            currentRoom.Update(gameTime);
+            CurrentRoom.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            currentRoom.Draw(spriteBatch, gameTime, false);
+            CurrentRoom.Draw(spriteBatch, gameTime, false);
         }
-
-        private Vector2 RandomPosition => Randomizer.NextVector2((int)bounds.Width, (int)bounds.Height);
     }
 }
