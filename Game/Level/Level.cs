@@ -25,10 +25,10 @@ namespace Crystal_of_Eternity
 
         private GameState gameState;
 
-        public Level(LevelType levelType, Queue<Room> rooms)
+        public Level(LevelType levelType, List<Room> rooms)
         {
             this.levelType = levelType;
-            Rooms = rooms;
+            Rooms = new(rooms);
         } 
         #endregion
 

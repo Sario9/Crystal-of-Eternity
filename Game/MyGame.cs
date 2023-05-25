@@ -16,7 +16,6 @@ namespace Crystal_of_Eternity
         public MyCamera Camera { get; private set; }
 
         public State CurrentState;
-        private State nextState;
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -50,7 +49,7 @@ namespace Crystal_of_Eternity
 
         public void ChangeState(State state)
         {
-            nextState = state;
+            CurrentState = state;
         }
 
         private void ExitToMenu()
@@ -60,12 +59,6 @@ namespace Crystal_of_Eternity
 
         protected override void Update(GameTime gameTime)
         {
-            if(nextState != null)
-            {
-                CurrentState = nextState;
-                nextState = null;
-            }
-
             CurrentState.Update(gameTime);
             CurrentState.PostUpdate(gameTime);
 

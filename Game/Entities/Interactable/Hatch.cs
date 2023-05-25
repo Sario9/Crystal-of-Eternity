@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Diagnostics;
 
 namespace Crystal_of_Eternity
 {
     public class Hatch : InteractableEntity
     {
         private GameState gameState;
+        private bool isInteracted = false;
 
         public Hatch(Vector2 position, Player player, GameState gameState) :
             base(position, SpriteNames.Hatch_idle, SpriteNames.Hatch_active, player, 50)
@@ -16,9 +16,9 @@ namespace Crystal_of_Eternity
 
         public override void Interact()
         {
-            Debug.Print("Change");
-            gameState.NextRoom();
+            isInteracted = true;
             UserInput.OnInteract -= Interact;
+            gameState.NextRoom();
         }
 
         public override void Update(GameTime gameTime)
@@ -28,8 +28,8 @@ namespace Crystal_of_Eternity
             if (canInteract && UserInput.OnInteract == null)
                 UserInput.OnInteract += Interact;
 
-            else if (!canInteract && UserInput.OnInteract != null)
-                    UserInput.OnInteract -= Interact;
+            if ((isInteracted || !canInteract) && UserInput.OnInteract != null)
+                UserInput.OnInteract -= Interact;
 
             isActive = canInteract;
         }

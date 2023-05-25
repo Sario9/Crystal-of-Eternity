@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Timers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Crystal_of_Eternity
         public bool IsCompleted { get; protected set; }
         
         public delegate void EnemiesHandler(int count);
-        public event EnemiesHandler OnEnemyDie;
+        public event EnemiesHandler OnEnemyChangeState;
 
         protected Player player;
         protected Vector2 playerStartPosition;
@@ -30,11 +31,15 @@ namespace Crystal_of_Eternity
         protected List<IEntity> entities;
         protected int totalEnemies;
         protected List<Enemy> enemiesTypes;
+        protected Queue<Enemy> enemiesToSpawn;
 
         protected List<IEntity> corpses;
         private Point size;
 
         protected GameState gameState;
+
+        protected CountdownTimer spawnTimer;
+        protected readonly float enemySpawnInterval = 0.5f;
 
         #endregion
 
@@ -49,6 +54,9 @@ namespace Crystal_of_Eternity
             this.playerStartPosition = playerStartPosition;
             this.totalEnemies = totalEnemies;
             this.enemiesTypes = enemiesTypes;
+
+            spawnTimer = new(enemySpawnInterval);
+            spawnTimer.Stop();
         }
 
         public virtual void Initialize(Player player, GameState gameState)
@@ -58,8 +66,9 @@ namespace Crystal_of_Eternity
             CollisionComponent.Initialize();
             entities = new List<IEntity>();
             corpses = new List<IEntity>();
+            enemiesToSpawn = new Queue<Enemy>();
 
-            SpawnEnemies(totalEnemies, enemiesTypes, player);
+            AddEnemies(totalEnemies, enemiesTypes);
             SpawnPlayer(player);
             AddEntitesToColliders(entities.ToArray());
             AddObstaclesToColliders();
@@ -67,17 +76,34 @@ namespace Crystal_of_Eternity
 
         protected virtual void Complete()
         {
-            SpawnEntities(1, new Hatch(new(100, 100), player, gameState));
+            SpawnEntities(new Hatch(player.Position, player, gameState));
+            OnEnemyChangeState = null;
         }
 
-        private void SpawnEnemies(int totalEnemies, List<Enemy> enemiesTypes, MovableEntity target)
+        protected void AddEnemies(int totalEnemies, List<Enemy> enemiesTypes)
         {
-            SpawnEntities(totalEnemies, enemiesTypes.ToArray());
-            var enemies = entities.Where(x => x is Enemy).Select(x => x as Enemy).ToList();
-            foreach (var enemy in enemies)
+            for (int i = 0; i < totalEnemies; i++)
             {
+                var entity = Randomizer.RandomFromList(enemiesTypes).Clone() as Enemy;
+                enemiesToSpawn.Enqueue(entity);
+            }
+            spawnTimer.Start();
+        }
+
+        protected void SpawnEnemies(GameTime gameTime)
+        {
+            spawnTimer.Update(gameTime);
+            if (enemiesToSpawn.Count != 0 && spawnTimer.State == TimerState.Completed)
+            {
+                var enemy = enemiesToSpawn.Dequeue();
                 enemy.OnDeath += KillEnemy;
-                enemy.Spawn(RandomPosition, Bounds, target);
+
+                enemy.Spawn(RandomPositionAwayFromPlayer(), Bounds, player);
+                SpawnEntities(enemy);
+                AddEntitesToColliders(enemy);
+                OnEnemyChangeState.Invoke(EnemiesCount);
+
+                spawnTimer.Restart();
             }
         }
 
@@ -100,23 +126,18 @@ namespace Crystal_of_Eternity
             CollisionComponent.Insert(player);
         }
 
-        protected void SpawnEntities(int count, params IEntity[] spawners)
+        protected void SpawnEntities(params IEntity[] spawners)
         {
-            var typesToSpawn = spawners.ToList();
-            for (int i = 0; i < count; i++) 
-            {
-                var entity = Randomizer.RandomFromList(typesToSpawn).Clone() as IEntity;
+            foreach (var entity in spawners)
                 entities.Add(entity);
-            }
         }
 
-        protected void RandomSpawnEntities(int count, params IEntity[] spawners)
+        protected void SpawnRandomEntities(int count, params IEntity[] spawners)
         {
             var typesToSpawn = spawners.ToList();
             for (int i = 0; i < count; i++)
             {
                 var entity = Randomizer.RandomFromList(typesToSpawn).Clone() as IEntity;
-                entity.Position = RandomPosition;
                 entities.Add(entity);
             }
         }
@@ -134,7 +155,7 @@ namespace Crystal_of_Eternity
                 movable.OnDeath -= KillEnemy;
 
                 if (entity is Enemy)
-                    OnEnemyDie?.Invoke(EnemiesCount);
+                    OnEnemyChangeState?.Invoke(EnemiesCount);
             }
             else
             {
@@ -145,6 +166,8 @@ namespace Crystal_of_Eternity
 
         public virtual void Update(GameTime gameTime)
         {
+            SpawnEnemies(gameTime);
+
             player.Update(gameTime);
             foreach (var entity in entities)
                 entity.Update(gameTime);
@@ -177,7 +200,16 @@ namespace Crystal_of_Eternity
                 entity.DrawBounds(spriteBatch);
         }
 
-
         protected Vector2 RandomPosition => Randomizer.NextVector2((int)Bounds.Width, (int)Bounds.Height);
+
+        protected Vector2 RandomPositionAwayFromPlayer()
+        {
+            while (true) 
+            {
+                var position = Randomizer.NextVector2((int)Bounds.Width, (int)Bounds.Height);
+                if(Vector2.Distance(position, player.Position) > 100)
+                    return position;
+            }
+        }
     }
 }

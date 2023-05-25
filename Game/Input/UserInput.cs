@@ -45,13 +45,13 @@ namespace Crystal_of_Eternity
         private static void ChangeState()
         {
             if (KeyboardState.IsKeyDown(KeyBinds.Exit))
-                OnMenuExit?.Invoke();
+                ExitToMenu();
         }
 
         public static void Debug(GameState gameState)
         {
             if (IsKeyPressed(Keys.R))
-                gameState.RestartLevel();
+                gameState.ReloadState();
             if (IsKeyPressed(Keys.Z))
                 gameState.NextRoom();
         }
