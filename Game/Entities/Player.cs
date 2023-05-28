@@ -70,7 +70,7 @@ namespace Crystal_of_Eternity
         {
             base.Spawn(position, mapBounds);
             PlayerAttack = new Sword(2f, collisionComponent);
-            TakeHit(25);
+            onHealthChanged.Invoke(currentHP, maxHP);
         }
 
         public override void TakeHit(float damage)

@@ -121,7 +121,7 @@ namespace Crystal_of_Eternity
             if (!isSpawned) return;
 
             var other = collisionInfo.Other;
-            if (other is Collider)
+            if (other is Collider || other is InteractableEntity)
                 Position -= collisionInfo.PenetrationVector * 1.1f;
         }
 

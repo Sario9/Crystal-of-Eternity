@@ -67,7 +67,7 @@ namespace Crystal_of_Eternity
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             CurrentState.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
         }

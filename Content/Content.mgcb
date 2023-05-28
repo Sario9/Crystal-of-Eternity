@@ -366,6 +366,30 @@
 /processorParam:TextureFormat=Color
 /build:Game/General/Entities/Player/Sword.png
 
+#begin Game/General/Environment/FountainOfLife_activated.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/Environment/FountainOfLife_activated.png
+
+#begin Game/General/Environment/FountainOfLife.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/Environment/FountainOfLife.png
+
 #begin Game/General/Environment/Hatch_open.png
 /importer:TextureImporter
 /processor:TextureProcessor

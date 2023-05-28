@@ -63,6 +63,8 @@
 
         public const string Hatch_idle = "Game/General/Environment/Hatch";
         public const string Hatch_active = "Game/General/Environment/Hatch_open";
+        public const string Fountain_idle = "Game/General/Environment/FountainOfLife";
+        public const string Fountain_active = "Game/General/Environment/FountainOfLife_activated";
 
         #endregion
     }

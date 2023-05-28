@@ -13,7 +13,9 @@ namespace Crystal_of_Eternity
 
         public Vector2 Position { get; set; }
 
-        public IShapeF Bounds { get; private set; }
+        public IShapeF Bounds { get; protected set; }
+
+        public bool isUsed = false;
 
         protected string idleSpritePath;
         protected string activeSpritePath;
@@ -22,6 +24,7 @@ namespace Crystal_of_Eternity
         protected Sprite activeSprite;
 
         protected bool canInteract = false;
+        protected bool isActive = false;
         #endregion
 
         protected InteractableEntity(Vector2 position, string idleSpritePath, string activeSpritePath)
@@ -40,7 +43,7 @@ namespace Crystal_of_Eternity
 
         public virtual void Interact()
         {
-            
+
         }
 
         public void SetActive() => canInteract = true;
@@ -63,7 +66,7 @@ namespace Crystal_of_Eternity
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var currentSprite = canInteract ? activeSprite : idleSprite;
+            var currentSprite = isActive ? activeSprite : idleSprite;
             currentSprite.Draw(spriteBatch, Position, 0, Vector2.One);
         }
 

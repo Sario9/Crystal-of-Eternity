@@ -5,7 +5,6 @@ namespace Crystal_of_Eternity
     public class Hatch : InteractableEntity
     {
         private GameState gameState;
-        private bool isInteracted = false;
 
         public Hatch(Vector2 position, GameState gameState) :
             base(position, SpriteNames.Hatch_idle, SpriteNames.Hatch_active)
@@ -16,6 +15,12 @@ namespace Crystal_of_Eternity
         public override void Interact()
         {
             gameState.NextRoom();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            isActive = canInteract;
         }
 
         public override object Clone() => new Hatch(Position, gameState);
