@@ -3,6 +3,7 @@ using GeonBit.UI;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -67,6 +68,8 @@ namespace Crystal_of_Eternity
 
         public void UpdateHealth(float currentHP, float maxHP)
         {
+            currentHP = MathF.Round(currentHP);
+            maxHP = MathF.Round(maxHP);
             healthBar.Value = (int)(currentHP / maxHP * 100);
             healthText.Text = string.Format("{0}/{1}", currentHP, maxHP);
         }

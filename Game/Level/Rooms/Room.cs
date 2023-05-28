@@ -69,19 +69,18 @@ namespace Crystal_of_Eternity
             corpses = new();
             enemiesToSpawn = new();
             interactableEntities = new();
-
-            AddEnemies(totalEnemies, enemiesTypes);
-            SpawnPlayer(player);
-            AddEntitesToColliders(entities.ToArray());
-            AddObstaclesToColliders();
         }
 
         protected virtual void Complete()
         {
-            var hatch = new Hatch(player.Position, gameState);
-            SpawnEntities(hatch);
-            interactableEntities.Add(hatch);
+            CreateInteractable(new Hatch(player.Position, gameState));
             OnEnemyChangeState = null;
+        }
+
+        public virtual void CreateInteractable(InteractableEntity interactable)
+        {
+            SpawnEntities(interactable);
+            interactableEntities.Add(interactable);
         }
 
         protected void AddEnemies(int totalEnemies, List<Enemy> enemiesTypes)

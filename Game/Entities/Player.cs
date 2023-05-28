@@ -40,6 +40,17 @@ namespace Crystal_of_Eternity
                     onHealthChanged?.Invoke(value, maxHP);
             }
         }
+        public override float MaxHP
+        {
+            get { return maxHP; }
+            protected set
+            {
+                var hpCorrelation = currentHP / maxHP;
+                maxHP = value;
+                CurrentHP = maxHP * hpCorrelation;
+                onHealthChanged?.Invoke(currentHP, maxHP);
+            }
+        }
 
         public delegate void HitHandler(float currentHealth, float maxHealth);
         public event HitHandler onHealthChanged; 
@@ -59,13 +70,18 @@ namespace Crystal_of_Eternity
         {
             base.Spawn(position, mapBounds);
             PlayerAttack = new Sword(2f, collisionComponent);
-            TakeHit(0);
+            TakeHit(25);
         }
 
         public override void TakeHit(float damage)
         {
             CurrentHP -= damage;
             Debug.Print("{0}/{1}", CurrentHP, maxHP);
+        }
+
+        public void ChangeMaxHealth(float value)
+        {
+            MaxHP = value;
         }
 
         public override void LoadContent()

@@ -23,14 +23,13 @@ namespace Crystal_of_Eternity
         {
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Initialize(Player player, GameState gameState)
         {
-            base.Update(gameTime);
-        }
-
-        protected override void Complete()
-        {
-            base.Complete();
+            base.Initialize(player, gameState);
+            AddEnemies(totalEnemies, enemiesTypes);
+            SpawnPlayer(player);
+            AddEntitesToColliders(entities.ToArray());
+            AddObstaclesToColliders();
         }
     }
 }

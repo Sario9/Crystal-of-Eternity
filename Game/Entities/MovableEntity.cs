@@ -34,7 +34,7 @@ namespace Crystal_of_Eternity
                 }
             }
         }
-        public float MaxHP { get { return maxHP; } }
+        public virtual float MaxHP { get { return maxHP; } protected set { maxHP = value; } }
         public bool IsAlive = true;
 
         public Sprite Sprite { get; protected set; }

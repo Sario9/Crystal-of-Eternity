@@ -18,11 +18,6 @@ namespace Crystal_of_Eternity
             gameState.NextRoom();
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
-
         public override object Clone() => new Hatch(Position, gameState);
     }
 }
