@@ -21,21 +21,14 @@ namespace Crystal_of_Eternity
         protected Sprite idleSprite;
         protected Sprite activeSprite;
 
-        protected float interactDistance;
-        protected bool canInteract;
-
-        protected Player player;
-
-        protected bool isActive = false;
+        protected bool canInteract = false;
         #endregion
 
-        protected InteractableEntity(Vector2 position, string idleSpritePath, string activeSpritePath, Player player, float interactDistance)
+        protected InteractableEntity(Vector2 position, string idleSpritePath, string activeSpritePath)
         {
             Position = position;
             this.activeSpritePath = activeSpritePath;
             this.idleSpritePath = idleSpritePath;
-            this.player = player;
-            this.interactDistance = interactDistance;
 
             LoadContent();
         }
@@ -50,6 +43,9 @@ namespace Crystal_of_Eternity
             
         }
 
+        public void SetActive() => canInteract = true;
+        public void SetNotActive() => canInteract = false;
+
         protected virtual void LoadContent()
         {
             var content = MyGame.Instance.Content;
@@ -62,13 +58,12 @@ namespace Crystal_of_Eternity
 
         public virtual void Update(GameTime gameTime)
         {
-            var playerDistance = Vector2.Distance(player.Position, Position);
-            canInteract = playerDistance < interactDistance;
+            
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var currentSprite = isActive ? activeSprite : idleSprite;
+            var currentSprite = canInteract ? activeSprite : idleSprite;
             currentSprite.Draw(spriteBatch, Position, 0, Vector2.One);
         }
 

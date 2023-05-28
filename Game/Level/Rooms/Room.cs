@@ -33,6 +33,7 @@ namespace Crystal_of_Eternity
         protected List<Enemy> enemiesTypes;
         protected Queue<Enemy> enemiesToSpawn;
 
+        protected List<InteractableEntity> interactableEntities;
         protected List<IEntity> corpses;
         private Point size;
 
@@ -64,9 +65,10 @@ namespace Crystal_of_Eternity
             this.gameState = gameState;
 
             CollisionComponent.Initialize();
-            entities = new List<IEntity>();
-            corpses = new List<IEntity>();
-            enemiesToSpawn = new Queue<Enemy>();
+            entities = new();
+            corpses = new();
+            enemiesToSpawn = new();
+            interactableEntities = new();
 
             AddEnemies(totalEnemies, enemiesTypes);
             SpawnPlayer(player);
@@ -76,7 +78,9 @@ namespace Crystal_of_Eternity
 
         protected virtual void Complete()
         {
-            SpawnEntities(new Hatch(player.Position, player, gameState));
+            var hatch = new Hatch(player.Position, gameState);
+            SpawnEntities(hatch);
+            interactableEntities.Add(hatch);
             OnEnemyChangeState = null;
         }
 
@@ -167,6 +171,10 @@ namespace Crystal_of_Eternity
         public virtual void Update(GameTime gameTime)
         {
             SpawnEnemies(gameTime);
+            var interactables = interactableEntities
+                .Where(x => Vector2.Distance(x.Position, player.Position) <= player.InteractDistance)
+                .OrderBy(x => Vector2.Distance(x.Position, player.Position));
+            player.CurrentInteractable = interactables.FirstOrDefault();   
 
             player.Update(gameTime);
             foreach (var entity in entities)

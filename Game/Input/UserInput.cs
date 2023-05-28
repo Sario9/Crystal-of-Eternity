@@ -113,6 +113,11 @@ namespace Crystal_of_Eternity
                 OnInteract?.Invoke();
         }
 
+        public static void Clear()
+        {
+            OnInteract = null;
+        }
+
         public static void Update(MyGame game, GameTime gameTime)
         {
             UpdateKeyboardState(gameTime);

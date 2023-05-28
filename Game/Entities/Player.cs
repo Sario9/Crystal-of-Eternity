@@ -11,11 +11,24 @@ namespace Crystal_of_Eternity
     public class Player : MovableEntity
     {
         #region Fields
+        public InteractableEntity CurrentInteractable 
+        {
+            get => currentInteractable;
+            set
+            {
+                currentInteractable?.SetNotActive();
+                currentInteractable = value;
+                currentInteractable?.SetActive();
+            }
+        }
+        public float InteractDistance = 50.0f;
         public PlayerWeapon PlayerAttack { get; private set; }
+
         private bool isIdle => velocity == Vector2.Zero;
         private GameState gameState;
 
-        private Sprite InteractCloud;
+        private Sprite interactCloud;
+        private InteractableEntity currentInteractable;
 
         public override float CurrentHP
         {
@@ -60,7 +73,7 @@ namespace Crystal_of_Eternity
             var content = MyGame.Instance.Content;
             base.LoadContent();
 
-            InteractCloud = new(content.Load<Texture2D>(SpriteNames.InteractCloud));
+            interactCloud = new(content.Load<Texture2D>(SpriteNames.InteractCloud));
         }
 
         private void Attack()
@@ -90,6 +103,10 @@ namespace Crystal_of_Eternity
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            if (CurrentInteractable != null && UserInput.OnInteract == null)
+                UserInput.OnInteract += CurrentInteractable.Interact;
+            else if (CurrentInteractable == null && UserInput.OnInteract != null)
+                UserInput.Clear();
 
             PlayerAttack.Update(gameTime);
             iTimer.Update(gameTime);
@@ -109,7 +126,7 @@ namespace Crystal_of_Eternity
             Sprite.Effect = flip;
 
             if (UserInput.OnInteract != null)
-                InteractCloud.Draw(spriteBatch, Position + new Vector2(20, -25), 0, Vector2.One);
+                interactCloud.Draw(spriteBatch, Position + new Vector2(20, -25), 0, Vector2.One);
 
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
             PlayerAttack.Draw(spriteBatch);

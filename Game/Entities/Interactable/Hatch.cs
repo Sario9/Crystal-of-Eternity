@@ -7,33 +7,22 @@ namespace Crystal_of_Eternity
         private GameState gameState;
         private bool isInteracted = false;
 
-        public Hatch(Vector2 position, Player player, GameState gameState) :
-            base(position, SpriteNames.Hatch_idle, SpriteNames.Hatch_active, player, 50)
+        public Hatch(Vector2 position, GameState gameState) :
+            base(position, SpriteNames.Hatch_idle, SpriteNames.Hatch_active)
         {
-            this.player = player;
             this.gameState = gameState;
         }
 
         public override void Interact()
         {
-            isInteracted = true;
-            UserInput.OnInteract -= Interact;
             gameState.NextRoom();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            if (canInteract && UserInput.OnInteract == null)
-                UserInput.OnInteract += Interact;
-
-            if ((isInteracted || !canInteract) && UserInput.OnInteract != null)
-                UserInput.OnInteract -= Interact;
-
-            isActive = canInteract;
         }
 
-        public override object Clone() => new Hatch(Position, player, gameState);
+        public override object Clone() => new Hatch(Position, gameState);
     }
 }
