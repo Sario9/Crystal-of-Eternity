@@ -12,11 +12,13 @@ namespace Crystal_of_Eternity
     public class PlayerWeapon : ICollisionActor
     {
         #region Fields
+        public float DamageWithModifier { get; private set; }
         public float Damage { get; private set; }
         public bool CanAttack => !animation.IsPlaying && attackTimer.State == TimerState.Completed;
 
         public IShapeF Bounds { get; private set; }
 
+        private const float CutThroughModifier = 1.5f;
         protected SpritesAnimation animation;
         protected string[] animationPaths;
         protected SpriteEffects attackFlip;
@@ -89,8 +91,12 @@ namespace Crystal_of_Eternity
 
         public bool WasAttacked(IEntity entity) => attackedEntities.Contains(entity);
 
+        public int AttackedCount => attackedEntities.Count;
+
         public virtual void Update(GameTime gameTime)
         {
+            DamageWithModifier = Damage - AttackedCount * CutThroughModifier;
+
             animation.Update(gameTime);
             attackTimer.Update(gameTime);
             if (!animation.IsPlaying)

@@ -96,10 +96,10 @@ namespace Crystal_of_Eternity
         protected void SpawnEnemies(GameTime gameTime)
         {
             spawnTimer.Update(gameTime);
-            if (enemiesToSpawn.Count != 0 && spawnTimer.State == TimerState.Completed)
+            if (enemiesToSpawn.Count != 0 && player.IsAlive && spawnTimer.State == TimerState.Completed)
             {
                 var enemy = enemiesToSpawn.Dequeue();
-                enemy.OnDeath += KillEnemy;
+                enemy.OnDeath += KillMovable;
 
                 enemy.Spawn(RandomPositionAwayFromPlayer(), Bounds, player);
                 SpawnEntities(enemy);
@@ -127,6 +127,8 @@ namespace Crystal_of_Eternity
             this.player = player;
             player.Spawn(playerStartPosition, Bounds, CollisionComponent);
             CollisionComponent.Insert(player);
+
+            player.OnDeath += KillMovable;
         }
 
         protected void SpawnEntities(params IEntity[] spawners)
@@ -145,7 +147,7 @@ namespace Crystal_of_Eternity
             }
         }
 
-        public void KillEnemy(IEntity entity)
+        public void KillMovable(IEntity entity)
         {
             if (entity is MovableEntity)
             {
@@ -155,7 +157,7 @@ namespace Crystal_of_Eternity
                 entities.Remove(entity);
                 if (movable.CorpseSpritePath != "")
                     corpses.Add(new Corpse(movable.CorpseSpritePath, entity.Position));
-                movable.OnDeath -= KillEnemy;
+                movable.OnDeath -= KillMovable;
 
                 if (entity is Enemy)
                     OnEnemyChangeState?.Invoke(EnemiesCount);

@@ -10,10 +10,10 @@ namespace Crystal_of_Eternity
         private readonly float additionalHealthPrecent = 0.25f;
 
         public FountainOfLife(Vector2 position, Player player) :
-            base(position, SpriteNames.Fountain_idle, SpriteNames.Fountain_active)
+            base(position, SpriteNames.Fountain_full, SpriteNames.Fountain_empty)
         {
             this.player = player;
-            Bounds = new RectangleF(position - new Vector2(16, 12), new(32, 24));
+            Bounds = new RectangleF(position - new Vector2(27, 20), new(54, 40));
         }
 
         public FountainOfLife(Player player) : this(new(400, 240), player)

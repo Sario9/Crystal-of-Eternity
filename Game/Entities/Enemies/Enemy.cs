@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GeonBit.UI;
+using GeonBit.UI.Entities;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
@@ -16,6 +20,9 @@ namespace Crystal_of_Eternity
         private CountdownTimer attackTimer;
         private float attackInterval;
         private bool canAttack => attackTimer.State == TimerState.Completed;
+
+        private ProgressBar healthBar;
+        private Label healthText;
         #endregion
 
         public Enemy(string name, string spritePath, string corpsePath, string hitSoundPath, float maxHP,

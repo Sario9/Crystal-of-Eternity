@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
@@ -67,7 +68,9 @@ namespace Crystal_of_Eternity
         private float iIntevral;
         protected CountdownTimer iTimer;
 
-        protected bool isSpawned = false; 
+        protected bool isSpawned = false;
+
+        protected ContentManager content;
         #endregion
 
         public MovableEntity(string name, string spritePath, string corpsePath, string hitSoundPath, float maxHP, float moveSpeed,
@@ -102,7 +105,7 @@ namespace Crystal_of_Eternity
 
         public virtual void LoadContent()
         {
-            var content = MyGame.Instance.Content;
+            content = MyGame.Instance.Content;
             Sprite = new Sprite(content.Load<Texture2D>(spritePath));
             if (hitSoundPath != "")
                 hitSound = content.Load<SoundEffect>(hitSoundPath);

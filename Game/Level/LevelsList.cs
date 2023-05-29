@@ -31,18 +31,19 @@ namespace Crystal_of_Eternity
                 new(LevelType.Level2,
                 new()
                 {
-                    new DefaultRoom(LevelType.Level2, new(15,15), new(125,125),
+                    new DefaultRoom(LevelType.Level2, new(25,15), new(125,125),
                     30, new()
                     {
                         new Skeleton(),
                     }),
-                    new DefaultRoom(LevelType.Level2, new(15,15), new(255,125),
-                    35, new()
+                    new DefaultRoom(LevelType.Level2, new(25,25), new(255,125),
+                    45, new()
                     {
                         new Skeleton(),
                         new Rogue(1),
                         new Rogue(2),
                     }),
+                    new SpecialRoom (LevelType.Level2, new(400,120))
                 }),
             };
         }

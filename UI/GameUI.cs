@@ -40,18 +40,21 @@ namespace Crystal_of_Eternity
             CreatePlayerHealthPanel();
 
             enemiesLeft = new Paragraph("Осталось врагов: ???", Anchor.TopRight, new(300, 50), new(25, 25), 1f);
-
             UserInterface.Active.AddEntity(enemiesLeft);
         }
 
         private void CreatePlayerHealthPanel()
         {
             playerHealthPanel = new Panel(new(700, 100), PanelSkin.None, Anchor.TopLeft);
-            healthBar = new ProgressBar(0, 100, new(500, 50), Anchor.Auto);
-            healthBar.Opacity = 250;
-            healthBar.Value = 100;
-            healthText = new Paragraph("XXX/XXX", Anchor.Center, scale: 1.2f);
-            healthText.TextStyle = FontStyle.Bold;
+            healthBar = new ProgressBar(0, 100, new(500, 50), Anchor.Auto)
+            {
+                Opacity = 250,
+                Value = 100
+            };
+            healthText = new Paragraph("XXX/XXX", Anchor.Center, scale: 1.2f)
+            {
+                TextStyle = FontStyle.Bold,
+            };
 
             healthBar.AddChild(healthText);
 
@@ -89,8 +92,10 @@ namespace Crystal_of_Eternity
             };
 
             playerDeathPanel = new Panel(new(1200, 400), PanelSkin.None, Anchor.Center);
-            playerDeathText = new Paragraph("ПОМЕР", Anchor.Center, Color.DarkRed, 1.5f);
-            playerDeathText.FontOverride = fonts["72"];
+            playerDeathText = new Paragraph("ПОМЕР", Anchor.Center, Color.DarkRed, 1.5f)
+            {
+                FontOverride = fonts["72"]
+            };
             playerDeathPanel.AddChild(restartButton);
             playerDeathPanel.AddChild(playerDeathText);
 

@@ -69,7 +69,7 @@ namespace Crystal_of_Eternity
         public void Spawn(Vector2 position, RectangleF mapBounds, CollisionComponent collisionComponent)
         {
             base.Spawn(position, mapBounds);
-            PlayerAttack = new Sword(2f, collisionComponent);
+            PlayerAttack = new Sword(2.0f, collisionComponent);
             onHealthChanged.Invoke(currentHP, maxHP);
         }
 
@@ -141,10 +141,11 @@ namespace Crystal_of_Eternity
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
 
-            if (UserInput.OnInteract != null)
+            if (UserInput.OnInteract != null && currentInteractable != null && !currentInteractable.isUsed)
                 interactCloud.Draw(spriteBatch, Position + new Vector2(20, -25), 0, Vector2.One);
 
-            Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
+            if(IsAlive)
+                Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
             PlayerAttack.Draw(spriteBatch);
         }
 
