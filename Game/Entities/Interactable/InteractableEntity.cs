@@ -41,7 +41,7 @@ namespace Crystal_of_Eternity
 
         }
 
-        public virtual void Interact()
+        public virtual void Interact(GameUI ui)
         {
 
         }

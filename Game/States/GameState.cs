@@ -14,8 +14,8 @@ namespace Crystal_of_Eternity
         public List<Level> Levels { get; private set; }
         public Player Player { get; private set; }
         public MyCamera Camera { get; private set; }
+        public GameUI UI { get; private set; }
 
-        private GameUI ui;
         private int currentLevelIndex = 0;
         #endregion
 
@@ -27,11 +27,11 @@ namespace Crystal_of_Eternity
         public void Initialize()
         {
             UserInterface.Active.Clear();
-            ui = new GameUI(this);
+            UI = new GameUI(this);
 
             Player = new Player(this, 100.0f, 0.7f, 0);
-            Player.onHealthChanged += ui.UpdateHealth;
-            Player.OnDeath += ui.ShowPlayerDeathText;
+            Player.onHealthChanged += UI.UpdateHealth;
+            Player.OnDeath += UI.ShowPlayerDeathPanel;
 
             Levels = LevelsList.GetLevels();
 
@@ -39,7 +39,7 @@ namespace Crystal_of_Eternity
 
             Camera = new MyCamera(this, graphicsDevice);
 
-            CurrentLevel.CurrentRoom.OnEnemyChangeState += ui.UpdateEnemies;
+            CurrentLevel.CurrentRoom.OnEnemyChangeState += UI.UpdateEnemies;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -85,7 +85,7 @@ namespace Crystal_of_Eternity
             if (CurrentLevel.NextRoom(Player) == null)
                 ChangeLevel(currentLevelIndex + 1);
 
-            CurrentLevel.CurrentRoom.OnEnemyChangeState += ui.UpdateEnemies;
+            CurrentLevel.CurrentRoom.OnEnemyChangeState += UI.UpdateEnemies;
         }
 
         public void ReloadState()

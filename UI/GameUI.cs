@@ -82,7 +82,7 @@ namespace Crystal_of_Eternity
             enemiesLeft.Text = string.Format("Осталось врагов: {0}", count);
         }
 
-        public void ShowPlayerDeathText(MovableEntity player)
+        public void ShowPlayerDeathPanel(MovableEntity player)
         {
             var restartButton = UIHelper.CreateButton("В меню", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
             restartButton.OnClick += (btn) =>
@@ -102,10 +102,32 @@ namespace Crystal_of_Eternity
             UserInterface.Active.AddEntity(playerDeathPanel);
         }
 
-        private void Restart()
+        public void ShowFountainMenu(FountainOfLife fountain)
         {
-            UserInterface.Active.Clear();
-            Initialize();
+            var panel = new Panel(new(1200, 400), PanelSkin.Default, Anchor.Center);
+            var healButton = UIHelper.CreateButton("Восполнить 50% здоровья", fonts["32"], anchor: Anchor.BottomLeft, size: new(500, 125));
+            var addMaxHealthButton = UIHelper.CreateButton("Увеличить максимальное здоровье на 25%", fonts["32"], anchor: Anchor.BottomRight, size: new(500, 125));
+            healButton.OnClick += (btn) =>
+            {
+                fountain.Heal();
+                UserInterface.Active.RemoveEntity(panel);
+            };
+            addMaxHealthButton.OnClick += (btn) =>
+            {
+                fountain.AddMaxHealth();
+                UserInterface.Active.RemoveEntity(panel);
+            };
+
+            var headerText = new Paragraph("Что сделать?", Anchor.TopCenter, Color.Green, 1.5f)
+            {
+                FontOverride = fonts["32"]
+            };
+            panel.AddChild(headerText);
+            panel.AddChild(new HorizontalLine());
+            panel.AddChild(healButton);
+            panel.AddChild(addMaxHealthButton);
+
+            UserInterface.Active.AddEntity(panel);
         }
     }
 }

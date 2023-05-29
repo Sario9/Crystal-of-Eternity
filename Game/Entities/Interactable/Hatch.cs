@@ -12,7 +12,7 @@ namespace Crystal_of_Eternity
             this.gameState = gameState;
         }
 
-        public override void Interact()
+        public override void Interact(GameUI ui)
         {
             gameState.NextRoom();
         }

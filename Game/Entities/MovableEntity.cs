@@ -25,13 +25,13 @@ namespace Crystal_of_Eternity
             {
                 if(IsAlive)
                 {
-                    currentHP = value;
-                    if (currentHP <= 0)
+                    if (value > maxHP) currentHP = maxHP;
+                    else if (value <= 0)
                     {
                         currentHP = 0;
                         Die();
                     }
-                    if (currentHP > maxHP) currentHP = maxHP;
+                    else currentHP = value;
                 }
             }
         }
@@ -158,10 +158,7 @@ namespace Crystal_of_Eternity
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
 
-            if (!canGetHit)
-                Sprite.Color = Color.Red;
-            else
-                Sprite.Color = Color.White;
+            Sprite.Color = !canGetHit ? Color.Red : Color.White;
 
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
         }

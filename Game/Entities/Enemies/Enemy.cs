@@ -1,11 +1,7 @@
-﻿using GeonBit.UI;
-using GeonBit.UI.Entities;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Timers;
 using System;
 using System.Diagnostics;
@@ -21,8 +17,7 @@ namespace Crystal_of_Eternity
         private float attackInterval;
         private bool canAttack => attackTimer.State == TimerState.Completed;
 
-        private ProgressBar healthBar;
-        private Label healthText;
+        private EntityHealthBar healthBar;
         #endregion
 
         public Enemy(string name, string spritePath, string corpsePath, string hitSoundPath, float maxHP,
@@ -43,6 +38,8 @@ namespace Crystal_of_Eternity
         {
             base.Spawn(position, mapBounds);
             this.target = target;
+            healthBar = new(this, new(20, 5), Color.Red, new(Color.Black, 0.5f));
+            healthBar.UpdateValue();
         }
 
         public override void OnCollision(CollisionEventArgs collisionInfo)
@@ -82,13 +79,14 @@ namespace Crystal_of_Eternity
             iTimer.Restart();
             Debug.Print("{0} has {1}/{2} HP", Name, currentHP, maxHP);
             base.TakeHit(damage);
+
+            healthBar?.UpdateValue();
         }
 
         public override void Update(GameTime gameTime)
         {
             iTimer.Update(gameTime);
             attackTimer.Update(gameTime);
-
             base.Update(gameTime);
 
             if (target != null && target.IsAlive)
@@ -101,6 +99,12 @@ namespace Crystal_of_Eternity
                     Move(directionToTarget, gameTime);
                 }
             }
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            base.Draw(gameTime, spriteBatch);
+            healthBar.Draw(spriteBatch, new(-8, -24));
         }
 
         public override object Clone() =>

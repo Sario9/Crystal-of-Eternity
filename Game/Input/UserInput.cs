@@ -28,7 +28,7 @@ namespace Crystal_of_Eternity
         public delegate void StateChangeHandler();
         public static StateChangeHandler OnMenuExit { get; set; }
 
-        public delegate void InteractHandler();
+        public delegate void InteractHandler(GameUI ui);
         public static InteractHandler OnInteract;
         #endregion
 
@@ -107,10 +107,10 @@ namespace Crystal_of_Eternity
             OnMove?.Invoke(direction, gameTime);
         }
 
-        private static void Interact()
+        private static void Interact(GameUI ui)
         {
             if (IsKeyPressed(KeyBinds.Interact))
-                OnInteract?.Invoke();
+                OnInteract?.Invoke(ui);
         }
 
         public static void Clear()
@@ -123,7 +123,8 @@ namespace Crystal_of_Eternity
             UpdateKeyboardState(gameTime);
             UpdateMouseState(gameTime);
             ChangeState();
-            Interact();
+            if(game.CurrentState is GameState state)
+                Interact(state.UI);
         }
 
         private static bool IsKeyPressed(Keys key) => KeyboardState.IsKeyDown(key) && !lastKeyboardState.IsKeyDown(key);

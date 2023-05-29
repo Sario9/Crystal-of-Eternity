@@ -4,6 +4,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Timers;
 using System.Diagnostics;
 
 namespace Crystal_of_Eternity
@@ -37,7 +38,7 @@ namespace Crystal_of_Eternity
             {
                 base.CurrentHP = value;
                 if(IsAlive)
-                    onHealthChanged?.Invoke(value, maxHP);
+                    onHealthChanged?.Invoke(currentHP, maxHP);
             }
         }
         public override float MaxHP
@@ -114,11 +115,13 @@ namespace Crystal_of_Eternity
         public void Restart()
         {
             CurrentHP = maxHP;
+            currentInteractable = null;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
             if (CurrentInteractable != null && UserInput.OnInteract == null)
                 UserInput.OnInteract += CurrentInteractable.Interact;
             else if (CurrentInteractable == null && UserInput.OnInteract != null)
