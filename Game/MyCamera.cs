@@ -48,7 +48,7 @@ namespace Crystal_of_Eternity
             var level = gameState.CurrentLevel;
             var cameraMax = new Vector2(level.Map.Size.X * 31 -
                 (device.Viewport.Width / Main.Zoom / 2),
-                level.Map.Size.Y * 30 -
+                level.Map.Size.Y * 30.5f -
                 (device.Viewport.Height / Main.Zoom / 2));
 
             return Vector2.Clamp(position,

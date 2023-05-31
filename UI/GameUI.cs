@@ -22,7 +22,10 @@ namespace Crystal_of_Eternity
         private Paragraph playerDeathText;
         private GameState gameState;
 
-        private readonly Dictionary<string, SpriteFont> fonts; 
+        private Label moneyCountText;
+
+        private Texture2D coinImage;
+        private readonly Dictionary<string, SpriteFont> fonts;
         #endregion
 
         public GameUI(GameState gameState)
@@ -38,8 +41,9 @@ namespace Crystal_of_Eternity
             UserInterface.Active.Clear();
 
             CreatePlayerHealthPanel();
+            CreatePlayerInvenotyHUD();
 
-            enemiesLeft = new Paragraph("Осталось врагов: ???", Anchor.TopRight, new(300, 50), new(25, 25), 1f);
+            enemiesLeft = new Label("Осталось врагов: ???", Anchor.TopCenter, new(400, 50), new(0, 25)) { Scale = 1.25f };
             UserInterface.Active.AddEntity(enemiesLeft);
         }
 
@@ -67,19 +71,7 @@ namespace Crystal_of_Eternity
         {
             fonts.Add("72", gameState.Content.Load<SpriteFont>("Font72"));
             fonts.Add("32", gameState.Content.Load<SpriteFont>("Font32"));
-        }
-
-        public void UpdateHealth(float currentHP, float maxHP)
-        {
-            currentHP = MathF.Round(currentHP);
-            maxHP = MathF.Round(maxHP);
-            healthBar.Value = (int)(currentHP / maxHP * 100);
-            healthText.Text = string.Format("{0}/{1}", currentHP, maxHP);
-        }
-
-        public void UpdateEnemies(int count)
-        {
-            enemiesLeft.Text = string.Format("Осталось врагов: {0}", count);
+            coinImage = gameState.Content.Load<Texture2D>(SpriteNames.Coin1);
         }
 
         public void ShowPlayerDeathPanel(MovableEntity player)
@@ -128,6 +120,45 @@ namespace Crystal_of_Eternity
             panel.AddChild(addMaxHealthButton);
 
             UserInterface.Active.AddEntity(panel);
+        }
+
+        public void CreatePlayerInvenotyHUD()
+        {
+            var panel = new Panel(new(150, 80), PanelSkin.None, Anchor.TopRight)
+            {
+                AdjustHeightAutomatically = false,
+                Padding = new(5, 5),
+                Opacity = 230,
+                Offset = new(15, 15)
+            };
+
+            var coinPanel = new Panel(new(125, 60), PanelSkin.None, Anchor.Center);
+            var coin = new Image(coinImage, new(20, 32), ImageDrawMode.Stretch, Anchor.CenterLeft);
+            moneyCountText = new Label("1000", Anchor.CenterRight) { Scale = 1.25f };
+
+            coinPanel.AddChild(coin);
+            coinPanel.AddChild(moneyCountText);
+            panel.AddChild(coinPanel);
+
+            UserInterface.Active.AddEntity(panel);
+        }
+
+        public void UpdateHealth(float currentHP, float maxHP)
+        {
+            currentHP = MathF.Round(currentHP);
+            maxHP = MathF.Round(maxHP);
+            healthBar.Value = (int)(currentHP / maxHP * 100);
+            healthText.Text = string.Format("{0}/{1}", currentHP, maxHP);
+        }
+
+        public void UpdateEnemies(int count)
+        {
+            enemiesLeft.Text = string.Format("Осталось врагов: {0}", count);
+        }
+
+        public void UpdateMoney(int count)
+        {
+            moneyCountText.Text = count.ToString();
         }
     }
 }

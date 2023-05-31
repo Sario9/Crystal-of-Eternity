@@ -31,6 +31,8 @@ namespace Crystal_of_Eternity
         private Sprite interactCloud;
         private InteractableEntity currentInteractable;
 
+        private Invenory invenory;
+
         public override float CurrentHP
         {
             get => currentHP;
@@ -62,6 +64,7 @@ namespace Crystal_of_Eternity
                 moveSpeed, damage, 0.05f)
         {
             this.gameState = gameState;
+            invenory = gameState.Invenory;
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
@@ -110,6 +113,15 @@ namespace Crystal_of_Eternity
 
             UserInput.OnLMBPressed -= Attack;
             UserInput.OnMove -= Move;
+        }
+
+        public override void OnCollision(CollisionEventArgs collisionInfo)
+        {
+            base.OnCollision(collisionInfo);
+            if(collisionInfo.Other is DropableEntity dropable)
+            {
+                dropable.Interact(invenory);
+            }
         }
 
         public void Restart()

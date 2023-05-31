@@ -15,12 +15,12 @@ namespace Crystal_of_Eternity
                     //new DefaultRoom(LevelType.Level1, new (25,15), new (125,125),
                     //15, new ()
                     //{
-                    //    new Skeleton(),
                     //    new Rogue(1),
                     //    new Rogue(2),
+                    //    new Rogue(3),
                     //}),
                     //new DefaultRoom(LevelType.Level1, new(25,20),new (255,125),
-                    //25, new ()
+                    //5, new ()
                     //{
                     //    new Skeleton(),
                     //}),
@@ -32,16 +32,16 @@ namespace Crystal_of_Eternity
                 new()
                 {
                     new DefaultRoom(LevelType.Level2, new(25,15), new(125,125),
-                    30, new()
+                    25, new()
                     {
                         new Skeleton(),
+                        new Demon()
                     }),
                     new DefaultRoom(LevelType.Level2, new(25,25), new(255,125),
-                    45, new()
+                    25, new()
                     {
                         new Skeleton(),
-                        new Rogue(1),
-                        new Rogue(2),
+                        new Demon()
                     }),
                     new SpecialRoom (LevelType.Level2, new(400,120))
                 }),

@@ -41,8 +41,8 @@ namespace Crystal_of_Eternity
             UserInterface.Active.Clear();
 
             var scale = UserInterface.Active.GlobalScale = GameSettings.Scale;
-            var background = new Image(backgroundImage, device.Viewport.Bounds.Size.ToVector2() / scale);
-            var panel = new Panel(new(device.Viewport.Width * 0.35f / scale, device.Viewport.Height / scale), PanelSkin.Default, Anchor.TopLeft);
+            var background = new Image(backgroundImage, new(0,0));
+            var panel = new Panel(new(device.Viewport.Width * 0.35f / scale, 0), PanelSkin.Default, Anchor.TopLeft);
             var label = new Label("CRYSTAL OF ETERNITY", Anchor.TopCenter);
             var playButton = UIHelper.CreateButton("Играть", fonts["32"]);
             var quitButton = UIHelper.CreateButton("Выйти из игры", fonts["32"]);

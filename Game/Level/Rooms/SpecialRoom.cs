@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Crystal_of_Eternity
 {
@@ -13,12 +14,31 @@ namespace Crystal_of_Eternity
         {
             base.Initialize(player, gameState);
 
-            CreateInteractable(new FountainOfLife(player));
+            InitializeSpecialEntity(SpecialRoomTypes.Fountain, player);
             SpawnPlayer(player);
             AddEntitesToColliders(entities.ToArray());
             AddObstaclesToColliders();
 
             Complete();
+        }
+
+        private void InitializeSpecialEntity(SpecialRoomTypes type, Player player)
+        {
+            switch (type) 
+            {
+                case SpecialRoomTypes.Fountain:
+                    CreateInteractable(new FountainOfLife(player));
+                    break;
+                case SpecialRoomTypes.Shop:
+                    {
+                        var coin = new CoinDropable(new(125, 125), player);
+                        coin.OnInteract += DeleteEntity;
+                        SpawnEntities(coin);
+                    }
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         protected override void Complete()

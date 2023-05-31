@@ -32,6 +32,7 @@ namespace Crystal_of_Eternity
         protected int totalEnemies;
         protected List<Enemy> enemiesTypes;
         protected Queue<Enemy> enemiesToSpawn;
+        protected List<IEntity> entitesToSpawn;
 
         protected List<InteractableEntity> interactableEntities;
         protected List<IEntity> corpses;
@@ -68,6 +69,7 @@ namespace Crystal_of_Eternity
             entities = new();
             corpses = new();
             enemiesToSpawn = new();
+            entitesToSpawn = new();
             interactableEntities = new();
         }
 
@@ -99,7 +101,7 @@ namespace Crystal_of_Eternity
             if (enemiesToSpawn.Count != 0 && player.IsAlive && spawnTimer.State == TimerState.Completed)
             {
                 var enemy = enemiesToSpawn.Dequeue();
-                enemy.OnDeath += KillMovable;
+                enemy.OnDeath += DeleteEntity;
 
                 enemy.Spawn(RandomPositionAwayFromPlayer(), Bounds, player);
                 SpawnEntities(enemy);
@@ -128,7 +130,7 @@ namespace Crystal_of_Eternity
             player.Spawn(playerStartPosition, Bounds, CollisionComponent);
             CollisionComponent.Insert(player);
 
-            player.OnDeath += KillMovable;
+            player.OnDeath += DeleteEntity;
         }
 
         protected void SpawnEntities(params IEntity[] spawners)
@@ -147,20 +149,27 @@ namespace Crystal_of_Eternity
             }
         }
 
-        public void KillMovable(IEntity entity)
+        protected void SpawnDropable(DropableEntity dropable)
         {
-            if (entity is MovableEntity)
-            {
-                var movable = (MovableEntity)entity;
+            dropable.OnInteract += DeleteEntity;
+            entitesToSpawn.Add(dropable);
+        }
 
+        public void DeleteEntity(IEntity entity)
+        {
+            if (entity is MovableEntity movable)
+            {
                 CollisionComponent.Remove(entity);
                 entities.Remove(entity);
                 if (movable.CorpseSpritePath != "")
                     corpses.Add(new Corpse(movable.CorpseSpritePath, entity.Position));
-                movable.OnDeath -= KillMovable;
+                movable.OnDeath -= DeleteEntity;
 
                 if (entity is Enemy)
+                {
                     OnEnemyChangeState?.Invoke(EnemiesCount);
+                    SpawnDropable(new CoinDropable(entity.Position, player));
+                }
             }
             else
             {
@@ -171,6 +180,15 @@ namespace Crystal_of_Eternity
 
         public virtual void Update(GameTime gameTime)
         {
+            CollisionComponent.Update(gameTime);
+            if (entitesToSpawn.Count > 0)
+            {
+                var toSpawn = entitesToSpawn.ToArray();
+                SpawnEntities(toSpawn);
+                AddEntitesToColliders(toSpawn);
+                entitesToSpawn.Clear();
+            }
+
             SpawnEnemies(gameTime);
             var interactables = interactableEntities
                 .Where(x => Vector2.Distance(x.Position, player.Position) <= player.InteractDistance)
@@ -180,7 +198,6 @@ namespace Crystal_of_Eternity
             player.Update(gameTime);
             foreach (var entity in entities)
                 entity.Update(gameTime);
-            CollisionComponent.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime, bool drawBounds)

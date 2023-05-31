@@ -13,6 +13,7 @@ namespace Crystal_of_Eternity
         public Level CurrentLevel => Levels[currentLevelIndex];
         public List<Level> Levels { get; private set; }
         public Player Player { get; private set; }
+        public Invenory Invenory { get; private set; }
         public MyCamera Camera { get; private set; }
         public GameUI UI { get; private set; }
 
@@ -29,6 +30,7 @@ namespace Crystal_of_Eternity
             UserInterface.Active.Clear();
             UI = new GameUI(this);
 
+            Invenory = new Invenory(UI);
             Player = new Player(this, 100.0f, 0.7f, 0);
             Player.onHealthChanged += UI.UpdateHealth;
             Player.OnDeath += UI.ShowPlayerDeathPanel;

@@ -17,7 +17,12 @@
         //Спрайты разбойников
         public const string Rogue_1 = "Game/General/Entities/Enemies/Rogue/Rogue_1";
         public const string Rogue_2 = "Game/General/Entities/Enemies/Rogue/Rogue_2";
+        public const string Rogue_3 = "Game/General/Entities/Enemies/Rogue/Rogue_3";
         public const string Rogue_corpse = "Game/General/Entities/Enemies/Rogue/Rogue_corpse";
+
+        //Спрайты демонов
+        public const string Demon_1 = "Game/General/Entities/Enemies/Demon/Demon_1";
+        public const string Demon_corpse = "Game/General/Entities/Enemies/Demon/Demon_corpse";
 
         //Анимация слайма
         public const string Slime1 = "Game/General/Entities/Enemies/Slime/Slime1";
@@ -65,6 +70,20 @@
         public const string Hatch_active = "Game/General/Environment/Hatch_open";
         public const string Fountain_full = "Game/General/Environment/FountainOfLife_full";
         public const string Fountain_empty = "Game/General/Environment/FountainOfLife_empty";
+
+        #endregion
+
+        #region Dropable
+
+        //Анимация монеты
+        public const string Coin1 = "Game/General/Dropable/Coin/Coin_1";
+        public const string Coin2 = "Game/General/Dropable/Coin/Coin_2";
+        public const string Coin3 = "Game/General/Dropable/Coin/Coin_3";
+        public const string Coin4 = "Game/General/Dropable/Coin/Coin_4";
+        public const string Coin5 = "Game/General/Dropable/Coin/Coin_5";
+        public const string Coin6 = "Game/General/Dropable/Coin/Coin_6";
+        public const string Coin7 = "Game/General/Dropable/Coin/Coin_7";
+        public static readonly string[] CoinAnimation = new[] { Coin1, Coin2, Coin3, Coin4, Coin5, Coin6, Coin7 };
 
         #endregion
     }
