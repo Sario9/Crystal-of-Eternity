@@ -62,6 +62,14 @@
 
         #endregion
 
+        #region Icons
+
+        public const string DamageIcon = "Game/General/DamageIcon";
+        public const string AttackSpeedIcon = "Game/General/AttackSpeedIcon";
+        public const string AttackScaleIcon = "Game/General/AttackSizeIcon";
+
+        #endregion
+
         #region Interactable
 
         public const string InteractCloud = "Game/General/InteractCloud";

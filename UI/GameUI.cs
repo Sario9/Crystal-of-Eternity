@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Crystal_of_Eternity
 {
@@ -23,8 +25,14 @@ namespace Crystal_of_Eternity
         private GameState gameState;
 
         private Label moneyCountText;
+        private Label damageText;
+        private Label attackSpeedText;
+        private Label attackScaleText;
 
         private Texture2D coinImage;
+        private Texture2D damageImage;
+        private Texture2D attackSpeedImage;
+        private Texture2D attackScaleImage;
         private readonly Dictionary<string, SpriteFont> fonts;
         #endregion
 
@@ -42,6 +50,7 @@ namespace Crystal_of_Eternity
 
             CreatePlayerHealthPanel();
             CreatePlayerInvenotyHUD();
+            CreatePlayerStatsPanel();
 
             enemiesLeft = new Label("Осталось врагов: ???", Anchor.TopCenter, new(400, 50), new(0, 25)) { Scale = 1.25f };
             UserInterface.Active.AddEntity(enemiesLeft);
@@ -67,9 +76,34 @@ namespace Crystal_of_Eternity
             UserInterface.Active.AddEntity(playerHealthPanel);
         }
 
-        public void CreatePlayerStatsPanel(PlayerWeapon weapon)
+        public void CreatePlayerStatsPanel()
         {
-            var panel = new Panel(new(120, 300), PanelSkin.Default, Anchor.CenterLeft);
+            var panel = new Panel(new(160, 300), PanelSkin.Fancy, Anchor.CenterLeft)
+            {
+                AdjustHeightAutomatically = true,
+                Opacity = 240
+            };
+            var damage = new Image(damageImage, new(32, 32), ImageDrawMode.Stretch);
+            damageText = new Label("xxx", Anchor.AutoInlineNoBreak) { Scale = 1.25f, Offset = new(15,0) };
+
+            var attackSpeed = new Image(attackSpeedImage, new(32, 32), ImageDrawMode.Stretch);
+            attackSpeedText = new Label("xxx", Anchor.AutoInlineNoBreak) { Scale = 1.25f, Offset = new(15, 0) };
+
+            var attackScale = new Image(attackScaleImage, new(32, 32), ImageDrawMode.Stretch);
+            attackScaleText = new Label("xxx", Anchor.AutoInlineNoBreak) { Scale = 1.25f, Offset = new(15, 0) };
+
+            panel.AddChild(damage);
+            panel.AddChild(damageText);
+
+            panel.AddChild(new LineSpace());
+
+            panel.AddChild(attackSpeed);
+            panel.AddChild(attackSpeedText);
+
+            panel.AddChild(new LineSpace());
+
+            panel.AddChild(attackScale);
+            panel.AddChild(attackScaleText);
 
             UserInterface.Active.AddEntity(panel);
         }
@@ -79,6 +113,9 @@ namespace Crystal_of_Eternity
             fonts.Add("72", gameState.Content.Load<SpriteFont>("Font72"));
             fonts.Add("32", gameState.Content.Load<SpriteFont>("Font32"));
             coinImage = gameState.Content.Load<Texture2D>(SpriteNames.Coin1);
+            damageImage = gameState.Content.Load<Texture2D>(SpriteNames.DamageIcon);
+            attackScaleImage = gameState.Content.Load<Texture2D>(SpriteNames.AttackScaleIcon);
+            attackSpeedImage = gameState.Content.Load<Texture2D>(SpriteNames.AttackSpeedIcon);
         }
 
         public void ShowPlayerDeathPanel(MovableEntity player)
@@ -206,6 +243,13 @@ namespace Crystal_of_Eternity
         public void UpdateMoney(int count)
         {
             moneyCountText.Text = count.ToString();
+        }
+
+        public void UpdateStats(PlayerWeapon weapon)
+        {
+            damageText.Text = weapon.DamageWithModifier.ToString();
+            attackSpeedText.Text = $"{MathF.Round(weapon.AttackIntervalWithModifier, 2)}";
+            attackScaleText.Text = $"{MathF.Round(weapon.WeaponScaleWithModifier, 2)}";
         }
     }
 }

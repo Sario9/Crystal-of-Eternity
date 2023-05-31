@@ -13,6 +13,8 @@ namespace Crystal_of_Eternity
     {
         #region Fields
         public float DamageWithModifier => damage + AdditionalDamage - AttackedCount * cutThroughModifier;
+        public float AttackIntervalWithModifier => attackInterval / AdditionalAttackSpeedPercent;
+        public float WeaponScaleWithModifier => attackSize * AdditionalSizePercent;
         public bool CanAttack => !animation.IsPlaying && attackTimer.State == TimerState.Completed;
 
         public IShapeF Bounds { get; private set; }
