@@ -68,8 +68,12 @@
 
         public const string Hatch_idle = "Game/General/Environment/Hatch";
         public const string Hatch_active = "Game/General/Environment/Hatch_open";
+
         public const string Fountain_full = "Game/General/Environment/FountainOfLife_full";
         public const string Fountain_empty = "Game/General/Environment/FountainOfLife_empty";
+
+        public const string Merchant = "Game/General/Environment/Merchant";
+        public const string Merchant_used = "Game/General/Environment/Merchant_used";
 
         #endregion
 

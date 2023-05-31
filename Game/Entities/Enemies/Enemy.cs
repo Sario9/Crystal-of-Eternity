@@ -63,7 +63,7 @@ namespace Crystal_of_Eternity
                 if (!attack.WasAttacked(this))
                 {
                     attack.AddToAttacked(this);
-                    TakeHit(attack.Damage);
+                    TakeHit(attack.DamageWithModifier);
                 }
             }
             else if (canAttack && other.Equals(target) && target.IsAlive)

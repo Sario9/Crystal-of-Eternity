@@ -23,7 +23,7 @@ namespace Crystal_of_Eternity
             }
         }
         public float InteractDistance = 50.0f;
-        public PlayerWeapon PlayerAttack { get; private set; }
+        public PlayerWeapon Weapon { get; private set; }
 
         private bool isIdle => velocity == Vector2.Zero;
         private GameState gameState;
@@ -73,7 +73,7 @@ namespace Crystal_of_Eternity
         public void Spawn(Vector2 position, RectangleF mapBounds, CollisionComponent collisionComponent)
         {
             base.Spawn(position, mapBounds);
-            PlayerAttack = new Sword(2.0f, collisionComponent);
+            Weapon = new Sword(2.0f, collisionComponent);
             onHealthChanged.Invoke(currentHP, maxHP);
         }
 
@@ -98,12 +98,12 @@ namespace Crystal_of_Eternity
 
         private void Attack()
         {
-            if (PlayerAttack.CanAttack && isSpawned)
+            if (Weapon.CanAttack && isSpawned)
             {
                 var camera = gameState.Camera.Main;
                 var mouseWorldPosition = camera.ScreenToWorld(UserInput.GetMousePosition().ToVector2());
                 var distance = (mouseWorldPosition - Position).Length();
-                PlayerAttack.MakeAttack(mouseWorldPosition - Position, Position, distance);
+                Weapon.MakeAttack(mouseWorldPosition - Position, Position, distance);
             }
         }
 
@@ -139,7 +139,7 @@ namespace Crystal_of_Eternity
             else if (CurrentInteractable == null && UserInput.OnInteract != null)
                 UserInput.Clear();
 
-            PlayerAttack.Update(gameTime);
+            Weapon.Update(gameTime);
             iTimer.Update(gameTime);
         }
 
@@ -161,13 +161,13 @@ namespace Crystal_of_Eternity
 
             if(IsAlive)
                 Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
-            PlayerAttack.Draw(spriteBatch);
+            Weapon.Draw(spriteBatch);
         }
 
         public override void DrawBounds(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawRectangle((RectangleF)Bounds, Color.Blue, 3);
-            PlayerAttack.DrawBounds(spriteBatch);
+            Weapon.DrawBounds(spriteBatch);
         }
     }
 }

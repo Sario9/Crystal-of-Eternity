@@ -67,6 +67,13 @@ namespace Crystal_of_Eternity
             UserInterface.Active.AddEntity(playerHealthPanel);
         }
 
+        public void CreatePlayerStatsPanel(PlayerWeapon weapon)
+        {
+            var panel = new Panel(new(120, 300), PanelSkin.Default, Anchor.CenterLeft);
+
+            UserInterface.Active.AddEntity(panel);
+        }
+
         private void LoadContent()
         {
             fonts.Add("72", gameState.Content.Load<SpriteFont>("Font72"));
@@ -118,6 +125,46 @@ namespace Crystal_of_Eternity
             panel.AddChild(new HorizontalLine());
             panel.AddChild(healButton);
             panel.AddChild(addMaxHealthButton);
+
+            UserInterface.Active.AddEntity(panel);
+        }
+
+        public void ShowMerchantMenu(Merchant merchant)
+        {
+            var damage = 5.0f;
+            var speed = 2.15f;
+            var size = 1.2f;
+
+            var panel = new Panel(new(1800, 400), PanelSkin.Default, Anchor.Center);
+            var upgradeDamageButton = UIHelper.CreateButton($"Увеличить урон оружия на {damage}", fonts["32"], anchor: Anchor.BottomLeft, size: new(500, 125));
+            var upgradeAttackSpeedButton = UIHelper.CreateButton($"Увеличить скорость атаки на  {MathF.Round(speed * 100)}%", fonts["32"], anchor: Anchor.BottomCenter, size: new(500, 125));
+            var upgradeWeaponSizeButton = UIHelper.CreateButton($"Увеличить размер оружия на {MathF.Round(size * 100)}%", fonts["32"], anchor: Anchor.BottomRight, size: new(500, 125));
+
+            upgradeDamageButton.OnClick += (btn) =>
+            {
+                merchant.IncreaseAttackDamage(damage);
+                UserInterface.Active.RemoveEntity(panel);
+            };
+            upgradeAttackSpeedButton.OnClick += (btn) =>
+            {
+                merchant.IncreaseAttackSpeed(speed);
+                UserInterface.Active.RemoveEntity(panel);
+            };
+            upgradeWeaponSizeButton.OnClick += (btn) =>
+            {
+                merchant.IncreaseAttackSize(size);
+                UserInterface.Active.RemoveEntity(panel);
+            };
+
+            var headerText = new Paragraph("Что сделать?", Anchor.TopCenter, Color.Green, 1.5f)
+            {
+                FontOverride = fonts["32"]
+            };
+            panel.AddChild(headerText);
+            panel.AddChild(new HorizontalLine());
+            panel.AddChild(upgradeDamageButton);
+            panel.AddChild(upgradeAttackSpeedButton);
+            panel.AddChild(upgradeWeaponSizeButton);
 
             UserInterface.Active.AddEntity(panel);
         }

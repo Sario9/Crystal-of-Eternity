@@ -22,6 +22,7 @@ namespace Crystal_of_Eternity
 
         protected Sprite idleSprite;
         protected Sprite activeSprite;
+        protected float spriteScale = 1.0f;
 
         protected bool canInteract = false;
         protected bool isActive = false;
@@ -56,7 +57,7 @@ namespace Crystal_of_Eternity
             idleSprite = new Sprite(content.Load<Texture2D>(idleSpritePath));
             activeSprite = new Sprite(content.Load<Texture2D>(activeSpritePath));
 
-            Bounds = idleSprite.GetBoundingRectangle(Position, 0, Vector2.One);
+            Bounds = idleSprite.GetBoundingRectangle(Position, 0, Vector2.One * spriteScale);
         }
 
         public virtual void Update(GameTime gameTime)
@@ -67,7 +68,7 @@ namespace Crystal_of_Eternity
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var currentSprite = isActive ? activeSprite : idleSprite;
-            currentSprite.Draw(spriteBatch, Position, 0, Vector2.One);
+            currentSprite.Draw(spriteBatch, Position, 0, Vector2.One * spriteScale);
         }
 
         public void DrawBounds(SpriteBatch spriteBatch)

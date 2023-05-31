@@ -14,8 +14,8 @@ namespace Crystal_of_Eternity
         {
             base.Initialize(player, gameState);
 
-            InitializeSpecialEntity(SpecialRoomTypes.Fountain, player);
             SpawnPlayer(player);
+            InitializeSpecialEntity(SpecialRoomTypes.Shop, player);
             AddEntitesToColliders(entities.ToArray());
             AddObstaclesToColliders();
 
@@ -30,11 +30,7 @@ namespace Crystal_of_Eternity
                     CreateInteractable(new FountainOfLife(player));
                     break;
                 case SpecialRoomTypes.Shop:
-                    {
-                        var coin = new CoinDropable(new(125, 125), player);
-                        coin.OnInteract += DeleteEntity;
-                        SpawnEntities(coin);
-                    }
+                        CreateInteractable(new Merchant(new(400, 250), player.Weapon));
                     break;
                 default:
                     throw new ArgumentException();

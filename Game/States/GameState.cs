@@ -34,6 +34,7 @@ namespace Crystal_of_Eternity
             Player = new Player(this, 100.0f, 0.7f, 0);
             Player.onHealthChanged += UI.UpdateHealth;
             Player.OnDeath += UI.ShowPlayerDeathPanel;
+            UI.CreatePlayerStatsPanel(Player.Weapon);
 
             Levels = LevelsList.GetLevels();
 
