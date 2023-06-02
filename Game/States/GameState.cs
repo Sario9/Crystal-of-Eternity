@@ -93,7 +93,6 @@ namespace Crystal_of_Eternity
 
         public void ReloadState()
         {
-            Player.Restart();
             Camera = new MyCamera(this, graphicsDevice);
         }
     }
