@@ -1,6 +1,6 @@
 ﻿namespace Crystal_of_Eternity
 {
-    public enum SpecialRoomTypes
+    public enum SpecialRoomType
     {
         Fountain,
         Shop

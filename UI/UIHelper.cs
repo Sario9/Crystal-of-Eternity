@@ -11,9 +11,11 @@ namespace Crystal_of_Eternity.UI
         {
             var button = new Button("", skin, anchor, size, offset);
 
-            var buttonText = new Label(text, Anchor.Center);
-            buttonText.FontOverride = font;
-            buttonText.Locked = true;
+            var buttonText = new RichParagraph(text, Anchor.Center)
+            {
+                FontOverride = font,
+                Locked = true
+            };
 
             button.ClearChildren();
             button.AddChild(buttonText);

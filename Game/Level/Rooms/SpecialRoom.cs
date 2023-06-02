@@ -5,9 +5,12 @@ namespace Crystal_of_Eternity
 {
     public class SpecialRoom : Room
     {
-        public SpecialRoom(LevelType levelType, Vector2 playerStartPosition) :
+        private SpecialRoomType roomType;
+
+        public SpecialRoom(LevelType levelType, Vector2 playerStartPosition, SpecialRoomType roomType) :
             base(levelType, new(25,15), playerStartPosition, 0, new())
         {
+            this.roomType = roomType;
         }
 
         public override void Initialize(Player player, GameState gameState)
@@ -15,21 +18,21 @@ namespace Crystal_of_Eternity
             base.Initialize(player, gameState);
 
             SpawnPlayer(player);
-            InitializeSpecialEntity(SpecialRoomTypes.Shop, player);
+            InitializeSpecialEntity(roomType, player);
             AddEntitesToColliders(entities.ToArray());
             AddObstaclesToColliders();
 
             Complete();
         }
 
-        private void InitializeSpecialEntity(SpecialRoomTypes type, Player player)
+        private void InitializeSpecialEntity(SpecialRoomType type, Player player)
         {
             switch (type) 
             {
-                case SpecialRoomTypes.Fountain:
+                case SpecialRoomType.Fountain:
                     CreateInteractable(new FountainOfLife(player));
                     break;
-                case SpecialRoomTypes.Shop:
+                case SpecialRoomType.Shop:
                         CreateInteractable(new Merchant(new(400, 250), player.Weapon, player.Invenory));
                     break;
                 default:

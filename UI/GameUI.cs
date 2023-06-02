@@ -5,15 +5,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crystal_of_Eternity
 {
     public class GameUI
     {
         #region Fields
+        public bool IsSomethingOpened = false;
+
         private Panel playerHealthPanel;
         private ProgressBar healthBar;
         private Paragraph healthText;
@@ -120,9 +119,11 @@ namespace Crystal_of_Eternity
 
         public void ShowPlayerDeathPanel(MovableEntity player)
         {
+            IsSomethingOpened = true;
             var restartButton = UIHelper.CreateButton("В меню", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
             restartButton.OnClick += (btn) =>
             {
+                IsSomethingOpened = false;
                 UserInterface.Active.Clear();
                 UserInput.ExitToMenu();
             };
@@ -140,18 +141,21 @@ namespace Crystal_of_Eternity
 
         public void ShowFountainMenu(FountainOfLife fountain)
         {
-            var panel = new Panel(new(1200, 400), PanelSkin.Default, Anchor.Center);
-            var healButton = UIHelper.CreateButton("Восполнить 50% здоровья", fonts["32"], anchor: Anchor.BottomLeft, size: new(500, 125));
-            var addMaxHealthButton = UIHelper.CreateButton("Увеличить максимальное здоровье на 25%", fonts["32"], anchor: Anchor.BottomRight, size: new(500, 125));
+            IsSomethingOpened = true;
+            var panel = new Panel(new(800, 400), PanelSkin.Default, Anchor.Center) { AdjustHeightAutomatically = true };
+            var healButton = UIHelper.CreateButton(@"Восполнить {{GREEN}}50% {{DEFAULT}}здоровья", fonts["32"], anchor: Anchor.AutoCenter, size: new(700, 125));
+            var addMaxHealthButton = UIHelper.CreateButton("Увеличить максимальное здоровье на {{GREEN}}25%", fonts["32"], anchor: Anchor.AutoCenter, size: new(700, 125));
             healButton.OnClick += (btn) =>
             {
                 fountain.Heal();
                 UserInterface.Active.RemoveEntity(panel);
+                IsSomethingOpened = false;
             };
             addMaxHealthButton.OnClick += (btn) =>
             {
                 fountain.AddMaxHealth();
                 UserInterface.Active.RemoveEntity(panel);
+                IsSomethingOpened = false;
             };
 
             var headerText = new Paragraph("Что сделать?", Anchor.TopCenter, Color.Green, 1.5f)
@@ -168,6 +172,8 @@ namespace Crystal_of_Eternity
 
         public void ShowMerchantMenu(Merchant merchant)
         {
+            IsSomethingOpened = true;
+
             var damage = merchant.AdditionalDamage;
             var speed = merchant.AdditionalAttackSpeed;
             var size = merchant.AdditionalAttackScale;
@@ -194,7 +200,7 @@ namespace Crystal_of_Eternity
 
             var upgradeAttackSpeedButton = UIHelper.CreateButton
             (
-                $"Увеличить скорость атаки на  {MathF.Round(speed.count * 100)}%",
+                @$"Увеличить скорость атаки на {MathF.Round(speed.count * 100)}%",
                 fonts["32"],
                 anchor: Anchor.AutoCenter,
                 size: new(500, 125)
@@ -247,18 +253,25 @@ namespace Crystal_of_Eternity
             {
                 merchant.IncreaseAttackDamage(damage.count, damage.price);
                 UserInterface.Active.RemoveEntity(panel);
+                IsSomethingOpened = false;
             };
             upgradeAttackSpeedButton.OnClick += (btn) =>
             {
                 merchant.IncreaseAttackSpeed(speed.count, speed.price);
                 UserInterface.Active.RemoveEntity(panel);
+                IsSomethingOpened = false;
             };
             upgradeWeaponSizeButton.OnClick += (btn) =>
             {
                 merchant.IncreaseAttackSize(size.count, size.price);
                 UserInterface.Active.RemoveEntity(panel);
+                IsSomethingOpened = false;
             };
-            closeButton.OnClick += (btn) => { UserInterface.Active.RemoveEntity(panel); };
+            closeButton.OnClick += (btn) =>
+            {
+                UserInterface.Active.RemoveEntity(panel);
+                IsSomethingOpened = false;
+            };
 
             var headerText = new Paragraph("Что сделать?", Anchor.TopCenter, Color.Green, 1.5f)
             {

@@ -1,0 +1,4 @@
+﻿Level_2
+Room_1: Default (25,15) (125,125) 25 Skeleton Demon
+Room_2: Default (25,25) (125,225) 25 Skeleton Demon
+Room_3: Special (400,120) shop

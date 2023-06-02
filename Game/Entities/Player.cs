@@ -101,7 +101,7 @@ namespace Crystal_of_Eternity
 
         private void Attack()
         {
-            if (Weapon.CanAttack && isSpawned)
+            if (Weapon.CanAttack && isSpawned && !gameState.UI.IsSomethingOpened)
             {
                 var camera = gameState.Camera.Main;
                 var mouseWorldPosition = camera.ScreenToWorld(UserInput.GetMousePosition().ToVector2());

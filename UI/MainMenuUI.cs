@@ -46,7 +46,7 @@ namespace Crystal_of_Eternity
             var label = new Label("CRYSTAL OF ETERNITY", Anchor.TopCenter);
             var playButton = UIHelper.CreateButton("Играть", fonts["32"]);
             var quitButton = UIHelper.CreateButton("Выйти из игры", fonts["32"]);
-            ((Label)quitButton.Children[0]).FillColor = Color.IndianRed;
+            ((RichParagraph)quitButton.Children[0]).FillColor = Color.IndianRed;
 
             playButton.OnClick += (btn) => game.ChangeState(new GameState(game, content, device));
             quitButton.OnClick += (btn) => game.Exit();
