@@ -16,6 +16,7 @@ namespace Crystal_of_Eternity
         public float AttackIntervalWithModifier => attackInterval / AdditionalAttackSpeedPercent;
         public float WeaponScaleWithModifier => attackSize * AdditionalSizePercent;
         public bool CanAttack => !animation.IsPlaying && attackTimer.State == TimerState.Completed;
+        public CollisionComponent CollisionComponent { get; set; }
 
         public IShapeF Bounds { get; private set; }
 
@@ -29,7 +30,6 @@ namespace Crystal_of_Eternity
         protected Vector2 position;
         protected float attackRange;
 
-        protected CollisionComponent collisionComponent;
         protected CountdownTimer attackTimer;
         protected float attackInterval;
         protected List<IEntity> attackedEntities;
@@ -58,7 +58,7 @@ namespace Crystal_of_Eternity
 
             animation = new(animationSpeed, Vector2.One * size * AdditionalSizePercent);
 
-            this.collisionComponent = collisionComponent;
+            this.CollisionComponent = collisionComponent;
 
             this.attackInterval = attackInterval;
             attackTimer = new CountdownTimer(attackInterval);
@@ -88,7 +88,7 @@ namespace Crystal_of_Eternity
                 animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
                 animation.Play();
                 Randomizer.RandomFromList(attackSound).Play();
-                collisionComponent.Insert(this);
+                CollisionComponent.Insert(this);
                 attackTimer.Restart();
             }
         }
@@ -115,7 +115,7 @@ namespace Crystal_of_Eternity
             animation.Update(gameTime);
             attackTimer.Update(gameTime);
             if (!animation.IsPlaying)
-                collisionComponent.Remove(this);
+                CollisionComponent.Remove(this);
             else
                 Bounds.Position = position;
         }

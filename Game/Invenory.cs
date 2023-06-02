@@ -14,7 +14,7 @@ namespace Crystal_of_Eternity
             }
         }
 
-        private int money;
+        private int money = 10;
         private GameUI gameUI;
 
         public Invenory(GameUI gameUI)
@@ -24,5 +24,6 @@ namespace Crystal_of_Eternity
         }
 
         public void AddMoney(int count) => Money += count;
+        public void PayMoney(int count) => Money -= count;
     }
 }

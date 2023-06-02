@@ -98,5 +98,11 @@
         public static readonly string[] CoinAnimation = new[] { Coin1, Coin2, Coin3, Coin4, Coin5, Coin6, Coin7 };
 
         #endregion
+
+        #region Other
+
+        public const string Shadow = "Game/General/Entities/Shadow";
+
+        #endregion
     }
 }

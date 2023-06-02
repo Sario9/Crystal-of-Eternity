@@ -47,6 +47,7 @@ namespace Crystal_of_Eternity
 
         protected string spritePath;
         protected string hitSoundPath;
+        protected Sprite shadow;
 
         protected SoundEffect hitSound;
 
@@ -107,6 +108,7 @@ namespace Crystal_of_Eternity
         {
             content = MyGame.Instance.Content;
             Sprite = new Sprite(content.Load<Texture2D>(spritePath));
+            shadow = new Sprite(content.Load<Texture2D>(SpriteNames.Shadow));
             if (hitSoundPath != "")
                 hitSound = content.Load<SoundEffect>(hitSoundPath);
         }
@@ -160,6 +162,7 @@ namespace Crystal_of_Eternity
 
             Sprite.Color = !canGetHit ? Color.Red : Color.White;
 
+            shadow.Draw(spriteBatch, Position + new Vector2(0,12), 0, new(1, 1));
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
         }
 

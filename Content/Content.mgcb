@@ -522,6 +522,18 @@
 /processorParam:TextureFormat=Color
 /build:Game/General/Entities/Player/Sword.png
 
+#begin Game/General/Entities/Shadow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/Entities/Shadow.png
+
 #begin Game/General/Environment/FountainOfLife_empty.png
 /importer:TextureImporter
 /processor:TextureProcessor

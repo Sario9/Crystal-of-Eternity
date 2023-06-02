@@ -41,7 +41,7 @@ namespace Crystal_of_Eternity
             animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
             animation.Play();
             Randomizer.RandomFromList(attackSound).Play();
-            collisionComponent.Insert(this);
+            CollisionComponent.Insert(this);
             attackTimer.Restart();
         }
 

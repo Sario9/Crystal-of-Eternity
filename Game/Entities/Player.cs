@@ -24,6 +24,7 @@ namespace Crystal_of_Eternity
         }
         public float InteractDistance = 50.0f;
         public PlayerWeapon Weapon { get; private set; }
+        public Invenory Invenory;
 
         private bool isIdle => velocity == Vector2.Zero;
         private GameState gameState;
@@ -31,7 +32,6 @@ namespace Crystal_of_Eternity
         private Sprite interactCloud;
         private InteractableEntity currentInteractable;
 
-        private Invenory invenory;
 
         public override float CurrentHP
         {
@@ -64,7 +64,7 @@ namespace Crystal_of_Eternity
                 moveSpeed, damage, 0.05f)
         {
             this.gameState = gameState;
-            invenory = gameState.Invenory;
+            Invenory = gameState.Invenory;
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
@@ -73,7 +73,10 @@ namespace Crystal_of_Eternity
         public void Spawn(Vector2 position, RectangleF mapBounds, CollisionComponent collisionComponent)
         {
             base.Spawn(position, mapBounds);
-            Weapon = new Sword(2.0f, collisionComponent);
+            if (Weapon == null)
+                Weapon = new Sword(2.0f, collisionComponent);
+            else Weapon.CollisionComponent = collisionComponent;
+
             onHealthChanged.Invoke(currentHP, maxHP);
         }
 
@@ -120,7 +123,7 @@ namespace Crystal_of_Eternity
             base.OnCollision(collisionInfo);
             if(collisionInfo.Other is DropableEntity dropable)
             {
-                dropable.Interact(invenory);
+                dropable.Interact(Invenory);
             }
         }
 
@@ -160,7 +163,10 @@ namespace Crystal_of_Eternity
                 interactCloud.Draw(spriteBatch, Position + new Vector2(20, -25), 0, Vector2.One);
 
             if(IsAlive)
+            {
+                shadow.Draw(spriteBatch, Position + new Vector2(0, 12), 0, new(1, 1));
                 Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
+            }
             Weapon.Draw(spriteBatch);
         }
 

@@ -84,7 +84,7 @@ namespace Crystal_of_Eternity
                 Opacity = 240
             };
             var damage = new Image(damageImage, new(32, 32), ImageDrawMode.Stretch);
-            damageText = new Label("xxx", Anchor.AutoInlineNoBreak) { Scale = 1.25f, Offset = new(15,0) };
+            damageText = new Label("xxx", Anchor.AutoInlineNoBreak) { Scale = 1.25f, Offset = new(15, 0) };
 
             var attackSpeed = new Image(attackSpeedImage, new(32, 32), ImageDrawMode.Stretch);
             attackSpeedText = new Label("xxx", Anchor.AutoInlineNoBreak) { Scale = 1.25f, Offset = new(15, 0) };
@@ -168,36 +168,105 @@ namespace Crystal_of_Eternity
 
         public void ShowMerchantMenu(Merchant merchant)
         {
-            var damage = 5.0f;
-            var speed = 2.15f;
-            var size = 1.2f;
+            var damage = merchant.AdditionalDamage;
+            var speed = merchant.AdditionalAttackSpeed;
+            var size = merchant.AdditionalAttackScale;
 
-            var panel = new Panel(new(1800, 400), PanelSkin.Default, Anchor.Center);
-            var upgradeDamageButton = UIHelper.CreateButton($"Увеличить урон оружия на {damage}", fonts["32"], anchor: Anchor.BottomLeft, size: new(500, 125));
-            var upgradeAttackSpeedButton = UIHelper.CreateButton($"Увеличить скорость атаки на  {MathF.Round(speed * 100)}%", fonts["32"], anchor: Anchor.BottomCenter, size: new(500, 125));
-            var upgradeWeaponSizeButton = UIHelper.CreateButton($"Увеличить размер оружия на {MathF.Round(size * 100)}%", fonts["32"], anchor: Anchor.BottomRight, size: new(500, 125));
+            var panel = new Panel(new(700, 400), PanelSkin.Default, Anchor.Center) { AdjustHeightAutomatically = true };
+            var closeButton = UIHelper.CreateButton("X",
+                fonts["32"],
+                anchor: Anchor.TopRight,
+                size: new(64, 64));
+
+            var upgradeDamageButton = UIHelper.CreateButton
+            (
+                $"Увеличить урон оружия на {damage.count}",
+                fonts["32"],
+                anchor: Anchor.AutoCenter,
+                size: new(500, 125)
+            );
+
+            var damageCostText = new Label($"{damage.price}$", anchor: Anchor.BottomRight)
+            {
+                FillColor = Color.Gold,
+                Scale = 1.25f
+            };
+
+            var upgradeAttackSpeedButton = UIHelper.CreateButton
+            (
+                $"Увеличить скорость атаки на  {MathF.Round(speed.count * 100)}%",
+                fonts["32"],
+                anchor: Anchor.AutoCenter,
+                size: new(500, 125)
+            );
+
+            var speedCostText = new Label($"{speed.price}$", anchor: Anchor.BottomRight)
+            {
+                FillColor = Color.Gold,
+                Scale = 1.25f
+            };
+
+            var upgradeWeaponSizeButton = UIHelper.CreateButton
+            (
+                $"Увеличить размер оружия на {MathF.Round(size.count * 100)}%",
+                fonts["32"],
+                anchor: Anchor.AutoCenter,
+                size: new(500, 125)
+            );
+
+            var sizeCostText = new Label($"{size.price}$", anchor: Anchor.BottomRight)
+            {
+                FillColor = Color.Gold,
+                Scale = 1.25f
+            };
+
+            closeButton.Padding = new(0, 0);
+            var playerMoney = merchant.CurrentPlayerMoney;
+
+            upgradeDamageButton.AddChild(damageCostText);
+            upgradeAttackSpeedButton.AddChild(speedCostText);
+            upgradeWeaponSizeButton.AddChild(sizeCostText);
+
+            if (playerMoney < damage.price)
+            {
+                upgradeDamageButton.Locked = true;
+                upgradeDamageButton.FillColor = Color.DarkGray;
+            }
+            if (playerMoney < speed.price)
+            {
+                upgradeAttackSpeedButton.Locked = true;
+                upgradeAttackSpeedButton.FillColor = Color.DarkGray;
+            }
+            if (playerMoney < size.price)
+            {
+                upgradeWeaponSizeButton.Locked = true;
+                upgradeWeaponSizeButton.FillColor = Color.DarkGray;
+            }
 
             upgradeDamageButton.OnClick += (btn) =>
             {
-                merchant.IncreaseAttackDamage(damage);
+                merchant.IncreaseAttackDamage(damage.count, damage.price);
                 UserInterface.Active.RemoveEntity(panel);
             };
             upgradeAttackSpeedButton.OnClick += (btn) =>
             {
-                merchant.IncreaseAttackSpeed(speed);
+                merchant.IncreaseAttackSpeed(speed.count, speed.price);
                 UserInterface.Active.RemoveEntity(panel);
             };
             upgradeWeaponSizeButton.OnClick += (btn) =>
             {
-                merchant.IncreaseAttackSize(size);
+                merchant.IncreaseAttackSize(size.count, size.price);
                 UserInterface.Active.RemoveEntity(panel);
             };
+            closeButton.OnClick += (btn) => { UserInterface.Active.RemoveEntity(panel); };
 
             var headerText = new Paragraph("Что сделать?", Anchor.TopCenter, Color.Green, 1.5f)
             {
                 FontOverride = fonts["32"]
             };
+
             panel.AddChild(headerText);
+            panel.AddChild(closeButton);
             panel.AddChild(new HorizontalLine());
             panel.AddChild(upgradeDamageButton);
             panel.AddChild(upgradeAttackSpeedButton);

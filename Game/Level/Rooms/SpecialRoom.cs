@@ -30,7 +30,7 @@ namespace Crystal_of_Eternity
                     CreateInteractable(new FountainOfLife(player));
                     break;
                 case SpecialRoomTypes.Shop:
-                        CreateInteractable(new Merchant(new(400, 250), player.Weapon));
+                        CreateInteractable(new Merchant(new(400, 250), player.Weapon, player.Invenory));
                     break;
                 default:
                     throw new ArgumentException();
