@@ -5,6 +5,7 @@
         #region Character
 
         public const string Character_knight = "Game/General/Entities/Player/Character-knight";
+        public const string Character_knight_dodge = "Game/General/Entities/Player/Character-knight_dodge";
 
         #endregion
 
@@ -30,6 +31,12 @@
         public const string Slime3 = "Game/General/Entities/Enemies/Slime/Slime3";
         public const string Slime4 = "Game/General/Entities/Enemies/Slime/Slime4";
         public const string Slime5 = "Game/General/Entities/Enemies/Slime/Slime5";
+
+        #endregion
+
+        #region Bosses
+
+        public const string Boss_rogue = "Game/General/Entities/Bosses/Boss_Rogue";
 
         #endregion
 

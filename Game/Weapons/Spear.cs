@@ -9,10 +9,10 @@ namespace Crystal_of_Eternity
     {
         private Vector2 attackEndPoint;
 
-        public Spear(float size, CollisionComponent collisionComponent) :
+        public Spear(CollisionComponent collisionComponent) :
             base
             (
-                5.0f, 0.07f, 0.6f, 100.0f,
+                15.0f, 0.04f, 0.6f, 100.0f,
                 new[]
                 {
                     SpriteNames.SpearAttack_1,
@@ -22,33 +22,36 @@ namespace Crystal_of_Eternity
                     SpriteNames.SpearAttack_5,
                     SpriteNames.SpearAttack_6,
                     SpriteNames.SpearAttack_7,
-                    SpriteNames.SpearAttack_8,
-                    SpriteNames.SpearAttack_9
                 },
                 new[] { SoundNames.Sword2 },
-                1.25f * size, collisionComponent)
+                1.25f, collisionComponent)
         {
 
         }
 
         public override void MakeAttack(Vector2 direction, Vector2 playerPosition, float mouseDistance)
         {
-            attackedEntities.Clear();
-            attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            direction.Normalize();
-            position = playerPosition + direction;
-            attackEndPoint = position + direction * MathHelper.Clamp(mouseDistance, 5, attackRange - 16);
-            animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
-            animation.Play();
-            Randomizer.RandomFromList(attackSound).Play();
-            CollisionComponent.Insert(this);
-            attackTimer.Restart();
+            Bounds.Position = playerPosition;
+
+            if(CanAttack)
+            {
+                attackedEntities.Clear();
+                attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                direction.Normalize();
+                position = playerPosition + direction;
+                attackEndPoint = position + direction * MathHelper.Clamp(mouseDistance, 5, attackRange - 16);
+                animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
+                animation.Play();
+                Randomizer.RandomFromList(attackSound).Play();
+                CollisionComponent.Insert(this);
+                attackTimer.Restart();
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
             if (!CanAttack)
-                position = Vector2.Lerp(position, attackEndPoint, 0.05f);
+                position = Vector2.Lerp(position, attackEndPoint, 0.04f);
             base.Update(gameTime);
         }
 

@@ -4,7 +4,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 
 namespace Crystal_of_Eternity
 {
@@ -37,7 +36,7 @@ namespace Crystal_of_Eternity
             Player = player;
             this.gameState = gameState;
             if (NextRoom(player) == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Уровень не имеет комнат");
         }
 
         public Room NextRoom(Player player)
@@ -58,7 +57,7 @@ namespace Crystal_of_Eternity
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            CurrentRoom.Draw(spriteBatch, gameTime, false);
+            CurrentRoom.Draw(spriteBatch, gameTime, true);
         }
     }
 }

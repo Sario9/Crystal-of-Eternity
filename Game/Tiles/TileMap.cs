@@ -62,22 +62,27 @@ namespace Crystal_of_Eternity
             );
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < Size.X; i++)
                 for (int j = 0; j < Size.Y; j++)
                     DrawTile(ground, i, j, 0, spriteBatch);
         }
 
-        public void DrawObstacles(GameTime gameTime, SpriteBatch spriteBatch)
+        public void DrawObstacles(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < Size.X; i++)
                 for (int j = 0; j < Size.Y; j++)
                     if (environment[i, j] != null)
-                    {
                         DrawTile(environment, i, j, 1, spriteBatch);
-                        //obstacles[i, j].Draw(spriteBatch);
-                    }
+        }
+
+        public void DrawBounds(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < Size.X; i++)
+                for (int j = 0; j < Size.Y; j++)
+                    if (environment[i, j] != null)
+                        obstacles[i, j].Draw(spriteBatch);
         }
     }
 }

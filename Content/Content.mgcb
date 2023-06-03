@@ -162,6 +162,18 @@
 /processorParam:TextureFormat=Color
 /build:Game/General/Dropable/Coin/Coin_7.png
 
+#begin Game/General/Entities/Bosses/Boss_Rogue.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/Entities/Bosses/Boss_Rogue.png
+
 #begin Game/General/Entities/Enemies/Demon/Demon_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -474,7 +486,7 @@
 /processorParam:TextureFormat=Color
 /build:Game/General/Entities/Player/Animations/Attack/SpearAttack_7.png
 
-#begin Game/General/Entities/Player/Animations/Attack/SpearAttack_8.png
+#begin Game/General/Entities/Player/Character-knight_dodge.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -484,19 +496,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Game/General/Entities/Player/Animations/Attack/SpearAttack_8.png
-
-#begin Game/General/Entities/Player/Animations/Attack/SpearAttack_9.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Game/General/Entities/Player/Animations/Attack/SpearAttack_9.png
+/build:Game/General/Entities/Player/Character-knight_dodge.png
 
 #begin Game/General/Entities/Player/Character-knight.png
 /importer:TextureImporter

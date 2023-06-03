@@ -17,6 +17,7 @@ namespace Crystal_of_Eternity
         public const Keys PlayerMoveDown = Keys.S;
         public const Keys PlayerMoveLeft = Keys.A;
         public const Keys PlayerMoveRight = Keys.D;
+        public const Keys PlayerDodge = Keys.Space;
 
         //Интерактив
         public const Keys Interact = Keys.E;

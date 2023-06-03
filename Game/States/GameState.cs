@@ -66,6 +66,7 @@ namespace Crystal_of_Eternity
             UserInterface.Active.Update(gameTime);
             UserInput.Update(game, gameTime);
             UserInput.Debug(this);
+            UI.Update(gameTime);
             Camera.Update(gameTime, Player);
             CurrentLevel.Update(gameTime);
         }

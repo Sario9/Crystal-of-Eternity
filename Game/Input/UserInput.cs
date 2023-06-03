@@ -25,6 +25,9 @@ namespace Crystal_of_Eternity
         public delegate void MovementHandler(Vector2 direction, GameTime gameTime);
         public static MovementHandler OnMove;
 
+        public delegate void DodgeHandler();
+        public static DodgeHandler OnDodge;
+
         public delegate void StateChangeHandler();
         public static StateChangeHandler OnMenuExit { get; set; }
 
@@ -107,6 +110,12 @@ namespace Crystal_of_Eternity
             OnMove?.Invoke(direction, gameTime);
         }
 
+        private static void Dodge(GameTime gameTime)
+        {
+            if (IsKeyPressed(KeyBinds.PlayerDodge))
+                OnDodge?.Invoke();
+        }
+
         private static void Interact(GameUI ui)
         {
             if (IsKeyPressed(KeyBinds.Interact))
@@ -123,6 +132,7 @@ namespace Crystal_of_Eternity
             UpdateKeyboardState(gameTime);
             UpdateMouseState(gameTime);
             ChangeState();
+            Dodge(gameTime);
             if(game.CurrentState is GameState state)
                 Interact(state.UI);
         }

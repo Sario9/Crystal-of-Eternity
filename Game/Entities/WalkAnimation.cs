@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 
 namespace Crystal_of_Eternity
 {
@@ -19,7 +20,7 @@ namespace Crystal_of_Eternity
 
         public void Play(GameTime gameTime)
         {
-            var time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var time = (float)gameTime.GetElapsedSeconds();
             if (SpriteRotation > Clamp || SpriteRotation < -Clamp)
                 rotateDirection = !rotateDirection;
             var delta = time * Step;

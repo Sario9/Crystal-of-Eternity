@@ -4,10 +4,10 @@ namespace Crystal_of_Eternity
 {
     public class Sword : PlayerWeapon
     {
-        public Sword(float size, CollisionComponent collisionComponent) :
+        public Sword(CollisionComponent collisionComponent) :
             base
             (
-                20.0f, 0.03f, 0.75f, 35.0f,
+                20.0f, 0.02f, 0.75f, 35.0f,
                 new[]
                 {
                     SpriteNames.Attack_1,
@@ -18,7 +18,7 @@ namespace Crystal_of_Eternity
                     SpriteNames.Attack_6
                 },
                 new[] { SoundNames.Sword1 },
-                size, collisionComponent)
+                3.0f, collisionComponent)
         {
 
         }

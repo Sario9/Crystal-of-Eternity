@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Transactions;
 
 namespace Crystal_of_Eternity
 {
@@ -21,6 +22,9 @@ namespace Crystal_of_Eternity
 
         private Panel playerDeathPanel;
         private Paragraph playerDeathText;
+        private float deathOpacity = 0;
+        private bool isDead = false;
+
         private GameState gameState;
 
         private Label moneyCountText;
@@ -119,6 +123,7 @@ namespace Crystal_of_Eternity
 
         public void ShowPlayerDeathPanel(MovableEntity player)
         {
+            isDead = true;
             IsSomethingOpened = true;
             var restartButton = UIHelper.CreateButton("В меню", fonts["32"], anchor: Anchor.BottomCenter, size: new(250, 70));
             restartButton.OnClick += (btn) =>
@@ -135,6 +140,10 @@ namespace Crystal_of_Eternity
             };
             playerDeathPanel.AddChild(restartButton);
             playerDeathPanel.AddChild(playerDeathText);
+
+            playerDeathPanel.Opacity = 0;
+            foreach (var child in playerDeathPanel.Children)
+                child.Opacity = 0;
 
             UserInterface.Active.AddEntity(playerDeathPanel);
         }
@@ -332,6 +341,16 @@ namespace Crystal_of_Eternity
             damageText.Text = weapon.DamageWithModifier.ToString();
             attackSpeedText.Text = $"{MathF.Round(weapon.AttackIntervalWithModifier, 2)}";
             attackScaleText.Text = $"{MathF.Round(weapon.WeaponScaleWithModifier, 2)}";
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (!isDead) return;
+
+            deathOpacity = MathHelper.Lerp(deathOpacity, 255, 0.05f);
+            playerDeathPanel.Opacity = (byte)deathOpacity;
+            foreach(var child in playerDeathPanel.Children)
+                child.Opacity = (byte)deathOpacity;
         }
     }
 }

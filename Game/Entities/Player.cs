@@ -32,6 +32,14 @@ namespace Crystal_of_Eternity
         private Sprite interactCloud;
         private InteractableEntity currentInteractable;
 
+        private CountdownTimer dodgeTimer;
+        private float dodgeInterval = 0.15f;
+        private float dodgeSpeed = 6f;
+        private Sprite dodgeSprite;
+        private bool isDodging => dodgeTimer.State == TimerState.Started;
+
+        private CountdownTimer dodgeCooldownTimer;
+        private float dodgeCooldonInterval = 2.5f;
 
         public override float CurrentHP
         {
@@ -39,8 +47,7 @@ namespace Crystal_of_Eternity
             set
             {
                 base.CurrentHP = value;
-                if(IsAlive)
-                    onHealthChanged?.Invoke(currentHP, maxHP);
+                onHealthChanged?.Invoke(currentHP, maxHP);
             }
         }
         public override float MaxHP
@@ -68,13 +75,20 @@ namespace Crystal_of_Eternity
 
             UserInput.OnLMBPressed += Attack;
             UserInput.OnMove += Move;
+            UserInput.OnDodge += MakeDodge;
         }
 
         public void Spawn(Vector2 position, RectangleF mapBounds, CollisionComponent collisionComponent)
         {
             base.Spawn(position, mapBounds);
+
+            dodgeTimer = new(dodgeInterval);
+            dodgeTimer.Stop();
+            dodgeCooldownTimer = new(dodgeCooldonInterval);
+            dodgeCooldownTimer.Start();
+
             if (Weapon == null)
-                Weapon = new Sword(2.0f, collisionComponent);
+                Weapon = new Spear(collisionComponent);
             else Weapon.CollisionComponent = collisionComponent;
 
             onHealthChanged.Invoke(currentHP, maxHP);
@@ -82,6 +96,7 @@ namespace Crystal_of_Eternity
 
         public override void TakeHit(float damage)
         {
+            if (isDodging) return;
             CurrentHP -= damage;
             Debug.Print("{0}/{1}", CurrentHP, maxHP);
         }
@@ -95,7 +110,7 @@ namespace Crystal_of_Eternity
         {
             var content = MyGame.Instance.Content;
             base.LoadContent();
-
+            dodgeSprite = new(content.Load<Texture2D>(SpriteNames.Character_knight_dodge));
             interactCloud = new(content.Load<Texture2D>(SpriteNames.InteractCloud));
         }
 
@@ -110,6 +125,12 @@ namespace Crystal_of_Eternity
             }
         }
 
+        private void MakeDodge()
+        {
+            if(dodgeCooldownTimer.State == TimerState.Completed)
+                dodgeTimer.Restart();
+        }
+
         protected override void Die()
         {
             base.Die();
@@ -122,9 +143,7 @@ namespace Crystal_of_Eternity
         {
             base.OnCollision(collisionInfo);
             if(collisionInfo.Other is DropableEntity dropable)
-            {
                 dropable.Interact(Invenory);
-            }
         }
 
         public void Restart()
@@ -142,6 +161,14 @@ namespace Crystal_of_Eternity
             else if (CurrentInteractable == null && UserInput.OnInteract != null)
                 UserInput.Clear();
 
+            if(dodgeTimer.State == TimerState.Started)
+            {
+                Position += velocity * dodgeSpeed;
+                dodgeCooldownTimer.Restart();
+            }
+
+            dodgeCooldownTimer.Update(gameTime);
+            dodgeTimer.Update(gameTime);
             Weapon.Update(gameTime);
             iTimer.Update(gameTime);
         }
@@ -158,6 +185,7 @@ namespace Crystal_of_Eternity
             if (velocity.X < 0)
                 flip = SpriteEffects.None;
             Sprite.Effect = flip;
+            dodgeSprite.Effect = flip;
 
             if (UserInput.OnInteract != null && currentInteractable != null && !currentInteractable.isUsed)
                 interactCloud.Draw(spriteBatch, Position + new Vector2(20, -25), 0, Vector2.One);
@@ -165,7 +193,11 @@ namespace Crystal_of_Eternity
             if(IsAlive)
             {
                 shadow.Draw(spriteBatch, Position + new Vector2(0, 12), 0, new(1, 1));
-                Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
+                if(dodgeTimer.State != TimerState.Started)
+                    Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
+                else
+                    dodgeSprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
+
             }
             Weapon.Draw(spriteBatch);
         }

@@ -202,12 +202,12 @@ namespace Crystal_of_Eternity
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime, bool drawBounds)
         {
-            Map.Draw(gameTime, spriteBatch);
+            Map.Draw(spriteBatch);
 
             foreach (var corpse in corpses)
                 corpse.Draw(gameTime, spriteBatch);
 
-            Map.DrawObstacles(gameTime, spriteBatch);
+            Map.DrawObstacles(spriteBatch);
 
             foreach (var entity in entities)
                 entity.Draw(gameTime, spriteBatch);
@@ -224,6 +224,7 @@ namespace Crystal_of_Eternity
             player.DrawBounds(spriteBatch);
             foreach (var entity in entities)
                 entity.DrawBounds(spriteBatch);
+            Map.DrawBounds(spriteBatch);
         }
 
         protected Vector2 RandomPosition => Randomizer.NextVector2((int)Bounds.Width, (int)Bounds.Height);

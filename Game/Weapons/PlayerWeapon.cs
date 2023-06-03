@@ -12,7 +12,7 @@ namespace Crystal_of_Eternity
     public class PlayerWeapon : ICollisionActor
     {
         #region Fields
-        public float DamageWithModifier => damage + AdditionalDamage - AttackedCount * cutThroughModifier;
+        public float DamageWithModifier => damage + AdditionalDamage - AttackedCount * damage * cutThroughModifier;
         public float AttackIntervalWithModifier => attackInterval / AdditionalAttackSpeedPercent;
         public float WeaponScaleWithModifier => attackSize * AdditionalSizePercent;
         public bool CanAttack => !animation.IsPlaying && attackTimer.State == TimerState.Completed;
@@ -20,7 +20,7 @@ namespace Crystal_of_Eternity
 
         public IShapeF Bounds { get; private set; }
 
-        protected float cutThroughModifier = 1.5f;
+        protected float cutThroughModifier = 0.1f;
         protected float damage; 
         protected SpritesAnimation animation;
         protected string[] animationPaths;
@@ -79,12 +79,14 @@ namespace Crystal_of_Eternity
 
         public virtual void MakeAttack(Vector2 direction, Vector2 playerPosition, float mouseDistance)
         {
+            Bounds.Position = playerPosition;
+
             if (CanAttack)
             {
                 attackedEntities.Clear();
                 attackFlip = attackFlip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                 direction.Normalize();
-                position = playerPosition + direction * MathHelper.Clamp(mouseDistance, 15, attackRange);
+                position = playerPosition + direction * 32;
                 animation.SetRotation(Vector2Extensions.ToAngle(position - playerPosition));
                 animation.Play();
                 Randomizer.RandomFromList(attackSound).Play();
@@ -122,12 +124,14 @@ namespace Crystal_of_Eternity
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            animation.Draw(spriteBatch, position, attackFlip);
+            if(animation.IsPlaying)
+                animation.Draw(spriteBatch, position, attackFlip);
         }
 
         public void DrawBounds(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawCircle((CircleF)Bounds, 12, Color.Yellow, 1);
+            if (animation.IsPlaying)
+                spriteBatch.DrawCircle((CircleF)Bounds, 12, Color.Yellow, 1);
         }
     }
 }
