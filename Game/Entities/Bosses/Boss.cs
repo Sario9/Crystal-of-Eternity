@@ -18,6 +18,9 @@ namespace Crystal_of_Eternity
         protected float skillsInterval;
         protected List<Action> skills;
 
+        public delegate void HitHandler(Boss boss);
+        public event HitHandler OnHealthChanged;
+
         #endregion
 
         protected Boss(string name, string spritePath, string corpsePath, string hitSoundPath,
@@ -62,6 +65,8 @@ namespace Crystal_of_Eternity
             iTimer.Restart();
             Debug.Print("{0} has {1}/{2} HP", Name, currentHP, maxHP);
             base.TakeHit(damage);
+
+            OnHealthChanged?.Invoke(this);
         }
 
         public override void OnCollision(CollisionEventArgs collisionInfo)

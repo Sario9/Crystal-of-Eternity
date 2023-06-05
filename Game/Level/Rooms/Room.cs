@@ -129,7 +129,11 @@ namespace Crystal_of_Eternity
             entitesToSpawn.Add(boss);
             boss.Spawn(RandomPositionAwayFromPlayer(), Bounds, player);
             boss.OnDeath += DeleteEntity;
+            boss.OnDeath += gameState.UI.RemoveBossHealthBar;
             AddEntitesToColliders(boss);
+
+            gameState.UI.CreateBossHealthBar(boss);
+            boss.OnHealthChanged += gameState.UI.UpdateBossHealth;
         }
 
         protected void SpawnPlayer(Player player)
@@ -180,9 +184,14 @@ namespace Crystal_of_Eternity
                     if(i < 8)
                         SpawnDropable(new CoinDropable(entity.Position, player));
                 }
-                
-                else if (entity is Boss )
+
+                else if (entity is Boss boss)
+                {
+                    boss.OnHealthChanged -= gameState.UI.UpdateBossHealth;
+                    boss.OnDeath -= DeleteEntity;
+                    boss.OnDeath -= gameState.UI.RemoveBossHealthBar;
                     OnEnemyChangeState?.Invoke(EnemiesCount);
+                }
             }
             else
             {

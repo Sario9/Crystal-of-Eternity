@@ -20,6 +20,9 @@ namespace Crystal_of_Eternity
 
         private Paragraph enemiesLeft;
 
+        private ProgressBar bossHealthBar;
+        private Label bossHealthBarText;
+
         private Panel playerDeathPanel;
         private Paragraph playerDeathText;
         private float deathOpacity = 0;
@@ -318,11 +321,21 @@ namespace Crystal_of_Eternity
             UserInterface.Active.AddEntity(panel);
         }
 
+        public void CreateBossHealthBar(Boss boss)
+        {
+            bossHealthBar = new(0, 100, new(1000, 50), Anchor.BottomCenter, new(0, 15)) { Value = (int)(boss.CurrentHP / boss.MaxHP) * 100 };
+            bossHealthBarText = new($"{boss.CurrentHP}/{boss.MaxHP}", Anchor.Center) { FontOverride = fonts["32"] };
+
+            bossHealthBar.AddChild(bossHealthBarText);
+
+            UserInterface.Active.AddEntity(bossHealthBar);
+        }
+
         public void UpdateHealth(float currentHP, float maxHP)
         {
             currentHP = MathF.Round(currentHP);
             maxHP = MathF.Round(maxHP);
-            healthBar.Value = (int)(currentHP / maxHP * 100);
+            healthBar.Value = (int)(currentHP / maxHP) * 100;
             healthText.Text = string.Format("{0}/{1}", currentHP, maxHP);
         }
 
@@ -343,13 +356,24 @@ namespace Crystal_of_Eternity
             attackScaleText.Text = $"{MathF.Round(weapon.WeaponScaleWithModifier, 2)}";
         }
 
+        public void UpdateBossHealth(Boss boss)
+        {
+            bossHealthBar.Value = (int)(boss.CurrentHP / boss.MaxHP * 100);
+            bossHealthBarText.Text = $"{boss.CurrentHP}/{boss.MaxHP}";
+        }
+
+        public void RemoveBossHealthBar(IEntity entity)
+        {
+            UserInterface.Active.RemoveEntity(bossHealthBar);
+        }
+
         public void Update(GameTime gameTime)
         {
             if (!isDead) return;
 
             deathOpacity = MathHelper.Lerp(deathOpacity, 255, 0.05f);
             playerDeathPanel.Opacity = (byte)deathOpacity;
-            foreach(var child in playerDeathPanel.Children)
+            foreach (var child in playerDeathPanel.Children)
                 child.Opacity = (byte)deathOpacity;
         }
     }
