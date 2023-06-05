@@ -124,6 +124,14 @@ namespace Crystal_of_Eternity
                 CollisionComponent.Insert(entity);
         }
 
+        protected virtual void SpawnBoss(Boss boss)
+        {
+            entitesToSpawn.Add(boss);
+            boss.Spawn(RandomPositionAwayFromPlayer(), Bounds, player);
+            boss.OnDeath += DeleteEntity;
+            AddEntitesToColliders(boss);
+        }
+
         protected void SpawnPlayer(Player player)
         {
             this.player = player;
@@ -165,11 +173,16 @@ namespace Crystal_of_Eternity
                     corpses.Add(new Corpse(movable.CorpseSpritePath, entity.Position));
                 movable.OnDeath -= DeleteEntity;
 
-                if (entity is Enemy)
+                if (entity is Enemy )
                 {
                     OnEnemyChangeState?.Invoke(EnemiesCount);
-                    SpawnDropable(new CoinDropable(entity.Position, player));
+                    var i = Randomizer.Random.Next(10);
+                    if(i < 8)
+                        SpawnDropable(new CoinDropable(entity.Position, player));
                 }
+                
+                else if (entity is Boss )
+                    OnEnemyChangeState?.Invoke(EnemiesCount);
             }
             else
             {
@@ -187,6 +200,8 @@ namespace Crystal_of_Eternity
                 SpawnEntities(toSpawn);
                 AddEntitesToColliders(toSpawn);
                 entitesToSpawn.Clear();
+
+                OnEnemyChangeState.Invoke(EnemiesCount);
             }
 
             SpawnEnemies(gameTime);

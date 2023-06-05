@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended;
-
-namespace Crystal_of_Eternity
+﻿namespace Crystal_of_Eternity
 {
     public class Rogue : Enemy
     {

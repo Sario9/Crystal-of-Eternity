@@ -37,6 +37,7 @@
         #region Bosses
 
         public const string Boss_rogue = "Game/General/Entities/Bosses/Boss_Rogue";
+        public const string Boss_rogue_corpse = "Game/General/Entities/Bosses/Boss_Rogue_corpse";
 
         #endregion
 

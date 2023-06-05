@@ -88,7 +88,7 @@ namespace Crystal_of_Eternity
             dodgeCooldownTimer.Start();
 
             if (Weapon == null)
-                Weapon = new Spear(collisionComponent);
+                Weapon = new Sword(collisionComponent);
             else Weapon.CollisionComponent = collisionComponent;
 
             onHealthChanged.Invoke(currentHP, maxHP);

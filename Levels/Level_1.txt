@@ -1,4 +1,4 @@
 ﻿Level_1
-Room_1: Default (25,15) (125,125) 15 Rogue_1 Rogue_2 Rogue_3
+Boss_1: Boss (25,15) (125,125) Rogue 0 Rogue_1 Rogue_2 Rogue_3
 Room_2: Default (25,20) (255,125) 5 Skeleton
 Room_3: Special (400,120) shop

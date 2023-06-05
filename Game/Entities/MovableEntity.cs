@@ -48,6 +48,7 @@ namespace Crystal_of_Eternity
         protected string spritePath;
         protected string hitSoundPath;
         protected Sprite shadow;
+        protected float shadowScale = 1.0f;
 
         protected SoundEffect hitSound;
 
@@ -83,7 +84,7 @@ namespace Crystal_of_Eternity
             this.moveSpeed = moveSpeed;
             CollisionDamage = damage;
             iIntevral = iInterval;
-            walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.2f);
+            walkAnimation = new WalkAnimation(moveSpeed * 2f, 0.15f);
             CorpseSpritePath = corpsePath;
             this.spritePath = spritePath;
             this.hitSoundPath = hitSoundPath;
@@ -133,7 +134,7 @@ namespace Crystal_of_Eternity
         protected virtual void Die()
         {
             IsAlive = false;
-            OnDeath.Invoke(this);
+            OnDeath?.Invoke(this);
         }
 
         public virtual void TakeHit(float damage)
@@ -162,7 +163,7 @@ namespace Crystal_of_Eternity
 
             Sprite.Color = !canGetHit ? Color.Red : Color.White;
 
-            shadow.Draw(spriteBatch, Position + new Vector2(0,12), 0, new(1, 1));
+            shadow.Draw(spriteBatch, Position + new Vector2(0,12), 0, Vector2.One * shadowScale);
             Sprite.Draw(spriteBatch, Position, walkAnimation.SpriteRotation, new(1, 1));
         }
 

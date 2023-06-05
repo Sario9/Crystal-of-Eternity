@@ -162,6 +162,18 @@
 /processorParam:TextureFormat=Color
 /build:Game/General/Dropable/Coin/Coin_7.png
 
+#begin Game/General/Entities/Bosses/Boss_Rogue_corpse.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game/General/Entities/Bosses/Boss_Rogue_corpse.png
+
 #begin Game/General/Entities/Bosses/Boss_Rogue.png
 /importer:TextureImporter
 /processor:TextureProcessor

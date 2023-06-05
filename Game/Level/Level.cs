@@ -57,7 +57,7 @@ namespace Crystal_of_Eternity
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            CurrentRoom.Draw(spriteBatch, gameTime, true);
+            CurrentRoom.Draw(spriteBatch, gameTime, false);
         }
     }
 }

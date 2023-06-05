@@ -51,6 +51,7 @@ namespace Crystal_of_Eternity
             {
                 "default" => GenerateDefaultRoom(levelType, roomParams),
                 "special" => GenerateSpecialRoom(levelType, roomParams),
+                "boss" => GenerateBossRoom(levelType, roomParams),
                 _ => throw new ArgumentException("Неверный тип комнаты"),
             };
             return room;
@@ -110,9 +111,60 @@ namespace Crystal_of_Eternity
             return new(level, playerStartPosition, specialRoomType);
         }
 
+        private static BossRoom GenerateBossRoom(LevelType level, string[] parameters)
+        {
+
+            var size = ParseVector2(parameters[1]).ToPoint();
+            var playerStartPosition = ParseVector2(parameters[2]);
+            Boss boss;
+            var totalEnemies = int.Parse(parameters[4]);
+            var enemies = new List<Enemy>();
+            switch(parameters[3])
+            {
+                case "rogue":
+                    boss = new BossRogue();
+                    break;
+                default:
+                    throw new ArgumentException("Босса не существует");
+
+            }
+
+            for (int i = 5; i < parameters.Length; i++)
+            {
+                var text = parameters[i];
+                switch (text)
+                {
+                    case "skeleton":
+                        enemies.Add(new Skeleton());
+                        break;
+                    case "rogue_1":
+                        enemies.Add(new Rogue(1));
+                        break;
+                    case "rogue_2":
+                        enemies.Add(new Rogue(2));
+                        break;
+                    case "rogue_3":
+                        enemies.Add(new Rogue(3));
+                        break;
+                    case "demon":
+                        enemies.Add(new Demon());
+                        break;
+                    default:
+                        throw new ArgumentException("Враг отсутствует");
+                }
+            }
+
+            return new(level, size, playerStartPosition, boss, totalEnemies, enemies);
+        }
+
         private static Vector2 ParseVector2(string text)
         {
-            var split = text.Split(',').Select(x => x.Trim(' ', '(', ')')).Where(x => x != "").Select(x => int.Parse(x)).ToArray();
+            var split = text
+                .Split(',')
+                .Select(x => x.Trim(' ', '(', ')'))
+                .Where(x => x != "")
+                .Select(x => int.Parse(x))
+                .ToArray();
             return new(split[0], split[1]);
         }
     }
