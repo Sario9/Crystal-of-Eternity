@@ -12,7 +12,8 @@ namespace Crystal_of_Eternity
     public class PlayerWeapon : ICollisionActor
     {
         #region Fields
-        public float DamageWithModifier => damage + AdditionalDamage - AttackedCount * damage * cutThroughModifier;
+        public float CutThroughDamage => DamageWithModifier - AttackedCount * damage * cutThroughModifier;
+        public float DamageWithModifier => damage + AdditionalDamage;
         public float AttackIntervalWithModifier => attackInterval / AdditionalAttackSpeedPercent;
         public float WeaponScaleWithModifier => attackSize * AdditionalSizePercent;
         public bool CanAttack => !animation.IsPlaying && attackTimer.State == TimerState.Completed;

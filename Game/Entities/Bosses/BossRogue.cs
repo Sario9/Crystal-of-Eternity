@@ -7,7 +7,7 @@ namespace Crystal_of_Eternity
     {
         public BossRogue() : base
             (
-                "RogueBoss",
+                "Главарь бандитов",
                 SpriteNames.Boss_rogue,
                 SpriteNames.Boss_rogue_corpse,
                 SoundNames.HumanHit, 200.0f,

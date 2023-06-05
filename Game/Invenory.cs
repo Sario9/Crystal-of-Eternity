@@ -14,7 +14,7 @@ namespace Crystal_of_Eternity
             }
         }
 
-        private int money = 15;
+        private int money = 0;
         private GameUI gameUI;
 
         public Invenory(GameUI gameUI)

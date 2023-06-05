@@ -210,7 +210,7 @@ namespace Crystal_of_Eternity
                 AddEntitesToColliders(toSpawn);
                 entitesToSpawn.Clear();
 
-                OnEnemyChangeState.Invoke(EnemiesCount);
+                OnEnemyChangeState?.Invoke(EnemiesCount);
             }
 
             SpawnEnemies(gameTime);

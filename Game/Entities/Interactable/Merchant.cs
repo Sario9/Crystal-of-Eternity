@@ -5,9 +5,9 @@ namespace Crystal_of_Eternity
 {
     public class Merchant : InteractableEntity
     {
-        public (float count, int price) AdditionalDamage = (5.0f, 8);
-        public (float count, int price) AdditionalAttackSpeed = (0.25f, 15);
-        public (float count, int price) AdditionalAttackScale = (0.30f, 10);
+        public (float count, int price) AdditionalDamage = (5.0f, 40);
+        public (float count, int price) AdditionalAttackSpeed = (0.25f, 50);
+        public (float count, int price) AdditionalAttackScale = (0.30f, 30);
         public int CurrentPlayerMoney => invenory.Money;
 
         private PlayerWeapon weapon;

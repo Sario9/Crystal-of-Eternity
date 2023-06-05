@@ -20,6 +20,7 @@ namespace Crystal_of_Eternity
 
         private Paragraph enemiesLeft;
 
+        private Panel bossHealthPanel;
         private ProgressBar bossHealthBar;
         private Label bossHealthBarText;
 
@@ -190,7 +191,7 @@ namespace Crystal_of_Eternity
             var speed = merchant.AdditionalAttackSpeed;
             var size = merchant.AdditionalAttackScale;
 
-            var panel = new Panel(new(700, 400), PanelSkin.Default, Anchor.Center) { AdjustHeightAutomatically = true };
+            var panel = new Panel(new(850, 400), PanelSkin.Default, Anchor.Center) { AdjustHeightAutomatically = true };
             var closeButton = UIHelper.CreateButton("X",
                 fonts["32"],
                 anchor: Anchor.TopRight,
@@ -201,7 +202,7 @@ namespace Crystal_of_Eternity
                 $"Увеличить урон оружия на {damage.count}",
                 fonts["32"],
                 anchor: Anchor.AutoCenter,
-                size: new(500, 125)
+                size: new(700, 125)
             );
 
             var damageCostText = new Label($"{damage.price}$", anchor: Anchor.BottomRight)
@@ -215,7 +216,7 @@ namespace Crystal_of_Eternity
                 @$"Увеличить скорость атаки на {MathF.Round(speed.count * 100)}%",
                 fonts["32"],
                 anchor: Anchor.AutoCenter,
-                size: new(500, 125)
+                size: new(700, 125)
             );
 
             var speedCostText = new Label($"{speed.price}$", anchor: Anchor.BottomRight)
@@ -229,7 +230,7 @@ namespace Crystal_of_Eternity
                 $"Увеличить размер оружия на {MathF.Round(size.count * 100)}%",
                 fonts["32"],
                 anchor: Anchor.AutoCenter,
-                size: new(500, 125)
+                size: new(700, 125)
             );
 
             var sizeCostText = new Label($"{size.price}$", anchor: Anchor.BottomRight)
@@ -323,19 +324,25 @@ namespace Crystal_of_Eternity
 
         public void CreateBossHealthBar(Boss boss)
         {
-            bossHealthBar = new(0, 100, new(1000, 50), Anchor.BottomCenter, new(0, 15)) { Value = (int)(boss.CurrentHP / boss.MaxHP) * 100 };
+            bossHealthPanel = new(new(1000, 100), PanelSkin.None, Anchor.BottomCenter, new(0, 40));
+            var bossName = new Label(boss.Name, Anchor.Auto) { FontOverride = fonts["32"], Padding = new(35, 0) };
+            bossHealthBar = new(0, 100, new(1000, 50), Anchor.Auto) { Value = (int)(boss.CurrentHP / boss.MaxHP) * 100 };
             bossHealthBarText = new($"{boss.CurrentHP}/{boss.MaxHP}", Anchor.Center) { FontOverride = fonts["32"] };
 
-            bossHealthBar.AddChild(bossHealthBarText);
+            bossHealthBar.ProgressFill.FillColor = Color.DarkRed;
 
-            UserInterface.Active.AddEntity(bossHealthBar);
+            bossHealthBar.AddChild(bossHealthBarText);
+            bossHealthPanel.AddChild(bossName);
+            bossHealthPanel.AddChild(bossHealthBar);
+
+            UserInterface.Active.AddEntity(bossHealthPanel);
         }
 
         public void UpdateHealth(float currentHP, float maxHP)
         {
             currentHP = MathF.Round(currentHP);
             maxHP = MathF.Round(maxHP);
-            healthBar.Value = (int)(currentHP / maxHP) * 100;
+            healthBar.Value = (int)(currentHP / maxHP * 100);
             healthText.Text = string.Format("{0}/{1}", currentHP, maxHP);
         }
 
@@ -364,7 +371,7 @@ namespace Crystal_of_Eternity
 
         public void RemoveBossHealthBar(IEntity entity)
         {
-            UserInterface.Active.RemoveEntity(bossHealthBar);
+            UserInterface.Active.RemoveEntity(bossHealthPanel);
         }
 
         public void Update(GameTime gameTime)
